@@ -70,6 +70,8 @@ namespace UnicycleSheep
 
                 // update GameTime
                 gameTime.Update();
+                int waitTime = (int)(16.667f - gameTime.EllapsedTime.Milliseconds);
+                System.Threading.Thread.Sleep(waitTime >= 0 ? waitTime : 0 );
             }
         }
 
@@ -79,6 +81,14 @@ namespace UnicycleSheep
             {
                 case GameState.None:
                     running = false;
+                    break;
+
+                case GameState.MainMenu:
+                    state = new MainMenuState();
+                    break;
+
+                case GameState.InGame:
+                    state = new InGameState();
                     break;
             }
 
