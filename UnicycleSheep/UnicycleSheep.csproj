@@ -76,6 +76,8 @@
     <Compile Include="Code\AnimatedSprite.cs" />
     <Compile Include="Code\GamePadInputManager.cs" />
     <Compile Include="Code\GameStates\GameState.cs" />
+    <Compile Include="Code\GameStates\InGameState.cs" />
+    <Compile Include="Code\GameStates\MainMenuState.cs" />
     <Compile Include="Code\GameTime.cs" />
     <Compile Include="Code\GUI.cs" />
     <Compile Include="Code\Helper.cs" />

@@ -9,9 +9,7 @@ namespace UnicycleSheep
     enum GameState
     {
         None,
-        Intro,
         MainMenu,
-        Options,
         InGame
     }
 }
