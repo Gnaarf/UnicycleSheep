@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\AnimatedSprite.cs" />
+    <Compile Include="Code\AssetManager.cs" />
     <Compile Include="Code\GamePadInputManager.cs" />
     <Compile Include="Code\gameplay\Actor.cs" />
     <Compile Include="Code\gameplay\IContactEvent.cs" />
@@ -97,6 +98,12 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Textures\Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\pixel.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="csfml-audio-2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
