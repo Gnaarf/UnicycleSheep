@@ -17,7 +17,6 @@ namespace UnicycleSheep
             bodydef.Position = _position;
             bodydef.Angle = 0.0f;
 
-
             body = _world.CreateBody(bodydef);
         }
         public Body body { get; protected set; }

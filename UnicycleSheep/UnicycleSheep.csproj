@@ -78,6 +78,7 @@
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\GamePadInputManager.cs" />
     <Compile Include="Code\gameplay\Actor.cs" />
+    <Compile Include="Code\gameplay\actors\PolygonActor.cs" />
     <Compile Include="Code\gameplay\IContactEvent.cs" />
     <Compile Include="Code\gameplay\InactBody.cs" />
     <Compile Include="Code\gameplay\PlayerCharacter.cs" />
