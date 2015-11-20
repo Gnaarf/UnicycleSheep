@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace UnicycleSheep
 {
-    class Program
+    enum GameState
     {
-        static void Main(string[] args)
-        {
-        }
+        None,
+        Intro,
+        MainMenu,
+        Options,
+        InGame
     }
 }
