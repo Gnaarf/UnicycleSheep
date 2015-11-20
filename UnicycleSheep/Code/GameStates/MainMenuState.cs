@@ -10,7 +10,7 @@ namespace UnicycleSheep
 
         public MainMenuState()
         {
-            backgroundSprite = new Sprite(new Texture("Assets/Textures/Background.png"));
+            backgroundSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.MainMenuBackground));
         }
 
         public GameState update() 
