@@ -13,7 +13,7 @@ namespace UnicycleSheep
         static bool running = true;
 
         static GameState currentGameState = GameState.MainMenu;
-        static GameState prevGameState = GameState.MainMenu;
+        static GameState prevGameState = GameState.InGame;//changed
         static IGameState state;
 
         static RenderWindow win;
