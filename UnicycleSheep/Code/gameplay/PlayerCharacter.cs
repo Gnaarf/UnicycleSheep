@@ -16,13 +16,13 @@ namespace UnicycleSheep
         public PlayerCharacter(World _world, Vector2 _position)
             :base(_world, _position)
         { 
-            sprite = new AnimatedSprite(new Texture("Assets/schwert2.png"), 1.0f, 1, new Vector2i(256, 128));
+            sprite = new AnimatedSprite(new Texture("Assets/textures/pixel.png"), 1.0f, 1, new Vector2i(1, 1));
         }
 
         public override void draw(RenderWindow win, View view)
         {
-            sprite.Position = new Vector2f(40, 32);
-            sprite.Scale = new Vector2f(1, 1);
+            sprite.Position = location.toPixelCoord();
+            sprite.Scale = new Vector2f(10, 10);
             sprite.Rotation = body.GetAngle() * Helper.RadianToDegree;
 
             win.Draw(sprite);

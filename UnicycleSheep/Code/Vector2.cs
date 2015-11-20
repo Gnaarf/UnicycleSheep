@@ -72,15 +72,15 @@ public struct Vector2
     public static Vector2 Down { get { return new Vector2(0F, 1F); } }
     public static Vector2 Left { get { return new Vector2(-1F, 0F); } }
 
-    /*
+   
     //------------------------------------------//
     //                Conversions               //
     //------------------------------------------//
     public Vector2 toPixelCoord()
     {
-        return this *= UnicycleSheep.GameConstants.PIXEL_PER_UNIT;
+        return new Vector2(X * Constants.worldToScreenRatio, (Constants.worldSizeY - Y) * Constants.worldToScreenRatio);
     }
-    public Vector2 PixelCoord { get { return this * UnicycleSheep.GameConstants.PIXEL_PER_UNIT; } }
+   /* public Vector2 PixelCoord { get { return this * UnicycleSheep.GameConstants.PIXEL_PER_UNIT; } }
     
     public Vector2 toWorldCoord()
     {

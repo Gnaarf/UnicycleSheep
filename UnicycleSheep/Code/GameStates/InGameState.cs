@@ -15,9 +15,12 @@ namespace UnicycleSheep
         public InGameState()
         {
             AABB aabb = new AABB();
+            aabb.LowerBound.Set(0.0f, 0.0f);
+            aabb.UpperBound.Set(Constants.worldSizeX, Constants.worldSizeX * Constants.screenRatio);
+
             physicsWorld = new World(aabb, new Vec2(0.0f, 9.81f), false);
 
-            playerChar = new PlayerCharacter(physicsWorld, new Vec2(30, 40));
+            playerChar = new PlayerCharacter(physicsWorld, new Vec2(5.0f, 5.0f));
         }
         public GameState update() 
         {

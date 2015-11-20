@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Code\AnimatedSprite.cs" />
     <Compile Include="Code\AssetManager.cs" />
+    <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\GamePadInputManager.cs" />
     <Compile Include="Code\gameplay\Actor.cs" />
     <Compile Include="Code\gameplay\IContactEvent.cs" />
