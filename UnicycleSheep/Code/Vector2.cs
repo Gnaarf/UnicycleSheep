@@ -76,7 +76,7 @@ public struct Vector2
     //------------------------------------------//
     //                Conversions               //
     //------------------------------------------//
-    public Vector2 toPixelCoord()
+    public Vector2 toScreenCoord()
     {
         return new Vector2(X * Constants.worldToScreenRatio, (Constants.worldSizeY - Y) * Constants.worldToScreenRatio);
     }

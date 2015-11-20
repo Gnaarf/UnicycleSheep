@@ -11,6 +11,7 @@ namespace UnicycleSheep
 
         //test
         PlayerCharacter playerChar;
+        Actors.PolygonActor polygonAct;
 
         public InGameState()
         {
@@ -18,18 +19,20 @@ namespace UnicycleSheep
             aabb.LowerBound.Set(0.0f, 0.0f);
             aabb.UpperBound.Set(Constants.worldSizeX, Constants.worldSizeX * Constants.screenRatio);
 
-            physicsWorld = new World(aabb, new Vec2(0.0f, 9.81f), false);
+            physicsWorld = new World(aabb, new Vec2(0.0f, -9.81f), false);
 
-            playerChar = new PlayerCharacter(physicsWorld, new Vec2(5.0f, 5.0f));
+            playerChar = new PlayerCharacter(physicsWorld, new Vec2(5.0f, 50.0f));
+            polygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 0.0f));
         }
         public GameState update() 
         {
- 
+            physicsWorld.Step(1 / 60.0f, 8, 1);
             return GameState.InGame; 
         }
         public void draw(RenderWindow win, View view) 
         {
             playerChar.draw(win, view);
+            polygonAct.draw(win, view);
         }
         public void drawGUI(GUI gui) { }
     }
