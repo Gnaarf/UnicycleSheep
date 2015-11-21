@@ -36,9 +36,9 @@ namespace UnicycleSheep
 
         public void KeyboardInput()
         {
-            if (Keyboard.IsKeyPressed(Keyboard.Key.A))
+            if (KeyboardInputManager.isPressed(Keyboard.Key.A))
                 rotation = 1;
-            else if (Keyboard.IsKeyPressed(Keyboard.Key.D))
+            else if (KeyboardInputManager.isPressed(Keyboard.Key.D))
                 rotation = -1;
         }
         public void Move()

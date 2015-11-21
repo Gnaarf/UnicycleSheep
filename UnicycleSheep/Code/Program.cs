@@ -32,9 +32,6 @@ namespace UnicycleSheep
             //win.Closed += new EventHandler(closeWindow);
             win.Closed += (sender, e) => { (sender as Window).Close(); };
 
-            // initialize GamePadInputManager, in case, there are GamePads connected
-            gamePadInputManager = new GamePadInputManager();
-
             // initialize GameState
             handleNewGameState();
 
@@ -44,8 +41,8 @@ namespace UnicycleSheep
 
             while (running && win.IsOpen())
             {
-                gamePadInputManager.update();
-                // TODO: reevaluate gamepads every once in a while
+                GamePadInputManager.update();
+                KeyboardInputManager.update();
 
                 currentGameState = state.update();
 

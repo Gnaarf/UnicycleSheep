@@ -17,17 +17,21 @@ namespace UnicycleSheep
             public bool[] currentButton;
         }
 
-        const float deadZone = 0.05F;
+        private static bool isInitialized = false;
 
-        Dictionary<uint, Input> padInputs;
+        private const float deadZone = 0.05F;
 
-        public Dictionary<uint, Input>.KeyCollection connectedPadIndices { get { return padInputs.Keys; } }
+        private static Dictionary<uint, Input> padInputs;
 
-        public readonly int numSupportedPads = 8;
 
-        public int numConnectedPads {get; private set;}
+        public static readonly int numSupportedPads = 8;
+        
+        public static int numConnectedPads { get; private set; }
+        
+        public static Dictionary<uint, Input>.KeyCollection connectedPadIndices { get { return padInputs.Keys; } }
 
-        public GamePadInputManager()
+
+        static void initialize()
         {
             padInputs = new Dictionary<uint, Input>();
 
@@ -42,9 +46,11 @@ namespace UnicycleSheep
                     registerPad(i);
                 }
             }
+
+            isInitialized = true;
         }
 
-        private void registerPad(uint i)
+        private static void registerPad(uint i)
         {
             numConnectedPads++;
 
@@ -59,15 +65,17 @@ namespace UnicycleSheep
             padInputs[i] = input;
         }
 
-        private void unregisterPad(uint i)
+        private static void unregisterPad(uint i)
         {
             numConnectedPads--;
 
             padInputs.Remove(i);
         }
 
-        public void update()
+        public static void update()
         {
+            if (!isInitialized) { initialize(); }
+
             Joystick.Update();
 
             for (uint index = 0; index < numSupportedPads; index++)
@@ -116,28 +124,38 @@ namespace UnicycleSheep
             return v;
         }
 
-        public bool isConnected(uint padIndex)
+        public static bool isConnected(uint padIndex)
         {
+            if (!isInitialized) { initialize(); }
+
             return padInputs.ContainsKey(padIndex);
         }
 
-        public Vector2 getLeftStick(uint padIndex)
+        public static Vector2 getLeftStick(uint padIndex)
         {
+            if (!isInitialized) { initialize(); }
+
             return padInputs[padIndex].leftStick;
         }
-        
-        public Vector2 getRightStick(uint padIndex)
+
+        public static Vector2 getRightStick(uint padIndex)
         {
+            if (!isInitialized) { initialize(); }
+
             return padInputs[padIndex].rightStick;
         }
 
-        public bool isClicked(GamePadButton button, uint padIndex)
+        public static bool isClicked(GamePadButton button, uint padIndex)
         {
+            if (!isInitialized) { initialize(); }
+
             return padInputs[padIndex].currentButton[(int)button] && !padInputs[padIndex].oldButton[(int)button];
         }
 
-        public bool isPressed(GamePadButton button, uint padIndex)
+        public static bool isPressed(GamePadButton button, uint padIndex)
         {
+            if (!isInitialized) { initialize(); }
+
             if (button == GamePadButton.LT)
                 return padInputs[padIndex].LTRT > 50;
             if (button == GamePadButton.RT)
@@ -146,8 +164,10 @@ namespace UnicycleSheep
             return padInputs[padIndex].currentButton[(int)button];
         }
 
-        public bool isReleased(GamePadButton button, uint padIndex)
+        public static bool isReleased(GamePadButton button, uint padIndex)
         {
+            if (!isInitialized) { initialize(); }
+
             return !padInputs[padIndex].currentButton[(int)button] && padInputs[padIndex].oldButton[(int)button];
         }
     }
