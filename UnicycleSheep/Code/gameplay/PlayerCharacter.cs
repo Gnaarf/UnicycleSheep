@@ -11,7 +11,7 @@ namespace UnicycleSheep
     class PlayerCharacter : PhysicsActor//, IContactEvent
     {
         //remove after manager exists
-        AnimatedSprite sprite;
+        AnimatedSprite wheelSprite;
         protected float rotation;
         private float RotationFakt;
 
@@ -25,11 +25,13 @@ namespace UnicycleSheep
             circleDef.Friction = 1.0f;
             circleDef.LocalPosition.Set(0, 0);
 
-            body.CreateShape(circleDef);
+            Box2DX.Collision.Shape s = body.CreateShape(circleDef);
             body.SetMassFromShapes();
 
-            sprite = new AnimatedSprite(new Texture("Assets/textures/pixel.png"), 1.0f, 1, new Vector2i(1, 1));
-            sprite.Origin = ((Vector2)sprite.spriteSize) / 2F;
+            Texture wheelTexture = AssetManager.getTexture(AssetManager.TextureName.ShoopWheel);
+            wheelSprite = new AnimatedSprite(wheelTexture, 1.0f, 1, (Vector2)wheelTexture.Size);
+            wheelSprite.Scale = Vector2.Zero.toScreenCoord() - (Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord();
+            wheelSprite.Origin = ((Vector2)wheelSprite.spriteSize) / 2F;
         }
 
         public void KeyboardInput()
@@ -49,11 +51,10 @@ namespace UnicycleSheep
 
         public override void draw(RenderWindow win, View view)
         {
-            sprite.Position = new Vector2 (location.toScreenCoord().X,location.toScreenCoord().Y);
-            sprite.Scale = new Vector2f(10, 10);
-            sprite.Rotation = -body.GetAngle() * Helper.RadianToDegree;
+            wheelSprite.Position = new Vector2 (location.toScreenCoord().X,location.toScreenCoord().Y);
+            wheelSprite.Rotation = -body.GetAngle() * Helper.RadianToDegree;
 
-            win.Draw(sprite);
+            win.Draw(wheelSprite);
         }
     }
 }

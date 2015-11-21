@@ -18,11 +18,15 @@ public class AssetManager
     {
         textures.Add(TextureName.WhitePixel, new Texture("Assets/Textures/pixel.png"));
         textures.Add(TextureName.MainMenuBackground, new Texture("Assets/Textures/Background.png"));
+        textures.Add(TextureName.ShoopWheel, new Texture("Assets/Textures/Wheel.png"));
     }
 
     public enum TextureName
     {
         WhitePixel,
-        MainMenuBackground
+        MainMenuBackground,
+
+        //characterStuff
+        ShoopWheel
     }
 }
