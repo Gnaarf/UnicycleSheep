@@ -29,9 +29,14 @@ namespace UnicycleSheep
         //state vars
         bool isOnGround;
 
+        static uint count = 0;
+        uint index;
+
         public PlayerCharacter(World _world, Vector2 _position)
             :base(_world, _position)
         {
+            index = ++count;
+
             this.angVelocity = 0;
             CircleDef circleDef = new CircleDef();
             circleDef.Radius = 1;
@@ -73,19 +78,33 @@ namespace UnicycleSheep
 
         public void KeyboardInput()
         {
-            if (KeyboardInputManager.isPressed(Keyboard.Key.A))
-                rotation = 1;
-            else if (KeyboardInputManager.isPressed(Keyboard.Key.D))
-                rotation = -1;
-            else //stop accelerating
-                rotation = 0f;
+            bool jumpButtonIsPressed;
 
-            if (KeyboardInputManager.isPressed(Keyboard.Key.Space))
+            if(GamePadInputManager.isConnected(index))
             {
-                if (jumpStrength < maxJump) jumpStrength += 0.8f;
+                rotation = -GamePadInputManager.getLeftStick(index).X;
+
+                jumpButtonIsPressed = GamePadInputManager.isPressed(GamePadButton.RB, index);
+            }
+            else
+            {
+                rotation = 0F;
+                if (KeyboardInputManager.isPressed(Keyboard.Key.A))
+                    rotation += 1F;
+                if (KeyboardInputManager.isPressed(Keyboard.Key.D))
+                    rotation += -1F;
+
+                jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.Space);
+            }
+
+            if (jumpButtonIsPressed)
+            {
+                if (jumpStrength < maxJump)
+                    jumpStrength += 0.8f;
                 jump = false;
             }
-            else if(jumpStrength > 0) jump = true;  
+            else if (jumpStrength > 0) jump = true;  
+
         }
         public void Move()
         {
