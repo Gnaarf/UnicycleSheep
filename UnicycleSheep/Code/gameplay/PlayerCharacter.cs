@@ -19,7 +19,9 @@ namespace UnicycleSheep
         Vector2 rotationHead;
 
         //movement input and constant
+        private float wheelToSheepRot = 0.0f; //basicly the rotation of the unicycle's frame
         protected float rotation = 0;
+        private float wantsToBalance = 0;
         private float RotationFakt = 1f;
 
         private float maxJump = 42f;
@@ -30,9 +32,14 @@ namespace UnicycleSheep
         //state vars
         bool isOnGround;
 
+        static uint count = 0;
+        uint index;
+
         public PlayerCharacter(World _world, Vector2 _position)
             :base(_world, _position)
         {
+            index = count++;
+
             this.angVelocity = 0;
             //build the unicycle
             CircleDef circleDef = new CircleDef();
@@ -86,19 +93,33 @@ namespace UnicycleSheep
 
         public void KeyboardInput()
         {
-            if (KeyboardInputManager.isPressed(Keyboard.Key.A))
-                rotation = 1;
-            else if (KeyboardInputManager.isPressed(Keyboard.Key.D))
-                rotation = -1;
-            else //stop accelerating
-                rotation = 0f;
+            bool jumpButtonIsPressed;
 
-            if (KeyboardInputManager.isPressed(Keyboard.Key.Space))
+            if(GamePadInputManager.isConnected(index))
             {
-                if (jumpStrength < maxJump) jumpStrength += 0.8f;
+                rotation = -GamePadInputManager.getLeftStick(index).X;
+                wantsToBalance = -GamePadInputManager.getRightStick(index).X;
+
+                jumpButtonIsPressed = GamePadInputManager.isPressed(GamePadButton.RB, index);
+            }
+            else
+            {
+                rotation = 0F;
+                if (KeyboardInputManager.isPressed(Keyboard.Key.A))
+                    rotation += 1F;
+                if (KeyboardInputManager.isPressed(Keyboard.Key.D))
+                    rotation += -1F;
+
+                jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.Space);
+            }
+
+            if (jumpButtonIsPressed)
+            {
+                if (jumpStrength < maxJump)
+                    jumpStrength += 0.8f;
                 jump = false;
             }
-            else if(jumpStrength > 0) jump = true;
+            else if (jumpStrength > 0) jump = true;  
 
         }
         public void Move()
@@ -115,10 +136,45 @@ namespace UnicycleSheep
                 jump = false;
                 jumpStrength = 0f;
             }
-            rotationHead = this.location;
-            
 
+            if(wantsToBalance != 0)
+            {
+                Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;
+                targetVel = wantsToBalance == 1 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
+                targetVel.normalize();
+
+                head.ApplyImpulse(targetVel, head.GetWorldCenter());
+            }
+            if(isOnGround)
+            {
+                //some auto correction to make it easier to not fall over
+                Vector2 headPos = head.GetWorldCenter();
+                Vector2 optPos = location + new Vector2(0.0f, 4.0f);
+                Vector2 currentVel = head.GetLinearVelocity();
+
+                Vector2 targetDir = optPos - headPos;
+                Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;
+                targetVel = targetDir.Y < 0 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
+
+                float len = targetDir.lengthSqr;
+                if (len < 0.05f * 0.05f) return;
+
+                targetVel.normalize();
+                float dif = (currentVel.normalize() - targetVel).length;
+
+                head.ApplyImpulse(targetVel , head.GetWorldCenter());//(Vector2)(body.GetLinearVelocity()*/
+            }
         }
+
+
+        public override void update()
+        {
+            base.update();
+
+            Vector2 radius = (Vector2)head.GetWorldCenter() - location;
+            wheelToSheepRot = (float)System.Math.Atan2(radius.X, radius.Y) * Helper.RadianToDegree;
+        }
+
 
         public override void draw(RenderWindow win, View view)
         {
@@ -126,7 +182,7 @@ namespace UnicycleSheep
             Vector2 radius = (Vector2)head.GetWorldCenter() - location;
 
             sheepSprite.Position = sheepLoc.toScreenCoord();
-            sheepSprite.Rotation =  (float)System.Math.Atan2(radius.X, radius.Y) * Helper.RadianToDegree;
+            sheepSprite.Rotation = wheelToSheepRot;
 
             wheelSprite.Position = location.toScreenCoord();
             wheelSprite.Rotation = -body.GetAngle() * Helper.RadianToDegree;
@@ -137,15 +193,22 @@ namespace UnicycleSheep
         }
 
         // ********************************************************** //
-        
+
+        // ********************************************************** //
+
+        Box2DX.Collision.Shape _lastContact;
+
         public void OnContact(Box2DX.Collision.Shape _other, ContactPoint _point)
         {
+            _lastContact = _other;
             isOnGround = true;
         }
 
         public void OnContactRemove(Box2DX.Collision.Shape _other, ContactPoint _point)
         {
-            isOnGround = false;
+            //only when the tile is left which was just hit
+            if (_lastContact == _other)
+                isOnGround = false;
         }
 
     }

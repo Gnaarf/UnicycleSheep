@@ -18,6 +18,7 @@ public class AssetManager
     {
         textures.Add(TextureName.WhitePixel, new Texture("Assets/Textures/pixel.png"));
         textures.Add(TextureName.MainMenuBackground, new Texture("Assets/Textures/Background.png"));
+        textures[TextureName.MainMenuBackground].Smooth = true;
 
         textures.Add(TextureName.ShoopWheel, new Texture("Assets/Textures/Wheel.png"));
         textures.Add(TextureName.Shoop, new Texture("Assets/Textures/Sheep.png"));
