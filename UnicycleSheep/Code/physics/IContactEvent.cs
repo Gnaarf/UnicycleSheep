@@ -1,7 +1,7 @@
 ﻿using Box2DX.Collision;
 using Box2DX.Dynamics;
 
-namespace UnicycleSheep
+namespace Physics
 {
     interface IContactEvent
     {
