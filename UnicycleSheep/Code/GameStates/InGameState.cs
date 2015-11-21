@@ -26,6 +26,8 @@ namespace UnicycleSheep
         }
         public GameState update() 
         {
+            playerChar.KeyboardInput();
+            playerChar.Move();
             physicsWorld.Step(1 / 60.0f, 8, 1);
             return GameState.InGame; 
         }

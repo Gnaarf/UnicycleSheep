@@ -25,6 +25,8 @@ namespace UnicycleSheep
 
         public Vector2 velocity { get { return body.GetLinearVelocity(); } protected set { body.SetLinearVelocity(value); } }
 
+        public float angVelocity { get { return body.GetAngularVelocity(); } protected set { body.SetAngularVelocity(value); } }
+
         public virtual void update()
         {
         }

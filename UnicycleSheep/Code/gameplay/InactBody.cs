@@ -30,7 +30,7 @@ namespace UnicycleSheep
 
         public override void draw(RenderWindow win, View view)
         {
-            this._sprite.Position = location.toPixelCoord();
+            this._sprite.Position = location.toScreenCoord();
 
             win.Draw(this._sprite);
         }

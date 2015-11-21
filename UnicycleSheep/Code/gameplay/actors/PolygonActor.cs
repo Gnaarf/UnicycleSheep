@@ -30,7 +30,8 @@ namespace Actors
             //create the function
             for (int i = 0; i < res; ++i)
             {
-                Vector2 pos = new Vec2(i * 5, 10 + Rand.IntValue(10));
+                //Vector2 pos = new Vec2(i * 5, 10 + Rand.IntValue(10));
+                Vector2 pos = new Vec2(i * 5, 10);
                 verts[i] = pos;
                 vertexBuffer.Append(new Vertex((pos + _position).toScreenCoord()));
             }
