@@ -27,6 +27,17 @@ namespace UnicycleSheep
             polygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 0.0f), 0xF0056A4);
 
             dekoHand = new DekoElements.RemoteControllHand(1);
+
+            //left and right borders of the map
+            BodyDef bodydef = new BodyDef();
+            bodydef.Position = new Vector2(0,0);
+            bodydef.Angle = 0.0f;
+            PolygonDef box = new PolygonDef();
+            box.SetAsBox(1f, Constants.worldSizeY);
+
+            Body leftEdge = physicsWorld.CreateBody(bodydef); leftEdge.CreateShape(box);
+            bodydef.Position = new Vector2(Constants.worldSizeX-1, 0);
+            Body rightEdge = physicsWorld.CreateBody(bodydef); rightEdge.CreateShape(box);
         }
         public GameState update() 
         {

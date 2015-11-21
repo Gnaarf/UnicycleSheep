@@ -12,6 +12,8 @@ namespace UnicycleSheep
     {
         //remove after manager exists
         AnimatedSprite wheelSprite;
+        Sprite sheepSprite;
+
         protected float rotation;
         private float RotationFakt = 3f;
 
@@ -32,6 +34,10 @@ namespace UnicycleSheep
             wheelSprite = new AnimatedSprite(wheelTexture, 1.0f, 1, (Vector2)wheelTexture.Size);
             wheelSprite.Scale = Vector2.Zero.toScreenCoord() - (Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord();
             wheelSprite.Origin = ((Vector2)wheelSprite.spriteSize) / 2F;
+
+            sheepSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Shoop));
+            sheepSprite.Scale = new Vector2(10, 10);
+            sheepSprite.Origin = ((Vector2)sheepSprite.Texture.Size) / 2F;
         }
 
         public void KeyboardInput()
@@ -51,10 +57,14 @@ namespace UnicycleSheep
 
         public override void draw(RenderWindow win, View view)
         {
+            Vector2 sheepLoc = location + new Vector2(0.0f, 4.0f);
+            sheepSprite.Position = sheepLoc.toScreenCoord();
             wheelSprite.Position = new Vector2 (location.toScreenCoord().X,location.toScreenCoord().Y);
             wheelSprite.Rotation = -body.GetAngle() * Helper.RadianToDegree;
 
             win.Draw(wheelSprite);
+            //draw after to overlap
+            win.Draw(sheepSprite);
         }
     }
 }

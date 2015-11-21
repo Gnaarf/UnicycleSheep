@@ -22,7 +22,7 @@ namespace Actors
 
             //make sure to have an even number
             if (res % 2 != 0) res++;
-            Vec2[] verts = new Vec2[(int)res];
+            Vec2[] verts = new Vec2[(int)res + 1];
             vertexBuffer = new VertexArray(PrimitiveType.LinesStrip);
 
             Vector2 posScreen = _position.toScreenCoord();
@@ -33,10 +33,10 @@ namespace Actors
             verts[0] = new Vec2(0, 10);
             vertexBuffer.Append(new Vertex(((Vector2)verts[0] + _position).toScreenCoord()));
             //create the function
-            for (int i = 1; i < res; ++i)
+            for (int i = 1; i <= res; ++i)
             {
                 //Vector2 pos = new Vec2(i * 5, 10 + Rand.IntValue(10));
-                Vector2 pos = new Vec2(i * 5, verts[i-1].Y + (int)rnd.next(6) - 3);
+                Vector2 pos = new Vec2(i * 5, System.Math.Max((verts[i-1].Y + (int)rnd.next(6) - 3),0));
                 verts[i] = pos;
                 vertexBuffer.Append(new Vertex((pos + _position).toScreenCoord()));
             }
@@ -53,7 +53,7 @@ namespace Actors
             bodydef.Angle = 0.0f;
 
             //convert to triangles
-            for (int i = 0; i < res - 1; ++i)
+            for (int i = 0; i < res; ++i)
             {
                 //always 3 points of the function form a triangle
                 triangleDef.Vertices[0] = verts[i];

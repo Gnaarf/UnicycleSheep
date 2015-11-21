@@ -142,6 +142,7 @@
     <Content Include="Assets\Textures\pixel.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Textures\Sheep.png" />
     <Content Include="Assets\Textures\Wheel.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

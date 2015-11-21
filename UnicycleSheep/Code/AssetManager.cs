@@ -20,7 +20,7 @@ public class AssetManager
         textures.Add(TextureName.MainMenuBackground, new Texture("Assets/Textures/Background.png"));
 
         textures.Add(TextureName.ShoopWheel, new Texture("Assets/Textures/Wheel.png"));
-        textures.Add(TextureName.Shoop, new Texture("Assets/Textures/what.png"));
+        textures.Add(TextureName.Shoop, new Texture("Assets/Textures/pixel.png"));
 
         textures.Add(TextureName.Hand1, new Texture("Assets/Textures/Hands/Hand1/Base.png"));
         textures.Add(TextureName.Hand1_LeftThumb_Leftmost, new Texture("Assets/Textures/Hands/Hand1/leftThumb_leftmost.png"));
