@@ -40,11 +40,11 @@ namespace DekoElements
             win.Draw(leftThumbSprite);
 
             if (KeyboardInputManager.isPressed(Keyboard.Key.Left))
-            { leftThumbSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Hand1_RightThumb_Leftmost); }
+            { rightThumbSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Hand1_RightThumb_Leftmost); }
             else if (KeyboardInputManager.isPressed(Keyboard.Key.Right))
-            { leftThumbSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Hand1_RightThumb_Rightmost); }
+            { rightThumbSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Hand1_RightThumb_Rightmost); }
             else
-            { leftThumbSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Hand1_RightThumb_Mid); }
+            { rightThumbSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Hand1_RightThumb_Mid); }
             win.Draw(rightThumbSprite);
         }
 
