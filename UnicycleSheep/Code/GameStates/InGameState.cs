@@ -7,7 +7,9 @@ namespace UnicycleSheep
 {
     class InGameState : IGameState
     {
+        //singletons
         World physicsWorld;
+        Physics.ContactManager contactManager;
 
         //test
         PlayerCharacter playerChar;
@@ -22,6 +24,9 @@ namespace UnicycleSheep
             aabb.UpperBound.Set(Constants.worldSizeX, Constants.worldSizeX * Constants.screenRatio);
 
             physicsWorld = new World(aabb, new Vec2(0.0f, -9.81f), false);
+
+            contactManager = new Physics.ContactManager();
+            physicsWorld.SetContactListener(contactManager);
 
             playerChar = new PlayerCharacter(physicsWorld, new Vec2(5.0f, 50.0f));
             polygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 0.0f), 0xF0056A4);

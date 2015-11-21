@@ -8,17 +8,23 @@ using System.Collections.Generic;
 
 namespace UnicycleSheep
 {
-    class PlayerCharacter : PhysicsActor//, IContactEvent
+    class PlayerCharacter : PhysicsActor, IContactEvent
     {
         //remove after manager exists
         AnimatedSprite wheelSprite;
         Sprite sheepSprite;
 
-        //movement input
+        //movement input and constant
         protected float rotation = 0;
-        private float RotationFakt = 3f;
+        private float RotationFakt = 1f;
+
+        private float maxJump = 42f;
 
         bool jump = false;
+        float jumpStrength = 0.0f;
+
+        //state vars
+        bool isOnGround;
 
         public PlayerCharacter(World _world, Vector2 _position)
             :base(_world, _position)
@@ -32,6 +38,7 @@ namespace UnicycleSheep
 
             Box2DX.Collision.Shape s = body.CreateShape(circleDef);
             body.SetMassFromShapes();
+            body.SetUserData(this); // link body and this to register collisions in this
 
             Texture wheelTexture = AssetManager.getTexture(AssetManager.TextureName.ShoopWheel);
             wheelSprite = new AnimatedSprite(wheelTexture, 1.0f, 1, (Vector2)wheelTexture.Size);
@@ -52,8 +59,12 @@ namespace UnicycleSheep
             else //stop accelerating
                 rotation = 0f;
 
-            jump = KeyboardInputManager.isPressed(Keyboard.Key.Space);
-                
+            if (KeyboardInputManager.isPressed(Keyboard.Key.Space))
+            {
+                if (jumpStrength < maxJump) jumpStrength += 0.8f;
+                jump = false;
+            }
+            else if(jumpStrength > 0) jump = true;  
         }
         public void Move()
         {
@@ -62,7 +73,13 @@ namespace UnicycleSheep
             else if ((this.angVelocity > -100) && this.rotation == -1)
                 this.angVelocity -= RotationFakt;
 
-            if (jump) body.ApplyImpulse(new Vector2(0, 2), new Vector2(0, 0));
+            if (jump && /*isOnGround &&*/ jumpStrength > 0f)
+            {
+                body.ApplyImpulse(new Vector2(0, jumpStrength), body.GetWorldCenter());
+
+                jump = false;
+                jumpStrength = 0f;
+            }
         }
 
         public override void draw(RenderWindow win, View view)
@@ -76,5 +93,18 @@ namespace UnicycleSheep
             //draw after to overlap
             win.Draw(sheepSprite);
         }
+
+        // ********************************************************** //
+        
+        public void OnContact(Box2DX.Collision.Shape _other, ContactPoint _point)
+        {
+            isOnGround = true;
+        }
+
+        public void OnContactRemove(Box2DX.Collision.Shape _other, ContactPoint _point)
+        {
+            isOnGround = false;
+        }
+
     }
 }
