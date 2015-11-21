@@ -29,7 +29,7 @@ namespace UnicycleSheep
             physicsWorld.SetContactListener(contactManager);
 
             playerChar = new PlayerCharacter(physicsWorld, new Vec2(5.0f, 50.0f));
-            polygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 0.0f), 0xF0056A4);
+            polygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 0.0f), 0xF0A58A4, Actors.FunctionType.GradientNoise, 4);
 
             dekoHand = new DekoElements.RemoteControllHand(1);
 
@@ -43,11 +43,15 @@ namespace UnicycleSheep
             Body leftEdge = physicsWorld.CreateBody(bodydef); leftEdge.CreateShape(box);
             bodydef.Position = new Vector2(Constants.worldSizeX-1, 0);
             Body rightEdge = physicsWorld.CreateBody(bodydef); rightEdge.CreateShape(box);
+            bodydef.Position = new Vector2(0, Constants.worldSizeY);
+            box.SetAsBox(Constants.worldSizeX, 1f);
+            Body topEdge = physicsWorld.CreateBody(bodydef); topEdge.CreateShape(box);
         }
         public GameState update() 
         {
             playerChar.KeyboardInput();
             playerChar.Move();
+            playerChar.update();
             physicsWorld.Step(1 / 60.0f, 8, 1);
             return GameState.InGame; 
         }

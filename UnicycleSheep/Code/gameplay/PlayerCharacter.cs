@@ -18,7 +18,9 @@ namespace UnicycleSheep
         Body head;
 
         //movement input and constant
+        private float wheelToSheepRot = 0.0f; //basicly the rotation of the unicycle's frame
         protected float rotation = 0;
+        private float wantsToBalance = 0;
         private float RotationFakt = 1f;
 
         private float maxJump = 42f;
@@ -83,6 +85,7 @@ namespace UnicycleSheep
             if(GamePadInputManager.isConnected(index))
             {
                 rotation = -GamePadInputManager.getLeftStick(index).X;
+                wantsToBalance = -GamePadInputManager.getRightStick(index).X;
 
                 jumpButtonIsPressed = GamePadInputManager.isPressed(GamePadButton.RB, index);
             }
@@ -120,7 +123,26 @@ namespace UnicycleSheep
                 jump = false;
                 jumpStrength = 0f;
             }
+
+            if(wantsToBalance != 0)
+            {
+                Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;
+                targetVel = wantsToBalance == 1 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
+                targetVel.normalize();
+
+                head.ApplyImpulse(targetVel, head.GetWorldCenter());
+            }
         }
+
+
+        public override void update()
+        {
+            base.update();
+
+            Vector2 radius = (Vector2)head.GetWorldCenter() - location;
+            wheelToSheepRot = (float)System.Math.Atan2(radius.X, radius.Y) * Helper.RadianToDegree;
+        }
+
 
         public override void draw(RenderWindow win, View view)
         {
@@ -128,7 +150,7 @@ namespace UnicycleSheep
             Vector2 radius = (Vector2)head.GetWorldCenter() - location;
 
             sheepSprite.Position = sheepLoc.toScreenCoord();
-            sheepSprite.Rotation =  (float)System.Math.Atan2(radius.X, radius.Y) * Helper.RadianToDegree;
+            sheepSprite.Rotation = wheelToSheepRot;
 
             wheelSprite.Position = location.toScreenCoord();
             wheelSprite.Rotation = -body.GetAngle() * Helper.RadianToDegree;
@@ -139,15 +161,22 @@ namespace UnicycleSheep
         }
 
         // ********************************************************** //
-        
+
+        // ********************************************************** //
+
+        Box2DX.Collision.Shape _lastContact;
+
         public void OnContact(Box2DX.Collision.Shape _other, ContactPoint _point)
         {
+            _lastContact = _other;
             isOnGround = true;
         }
 
         public void OnContactRemove(Box2DX.Collision.Shape _other, ContactPoint _point)
         {
-            isOnGround = false;
+            //only when the tile is left which was just hit
+            if (_lastContact == _other)
+                isOnGround = false;
         }
 
     }
