@@ -14,12 +14,10 @@ namespace UnicycleSheep
         //remove after manager exists
         AnimatedSprite wheelSprite;
         Sprite sheepSprite;
-        Sprite testsprite;
 
-        Body chest;
+        Body head;
 
         //movement input and constant
-        private float wheelToSheepRot = 0.0f; //basicly the rotation of the unicycle's frame
         protected float rotation = 0;
         private float RotationFakt = 1f;
 
@@ -31,9 +29,14 @@ namespace UnicycleSheep
         //state vars
         bool isOnGround;
 
+        static uint count = 0;
+        uint index;
+
         public PlayerCharacter(World _world, Vector2 _position)
             :base(_world, _position)
         {
+            index = ++count;
+
             this.angVelocity = 0;
             CircleDef circleDef = new CircleDef();
             circleDef.Radius = 1;
@@ -47,19 +50,20 @@ namespace UnicycleSheep
 
             //build the head and connect with the wheel
             BodyDef bodydef = new BodyDef();
+            bodydef.Position = _position + new Vector2(0.0f, 4.0f);
             bodydef.Angle = 0.0f;
 
-            bodydef.Position = _position + new Vector2(0.0f, 4f);
-            chest = _world.CreateBody(bodydef);
-            circleDef.Density = 0.2f;
-            chest.CreateShape(circleDef);
-            chest.SetMassFromShapes();
+            head = _world.CreateBody(bodydef);
+            head.CreateShape(circleDef);
+            head.SetMassFromShapes();
 
             DistanceJointDef jointDef = new DistanceJointDef();
-            jointDef.Body1 = chest;
+            jointDef.Body1 = head;
             jointDef.Body2 = body;
             jointDef.CollideConnected = false;
             jointDef.Length = 4f;
+     //       jointDef.Type = JointType.DistanceJoint;
+
             _world.CreateJoint(jointDef);
 
             Texture wheelTexture = AssetManager.getTexture(AssetManager.TextureName.ShoopWheel);
@@ -70,37 +74,37 @@ namespace UnicycleSheep
             sheepSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Shoop));
             sheepSprite.Scale = new Vector2(0.2f, 0.2f);
             sheepSprite.Origin = ((Vector2)sheepSprite.Texture.Size) / 2F;
-
-            testsprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.WhitePixel));
-            testsprite.Origin = ((Vector2)testsprite.Texture.Size) / 2F;
         }
 
         public void KeyboardInput()
         {
-            if (KeyboardInputManager.isPressed(Keyboard.Key.A))
-                rotation = 1;
-            else if (KeyboardInputManager.isPressed(Keyboard.Key.D))
-                rotation = -1;
-            else //stop accelerating
-                rotation = 0f;
+            bool jumpButtonIsPressed;
 
-            if (KeyboardInputManager.isPressed(Keyboard.Key.Space))
+            if(GamePadInputManager.isConnected(index))
             {
-                if (jumpStrength < maxJump) jumpStrength += 0.8f;
+                rotation = -GamePadInputManager.getLeftStick(index).X;
+
+                jumpButtonIsPressed = GamePadInputManager.isPressed(GamePadButton.RB, index);
+            }
+            else
+            {
+                rotation = 0F;
+                if (KeyboardInputManager.isPressed(Keyboard.Key.A))
+                    rotation += 1F;
+                if (KeyboardInputManager.isPressed(Keyboard.Key.D))
+                    rotation += -1F;
+
+                jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.Space);
+            }
+
+            if (jumpButtonIsPressed)
+            {
+                if (jumpStrength < maxJump)
+                    jumpStrength += 0.8f;
                 jump = false;
             }
-            else if(jumpStrength > 0) jump = true;
+            else if (jumpStrength > 0) jump = true;  
 
-       /*     bool stabilizePlus = KeyboardInputManager.isPressed(Keyboard.Key.X);
-            bool stabilizeMinus = KeyboardInputManager.isPressed(Keyboard.Key.L);
-            if (stabilizePlus || stabilizeMinus)
-            {
-                Vector2 targetVel = (Vector2)chest.GetWorldCenter() - location;//optPos - headPos;
-                targetVel = stabilizePlus ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y); 
-             //   targetVel.normalize();
-
-                chest.ApplyImpulse(targetVel, chest.GetWorldCenter());
-            }*/
         }
         public void Move()
         {
@@ -116,46 +120,15 @@ namespace UnicycleSheep
                 jump = false;
                 jumpStrength = 0f;
             }
-
-           if (isOnGround)
-            {
-                //some auto correction to make it easier to not fall over
-                Vector2 headPos = chest.GetWorldCenter();
-                Vector2 optPos = location + new Vector2(0.0f, 4.0f);
-                Vector2 currentVel = chest.GetLinearVelocity();
-
-                Vector2 targetDir = optPos - headPos;
-                Vector2 targetVel = (Vector2)chest.GetWorldCenter() - location;//optPos - headPos;
-                targetVel = targetDir.Y < 0 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
-
-                float len = targetDir.lengthSqr;
-                if (len < 0.05f * 0.05f)
-                {
-                //    chest.ApplyImpulse(-chest.GetLinearVelocity(), chest.GetWorldCenter());
-                    return;
-                }
-
-                targetVel.normalize();
-                float dif = (currentVel.normalize() - targetVel).length;
-
-                chest.ApplyImpulse(targetVel * dif* 0.5f, chest.GetWorldCenter());//(Vector2)(body.GetLinearVelocity()
-            }
-        }
-
-        public override void update()
-        {
-            base.update();
-
-             Vector2 radius = (Vector2)chest.GetWorldCenter() - location;
-             wheelToSheepRot = (float)System.Math.Atan2(radius.X, radius.Y) * Helper.RadianToDegree;
         }
 
         public override void draw(RenderWindow win, View view)
         {
-            Vector2 sheepLoc = chest.GetWorldCenter();
-  
+            Vector2 sheepLoc = head.GetWorldCenter();
+            Vector2 radius = (Vector2)head.GetWorldCenter() - location;
+
             sheepSprite.Position = sheepLoc.toScreenCoord();
-            sheepSprite.Rotation = wheelToSheepRot;
+            sheepSprite.Rotation =  (float)System.Math.Atan2(radius.X, radius.Y) * Helper.RadianToDegree;
 
             wheelSprite.Position = location.toScreenCoord();
             wheelSprite.Rotation = -body.GetAngle() * Helper.RadianToDegree;
@@ -163,11 +136,9 @@ namespace UnicycleSheep
             win.Draw(wheelSprite);
             //draw after to overlap
             win.Draw(sheepSprite);
-
-         //   testsprite.Scale = new Vector2(10, 10);
-         //   testsprite.Position = ((Vector2)chest.GetWorldCenter()).toScreenCoord();
-            win.Draw(testsprite);
         }
+
+        // ********************************************************** //
 
         // ********************************************************** //
 

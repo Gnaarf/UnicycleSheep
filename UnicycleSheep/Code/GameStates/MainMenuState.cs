@@ -11,6 +11,7 @@ namespace UnicycleSheep
         public MainMenuState()
         {
             backgroundSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.MainMenuBackground));
+
         }
 
         public GameState update() 
@@ -25,6 +26,7 @@ namespace UnicycleSheep
         
         public void draw(RenderWindow win, View view) 
         {
+            backgroundSprite.Scale = ((Vector2)win.Size) / ((Vector2)backgroundSprite.Texture.Size);
             win.Draw(backgroundSprite);
         }
         
