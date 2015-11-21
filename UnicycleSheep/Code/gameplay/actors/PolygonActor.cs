@@ -15,7 +15,7 @@ namespace Actors
     class PolygonActor : UnicycleSheep.PhysicsActor
     {
         Body[] triangleBodys; //to build a convex polygon triangles are used
-        public PolygonActor(World _world, Vector2 _position)
+        public PolygonActor(World _world, Vector2 _position, uint _seed)
             : base(_world, _position)
         {   
             int res = (int)Constants.worldSizeX / 5;
@@ -27,11 +27,16 @@ namespace Actors
 
             Vector2 posScreen = _position.toScreenCoord();
 
+            //repeatable random sequenze
+            Rand rnd = new Rand(_seed);
+
+            verts[0] = new Vec2(0, 10);
+            vertexBuffer.Append(new Vertex(((Vector2)verts[0] + _position).toScreenCoord()));
             //create the function
-            for (int i = 0; i < res; ++i)
+            for (int i = 1; i < res; ++i)
             {
                 //Vector2 pos = new Vec2(i * 5, 10 + Rand.IntValue(10));
-                Vector2 pos = new Vec2(i * 5, 10);
+                Vector2 pos = new Vec2(i * 5, verts[i-1].Y + (int)rnd.next(6) - 3);
                 verts[i] = pos;
                 vertexBuffer.Append(new Vertex((pos + _position).toScreenCoord()));
             }

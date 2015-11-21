@@ -24,7 +24,7 @@ namespace UnicycleSheep
             physicsWorld = new World(aabb, new Vec2(0.0f, -9.81f), false);
 
             playerChar = new PlayerCharacter(physicsWorld, new Vec2(5.0f, 50.0f));
-            polygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 0.0f));
+            polygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 0.0f), 0xF0056A4);
 
             dekoHand = new DekoElements.RemoteControllHand(1);
         }

@@ -3,6 +3,24 @@ using System.Diagnostics;
 
 public class Rand
 {
+    //random object with seed init
+    //and deterministic sequence
+    public Rand(uint _seed)
+    {
+        num = _seed;
+    }
+
+    public uint next(uint max, uint min = 0)
+    {
+        num ^= num << 13;
+        num ^= num >> 17;
+        num ^= num << 5;
+        return (num % (max + 1 - min)) + min;
+    }
+
+
+    uint num;
+
     static Random random = new Random();
 
     public static float Value()
