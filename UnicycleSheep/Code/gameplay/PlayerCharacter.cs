@@ -14,8 +14,11 @@ namespace UnicycleSheep
         AnimatedSprite wheelSprite;
         Sprite sheepSprite;
 
-        protected float rotation;
+        //movement input
+        protected float rotation = 0;
         private float RotationFakt = 3f;
+
+        bool jump = false;
 
         public PlayerCharacter(World _world, Vector2 _position)
             :base(_world, _position)
@@ -46,6 +49,11 @@ namespace UnicycleSheep
                 rotation = 1;
             else if (KeyboardInputManager.isPressed(Keyboard.Key.D))
                 rotation = -1;
+            else //stop accelerating
+                rotation = 0f;
+
+            jump = KeyboardInputManager.isPressed(Keyboard.Key.Space);
+                
         }
         public void Move()
         {
@@ -53,6 +61,8 @@ namespace UnicycleSheep
                 this.angVelocity += RotationFakt;
             else if ((this.angVelocity > -100) && this.rotation == -1)
                 this.angVelocity -= RotationFakt;
+
+            if (jump) body.ApplyImpulse(new Vector2(0, 2), new Vector2(0, 0));
         }
 
         public override void draw(RenderWindow win, View view)
