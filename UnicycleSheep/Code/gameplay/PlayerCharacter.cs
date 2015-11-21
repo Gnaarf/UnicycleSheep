@@ -15,6 +15,8 @@ namespace UnicycleSheep
         AnimatedSprite wheelSprite;
         Sprite sheepSprite;
 
+        Body head;
+
         //movement input and constant
         protected float rotation = 0;
         private float RotationFakt = 1f;
@@ -40,6 +42,24 @@ namespace UnicycleSheep
             Box2DX.Collision.Shape s = body.CreateShape(circleDef);
             body.SetMassFromShapes();
             body.SetUserData(this); // link body and this to register collisions in this
+
+            //build the head and connect with the wheel
+            BodyDef bodydef = new BodyDef();
+            bodydef.Position = _position + new Vector2(0.0f, 4.0f);
+            bodydef.Angle = 0.0f;
+
+            head = _world.CreateBody(bodydef);
+            head.CreateShape(circleDef);
+            head.SetMassFromShapes();
+
+            DistanceJointDef jointDef = new DistanceJointDef();
+            jointDef.Body1 = head;
+            jointDef.Body2 = body;
+            jointDef.CollideConnected = false;
+            jointDef.Length = 4f;
+     //       jointDef.Type = JointType.DistanceJoint;
+
+            _world.CreateJoint(jointDef);
 
             Texture wheelTexture = AssetManager.getTexture(AssetManager.TextureName.ShoopWheel);
             wheelSprite = new AnimatedSprite(wheelTexture, 1.0f, 1, (Vector2)wheelTexture.Size);
@@ -85,9 +105,13 @@ namespace UnicycleSheep
 
         public override void draw(RenderWindow win, View view)
         {
-            Vector2 sheepLoc = location + new Vector2(0.0f, 4.0f);
+            Vector2 sheepLoc = head.GetWorldCenter();
+            Vector2 radius = (Vector2)head.GetWorldCenter() - location;
+
             sheepSprite.Position = sheepLoc.toScreenCoord();
-            wheelSprite.Position = new Vector2 (location.toScreenCoord().X,location.toScreenCoord().Y);
+            sheepSprite.Rotation =  (float)System.Math.Atan2(radius.X, radius.Y) * Helper.RadianToDegree;
+
+            wheelSprite.Position = location.toScreenCoord();
             wheelSprite.Rotation = -body.GetAngle() * Helper.RadianToDegree;
 
             win.Draw(wheelSprite);
