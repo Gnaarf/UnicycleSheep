@@ -37,7 +37,7 @@ namespace UnicycleSheep
         public PlayerCharacter(World _world, Vector2 _position)
             :base(_world, _position)
         {
-            index = ++count;
+            index = count++;
 
             this.angVelocity = 0;
             CircleDef circleDef = new CircleDef();
@@ -131,6 +131,25 @@ namespace UnicycleSheep
                 targetVel.normalize();
 
                 head.ApplyImpulse(targetVel, head.GetWorldCenter());
+            }
+            if(isOnGround)
+            {
+                //some auto correction to make it easier to not fall over
+                Vector2 headPos = head.GetWorldCenter();
+                Vector2 optPos = location + new Vector2(0.0f, 4.0f);
+                Vector2 currentVel = head.GetLinearVelocity();
+
+                Vector2 targetDir = optPos - headPos;
+                Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;
+                targetVel = targetDir.Y < 0 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
+
+                float len = targetDir.lengthSqr;
+                if (len < 0.05f * 0.05f) return;
+
+                targetVel.normalize();
+                float dif = (currentVel.normalize() - targetVel).length;
+
+                head.ApplyImpulse(targetVel , head.GetWorldCenter());//(Vector2)(body.GetLinearVelocity()*/
             }
         }
 
