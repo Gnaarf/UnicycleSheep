@@ -16,7 +16,12 @@ namespace UnicycleSheep
 
         public GameState update() 
         {
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Return) || (GamePadInputManager.isConnected(0) && GamePadInputManager.isClicked(GamePadButton.A, 0)))
+            foreach (var i in GamePadInputManager.connectedPadIndices)
+            {
+                if (GamePadInputManager.isClicked(GamePadButton.A, i))
+                    return GameState.InGame;
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Return))
             {
                 return GameState.InGame;
             }
