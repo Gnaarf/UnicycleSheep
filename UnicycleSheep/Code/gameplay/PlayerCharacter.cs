@@ -13,7 +13,7 @@ namespace UnicycleSheep
         //remove after manager exists
         AnimatedSprite sprite;
         protected float rotation;
-        private float RotationFakt;
+        private float RotationFakt = 3f;
 
         public PlayerCharacter(World _world, Vector2 _position)
             :base(_world, _position)
@@ -42,9 +42,9 @@ namespace UnicycleSheep
         public void Move()
         {
             if((this.angVelocity < 100) && this.rotation == 1)
-                this.angVelocity += 3f;
+                this.angVelocity += RotationFakt;
             else if ((this.angVelocity > -100) && this.rotation == -1)
-                this.angVelocity -= 3f;
+                this.angVelocity -= RotationFakt;
         }
 
         public override void draw(RenderWindow win, View view)
