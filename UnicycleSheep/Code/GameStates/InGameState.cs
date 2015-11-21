@@ -13,6 +13,8 @@ namespace UnicycleSheep
         PlayerCharacter playerChar;
         Actors.PolygonActor polygonAct;
 
+        DekoElements.RemoteControllHand dekoHand;
+
         public InGameState()
         {
             AABB aabb = new AABB();
@@ -23,6 +25,8 @@ namespace UnicycleSheep
 
             playerChar = new PlayerCharacter(physicsWorld, new Vec2(5.0f, 50.0f));
             polygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 0.0f));
+
+            dekoHand = new DekoElements.RemoteControllHand(1);
         }
         public GameState update() 
         {
@@ -35,6 +39,8 @@ namespace UnicycleSheep
         {
             playerChar.draw(win, view);
             polygonAct.draw(win, view);
+
+            dekoHand.draw(win);
         }
         public void drawGUI(GUI gui) { }
     }

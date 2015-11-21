@@ -76,6 +76,7 @@
     <Compile Include="Code\AnimatedSprite.cs" />
     <Compile Include="Code\AssetManager.cs" />
     <Compile Include="Code\Constants.cs" />
+    <Compile Include="Code\DekoElements\RemoteControllHand.cs" />
     <Compile Include="Code\KeyboardInputManager.cs" />
     <Compile Include="Code\GamePadInputManager.cs" />
     <Compile Include="Code\gameplay\Actor.cs" />
@@ -103,6 +104,39 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Textures\Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\Base.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\leftThumb_left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\leftThumb_leftmost.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\leftThumb_mid.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\leftThumb_right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\leftThumb_rightmost.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\rightThumb_left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\rightThumb_leftmost.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\rightThumb_mid.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\rightThumb_right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\rightThumb_rightmost.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\pixel.png">
