@@ -178,7 +178,6 @@ namespace UnicycleSheep
                 
                     targetVec.normalize();
                     float scalfact = (float) Math.Acos(Math.Abs((double)targetVec.X));
-                Console.WriteLine(scalfact);
 
                 //head.ApplyForce(targetVec * Counterfactf * scalfact, head.GetWorldCenter());
                 
@@ -192,12 +191,8 @@ namespace UnicycleSheep
                 Vector2 theAngVec = chest.GetPosition() - body.GetPosition();
                 theAngVec.normalize();
                 scalfact = (float)Math.Acos(Math.Abs((double)theAngVec.X));
-                if(float.IsNaN(scalfact))
-                {
-                    Console.WriteLine(theAngVec.X);
-                }
+                
                 float angVel = chest.GetAngularVelocity();
-                Console.WriteLine(scalfact);
 
                 if (theAngVec.X > 0 && !float.IsNaN(scalfact))
                 {
@@ -278,7 +273,7 @@ namespace UnicycleSheep
             headDeb.Rotation = -chest.GetAngle() * Helper.RadianToDegree;
             headDeb.FillColor = isDead ? SFML.Graphics.Color.Black : SFML.Graphics.Color.Red;
 
-            win.Draw(headDeb); 
+            win.Draw(headDeb);
         }
 
         // ********************************************************** //
