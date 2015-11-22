@@ -15,7 +15,9 @@ namespace UnicycleSheep
         AnimatedSprite wheelSprite;
         Sprite sheepSprite;
 
-        Body head;
+        Box2DX.Collision.Shape head;
+        Box2DX.Collision.Shape wheel;
+        Body chest;
         Vector2 rotationHead;
 
         //movement input and constant
@@ -34,11 +36,15 @@ namespace UnicycleSheep
         //state vars
         bool isOnGround;
 
+        public bool isDead{get { return isDead;} private set{ isDead = value;}}
+
         uint controllerIndex;
 
         public PlayerCharacter(World _world, Vector2 _position, uint controllerIndex)
-            :base(_world, _position)
+            :base(_world, _position),
         {
+            isDead = false;
+
             this.controllerIndex = controllerIndex;
 
             this.angVelocity = 0;
@@ -50,17 +56,22 @@ namespace UnicycleSheep
             circleDef.Restitution = 0.0f;
             circleDef.LocalPosition.Set(0, 0);
 
-            Box2DX.Collision.Shape s = this.body.CreateShape(circleDef);
+            wheel = body.CreateShape(circleDef);
             body.SetMassFromShapes();
             body.SetUserData(this); // link body and this to register collisions in this
-            
-            
+
             //build the head and connect with the wheel
             BodyDef bodydef = new BodyDef();
             bodydef.Position = _position + new Vector2(0.0f, 3.5f);
             bodydef.Angle = 0f;
 
-            head = _world.CreateBody(bodydef);
+            chest = _world.CreateBody(bodydef);
+
+            //add the head
+            circleDef.Density = 0.0001f;
+            circleDef.Radius = 0.5f;
+            circleDef.LocalPosition.Set(0, 3);
+            head = chest.CreateShape(circleDef);
 
             rotationHead = _position;
 
@@ -68,19 +79,18 @@ namespace UnicycleSheep
             Boxdef.SetAsBox(1, 1.5f);
             Boxdef.Density = 0.25f;
             Boxdef.Friction = 0.0f;
-            Box2DX.Collision.Shape s2 = this.head.CreateShape(Boxdef);
-            this.head.SetMassFromShapes();
+            Box2DX.Collision.Shape s2 = chest.CreateShape(Boxdef);
+            chest.SetMassFromShapes();
+            chest.SetUserData(this);
 
             //Jointshit
             RevoluteJointDef jointDefKW = new RevoluteJointDef();
-            jointDefKW.Body2 = head;
+            jointDefKW.Body2 = chest;
             jointDefKW.Body1 = body;
             jointDefKW.CollideConnected = false;
             jointDefKW.LocalAnchor2 = new Vector2(0, -3.5f);
             jointDefKW.LocalAnchor1 = new Vector2(0, 0);
             jointDefKW.EnableLimit = false;
-
-            //       jointDef.Type = JointType.DistanceJoint;
 
             _world.CreateJoint(jointDefKW);
 
@@ -98,6 +108,9 @@ namespace UnicycleSheep
 
         public void KeyboardInput()
         {
+            //discard any input when dead
+            if (isDead) return;
+
             bool jumpButtonIsPressed;
 
             if(GamePadInputManager.isConnected(controllerIndex))
@@ -144,7 +157,7 @@ namespace UnicycleSheep
             if (jump && /*isOnGround &&*/ jumpStrength > 0f)
             {
                 body.ApplyImpulse(new Vector2(0, jumpStrength), body.GetWorldCenter());
-                head.ApplyImpulse(new Vector2(0, jumpStrength * 0.01f), body.GetWorldCenter());
+                chest.ApplyImpulse(new Vector2(0, jumpStrength * 0.01f), body.GetWorldCenter());
                 jump = false;
                 jumpStrength = 0f;
             }
@@ -154,7 +167,7 @@ namespace UnicycleSheep
                 //Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;
                 //targetVel = wantsToBalance == 1 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
                 //targetVel.normalize();
-                Vector2 theAngVec = head.GetPosition() - body.GetPosition();
+                Vector2 theAngVec = chest.GetPosition() - body.GetPosition();
                 //Vector2 targetVec = wantsToBalance == 1 ? new Vector2 ((float) -(Math.Sin((double) head.GetAngle())),(float) Math.Cos((double) head.GetAngle())) : new Vector2((float)Math.Sin((double)head.GetAngle()), (float)-Math.Cos((double)head.GetAngle()));
                 Vector2 targetVec = wantsToBalance > 0 ? new Vector2(-theAngVec.Y, theAngVec.X) : new Vector2(theAngVec.Y, -theAngVec.X);
                 
@@ -164,30 +177,30 @@ namespace UnicycleSheep
 
                 //head.ApplyForce(targetVec * Counterfactf * scalfact, head.GetWorldCenter());
                 
-                head.ApplyTorque(80* scalfact * wantsToBalance);
+                chest.ApplyTorque(80* scalfact * wantsToBalance);
 
                 wantsToBalance = 0;
             }
             if(isOnGround)
             {
                 float scalfact = 0;
-                Vector2 theAngVec = head.GetPosition() - body.GetPosition();
+                Vector2 theAngVec = chest.GetPosition() - body.GetPosition();
                 theAngVec.normalize();
                 scalfact = (float)Math.Acos(Math.Abs((double)theAngVec.X));
                 if(float.IsNaN(scalfact))
                 {
                     Console.WriteLine(theAngVec.X);
                 }
-                float angVel = head.GetAngularVelocity();
+                float angVel = chest.GetAngularVelocity();
                 Console.WriteLine(scalfact);
 
                 if (theAngVec.X > 0 && !float.IsNaN(scalfact))
                 {
-                   head.ApplyTorque(scalfact * 50);
+                   chest.ApplyTorque(scalfact * 50);
                 }
                 if (theAngVec.X < 0 && !float.IsNaN(scalfact))
                 {
-                   head.ApplyTorque(scalfact * -50);
+                   chest.ApplyTorque(scalfact * -50);
                 }
                 ////some auto correction to make it easier to not fall over
                 //Vector2 headPos = head.GetWorldCenter();
@@ -215,14 +228,14 @@ namespace UnicycleSheep
         {
             base.update();
 
-            Vector2 radius = (Vector2)head.GetWorldCenter() - location;
+            Vector2 radius = (Vector2)chest.GetWorldCenter() - location;
             wheelToSheepRot = (float)System.Math.Atan2(radius.X, radius.Y) * Helper.RadianToDegree;
         }
 
 
         public override void draw(RenderWindow win, View view)
         {
-            Vector2 sheepLoc = head.GetWorldCenter();
+            Vector2 sheepLoc = chest.GetWorldCenter();
 
             sheepSprite.Position = sheepLoc.toScreenCoord();
             sheepSprite.Rotation = wheelToSheepRot;
@@ -248,10 +261,18 @@ namespace UnicycleSheep
             //debugDraw for sheepBody
             SFML.Graphics.RectangleShape body_Debug = new SFML.Graphics.RectangleShape(new Vector2(2,3).toScreenCoord() - Vector2.Zero.toScreenCoord());
             body_Debug.Origin = (Vector2)body_Debug.Size / 2F;
-            body_Debug.Position = ((Vector2)head.GetPosition()).toScreenCoord();
-            body_Debug.Rotation = -head.GetAngle() * Helper.RadianToDegree;
+            body_Debug.Position = ((Vector2)chest.GetPosition()).toScreenCoord();
+            body_Debug.Rotation = -chest.GetAngle() * Helper.RadianToDegree;
             body_Debug.FillColor = SFML.Graphics.Color.Red;
             win.Draw(body_Debug);
+
+            //the head
+     /*       SFML.Graphics.CircleShape head = new SFML.Graphics.CircleShape(Vector2.Zero.toScreenCoord().X - Vector2.One.toScreenCoord().X);
+            head.Origin = Vector2.One * head.Radius;
+            head.Position = ((Vector2)chest.GetPosition() + new Vector2(0, 2)).toScreenCoord();
+            head.FillColor = SFML.Graphics.Color.Red;
+
+            win.Draw(head);  */     
         }
 
         // ********************************************************** //
@@ -260,17 +281,27 @@ namespace UnicycleSheep
 
         Box2DX.Collision.Shape _lastContact;
 
-        public void OnContact(Box2DX.Collision.Shape _other, ContactPoint _point)
+        public void OnContact(Box2DX.Collision.Shape _other, Box2DX.Collision.Shape _self, ContactPoint _point)
         {
-            _lastContact = _other;
-            isOnGround = true;
+            if (wheel == _self)
+            {
+                _lastContact = _other;
+                isOnGround = true;
+            }
+            else if(head == _self)
+            {
+                isDead = true;
+            }
         }
 
-        public void OnContactRemove(Box2DX.Collision.Shape _other, ContactPoint _point)
+        public void OnContactRemove(Box2DX.Collision.Shape _other, Box2DX.Collision.Shape _self, ContactPoint _point)
         {
-            //only when the tile is left which was just hit
-            if (_lastContact == _other)
-                isOnGround = false;
+            if (wheel == _self)
+            {
+                //only when the tile is left which was just hit
+                if (_lastContact == _other)
+                    isOnGround = false;
+            }
         }
 
     }
