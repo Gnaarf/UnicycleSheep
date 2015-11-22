@@ -297,7 +297,7 @@ namespace UnicycleSheep
 
         public void OnContactRemove(Box2DX.Collision.Shape _other, Box2DX.Collision.Shape _self, ContactPoint _point)
         {
-            if (wheel == _self)
+      //      if (wheel == _self)
             {
                 //only when the tile is left which was just hit
                 if (_lastContact == _other)
