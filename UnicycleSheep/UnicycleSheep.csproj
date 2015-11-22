@@ -76,6 +76,7 @@
     <Compile Include="Code\AnimatedSprite.cs" />
     <Compile Include="Code\AssetManager.cs" />
     <Compile Include="Code\Constants.cs" />
+    <Compile Include="Code\DekoElements\ParticleSpawner.cs" />
     <Compile Include="Code\DekoElements\RemoteControllHand.cs" />
     <Compile Include="Code\KeyboardInputManager.cs" />
     <Compile Include="Code\GamePadInputManager.cs" />
@@ -111,6 +112,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\Hands\Hand1\Base.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\FlagGreen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Textures\Hands\Hand1\FlagRed.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\Hands\Hand1\Jumpbar1.png">
