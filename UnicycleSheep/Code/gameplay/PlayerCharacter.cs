@@ -30,6 +30,7 @@ namespace UnicycleSheep
 
         private float maxJump = 84f;
         private float Jumptime;
+        public float JumptimePassed;
         bool jump = false;
         float jumpStrength = 0.0f;
 
@@ -167,9 +168,9 @@ namespace UnicycleSheep
                 jump = false;
                 jumpStrength = 0f;
             }
-            if (Program.inGameFrameCount-Jumptime < 300 /* && wantsToBalance == 0 */)
+            if (JumptimePassed < 30 /* && wantsToBalance == 0 */)
             {
-                Console.WriteLine(Program.inGameFrameCount - Jumptime);
+                Console.WriteLine(JumptimePassed);
                 float scalfact = 0;
                 Vector2 theAngVec = chest.GetPosition() - body.GetPosition();
                 theAngVec.normalize();
@@ -184,20 +185,20 @@ namespace UnicycleSheep
                 {
                     if (angVel < -2.5f)
                     {
-                        chest.ApplyTorque(scalfact * 50 * Math.Abs(angVel * 10));
+                        chest.ApplyTorque(scalfact * 55 * Math.Abs(angVel * 12));
                     }
                     else
-                        chest.ApplyTorque(scalfact * 50);
+                        chest.ApplyTorque(scalfact * 55);
 
                 }
                 if (theAngVec.X < 0 && !float.IsNaN(scalfact))
                 {
                     if (angVel > 2.5f)
                     {
-                        chest.ApplyTorque(scalfact * -50 * Math.Abs(angVel * 10));
+                        chest.ApplyTorque(scalfact * -55 * Math.Abs(angVel * 12));
                     }
                     else
-                        chest.ApplyTorque(scalfact * -50);
+                        chest.ApplyTorque(scalfact * -55);
                 }
             }
             if (wantsToBalance != 0)
@@ -214,7 +215,7 @@ namespace UnicycleSheep
 
                 //head.ApplyForce(targetVec * Counterfactf * scalfact, head.GetWorldCenter());
                 
-                chest.ApplyTorque(isOnGround ? 80 * scalfact * wantsToBalance : 50 * wantsToBalance);
+                chest.ApplyTorque(JumptimePassed < 30 ? 80 * scalfact * wantsToBalance : 60 * wantsToBalance);
 
                 wantsToBalance = 0;
             }
@@ -288,6 +289,7 @@ namespace UnicycleSheep
                 _lastContact = _other;
                 isOnGround = true;
                 Jumptime = Program.inGameFrameCount;
+                JumptimePassed = 0;
             }
             else if(head == _self && Physics.ContactManager.g_contactManager.isLethal(_other))
             {
@@ -303,6 +305,7 @@ namespace UnicycleSheep
                 if (_lastContact == _other)
                 {
                     isOnGround = false;
+                    JumptimePassed = Program.inGameFrameCount - Jumptime; 
                 }
             }
         }
