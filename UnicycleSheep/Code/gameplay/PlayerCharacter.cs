@@ -156,7 +156,7 @@ namespace UnicycleSheep
                 //targetVel.normalize();
                 Vector2 theAngVec = head.GetPosition() - body.GetPosition();
                 //Vector2 targetVec = wantsToBalance == 1 ? new Vector2 ((float) -(Math.Sin((double) head.GetAngle())),(float) Math.Cos((double) head.GetAngle())) : new Vector2((float)Math.Sin((double)head.GetAngle()), (float)-Math.Cos((double)head.GetAngle()));
-                Vector2 targetVec = wantsToBalance == 1 ? new Vector2(-theAngVec.Y, theAngVec.X) : new Vector2(theAngVec.Y, -theAngVec.X);
+                Vector2 targetVec = wantsToBalance > 0 ? new Vector2(-theAngVec.Y, theAngVec.X) : new Vector2(theAngVec.Y, -theAngVec.X);
                 
                     targetVec.normalize();
                     float scalfact = (float) Math.Acos(Math.Abs((double)targetVec.X));
@@ -164,7 +164,7 @@ namespace UnicycleSheep
 
                 //head.ApplyForce(targetVec * Counterfactf * scalfact, head.GetWorldCenter());
                 
-                head.ApplyTorque(wantsToBalance == 1 ? 70* scalfact*4 : -70* scalfact*4);
+                head.ApplyTorque(80* scalfact * wantsToBalance);
 
                 wantsToBalance = 0;
             }
