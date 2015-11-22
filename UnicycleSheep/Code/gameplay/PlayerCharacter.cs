@@ -267,7 +267,7 @@ namespace UnicycleSheep
             win.Draw(body_Debug);
 
             //the head
-            SFML.Graphics.CircleShape headDeb = new SFML.Graphics.CircleShape(Vector2.Zero.toScreenCoord().X - Vector2.One.toScreenCoord().X);
+            SFML.Graphics.CircleShape headDeb = new SFML.Graphics.CircleShape(Vector2.Zero.toScreenCoord().X - (0.5f * Vector2.One).toScreenCoord().X);
             headDeb.Origin = Vector2.One * headDeb.Radius;
             headDeb.Position = ((Vector2)chest.GetPosition() + (new Vector2(0, 3)).rotate(chest.GetAngle())).toScreenCoord();
             headDeb.Rotation = -chest.GetAngle() * Helper.RadianToDegree;
