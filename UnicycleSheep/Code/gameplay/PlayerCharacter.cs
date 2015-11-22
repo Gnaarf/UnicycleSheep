@@ -80,7 +80,7 @@ namespace UnicycleSheep
             PolygonDef Boxdef = new PolygonDef();
             Boxdef.SetAsBox(1, 1.5f);
             Boxdef.Density = 0.25f;
-            Boxdef.Friction = 0.0f;
+            Boxdef.Friction = 0.4f;
             Box2DX.Collision.Shape s2 = chest.CreateShape(Boxdef);
             chest.SetMassFromShapes();
             chest.SetUserData(this);
@@ -90,7 +90,7 @@ namespace UnicycleSheep
             jointDefKW.Body2 = chest;
             jointDefKW.Body1 = body;
             jointDefKW.CollideConnected = false;
-            jointDefKW.LocalAnchor2 = new Vector2(0, -3.5f);
+            jointDefKW.LocalAnchor2 = new Vector2(-0.0f, -3.8f);
             jointDefKW.LocalAnchor1 = new Vector2(0, 0);
             jointDefKW.EnableLimit = false;
 
@@ -98,7 +98,7 @@ namespace UnicycleSheep
 
             Texture wheelTexture = AssetManager.getTexture(AssetManager.TextureName.ShoopWheel);
             wheelSprite = new AnimatedSprite(wheelTexture, 1.0f, 1, (Vector2)wheelTexture.Size);
-            wheelSprite.Scale = (Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord() - Vector2.Zero.toScreenCoord();
+            wheelSprite.Scale = new Vector2(0.2f, 0.2f); //(Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord() - Vector2.Zero.toScreenCoord();//new Vector2(0.08f, 0.08f);
             wheelSprite.Origin = ((Vector2)wheelSprite.spriteSize) / 2F;
 
             sheepSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Shoop));
@@ -111,8 +111,7 @@ namespace UnicycleSheep
         public void KeyboardInput()
         {
             //discard any input when dead
-            if (isDead) 
-                return;
+            if (isDead) return;
 
             bool jumpButtonIsPressed;
 
@@ -152,6 +151,8 @@ namespace UnicycleSheep
         }
         public void Move()
         {
+            if (isDead) return;
+
             if((this.angVelocity < 100) && this.rotation == 1)
                 this.angVelocity += RotationFakt;
             else if ((this.angVelocity > -100) && this.rotation == -1)
@@ -244,7 +245,7 @@ namespace UnicycleSheep
             //draw after to overlap
             win.Draw(sheepSprite);
 
-            DebugDraw(win);
+       //     DebugDraw(win);
         }
 
         private void DebugDraw(RenderWindow win)
