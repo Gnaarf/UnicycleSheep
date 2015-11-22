@@ -13,11 +13,11 @@ namespace Physics
             IContactEvent s2 = point.Shape2.GetBody().GetUserData() as IContactEvent;
             if (s1 != null)
             {
-                s1.OnContact(point.Shape2, point);
+                s1.OnContact(point.Shape2, point.Shape1, point);
             }
             if (s2 != null)
             {
-                s2.OnContact(point.Shape1, point);
+                s2.OnContact(point.Shape1, point.Shape2, point);
             }
         }
 
@@ -27,11 +27,11 @@ namespace Physics
             IContactEvent s2 = point.Shape2.GetBody().GetUserData() as IContactEvent;
             if (s1 != null)
             {
-                s1.OnContactRemove(point.Shape2, point);
+                s1.OnContactRemove(point.Shape2, point.Shape1, point);
             }
             if (s2 != null)
             {
-                s2.OnContactRemove(point.Shape1, point);
+                s2.OnContactRemove(point.Shape1, point.Shape1, point);
             }
         }
     }
