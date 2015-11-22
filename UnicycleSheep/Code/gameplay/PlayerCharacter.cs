@@ -23,6 +23,7 @@ namespace UnicycleSheep
         protected float rotation = 0;
         private float wantsToBalance = 0;
         private float RotationFakt = 1f;
+        public float Counterfactf = 5f;
 
         private float maxJump = 42f;
 
@@ -111,6 +112,15 @@ namespace UnicycleSheep
                 if (KeyboardInputManager.isPressed(Keyboard.Key.D))
                     rotation += -1F;
 
+                if(KeyboardInputManager.isPressed(Keyboard.Key.Left))
+                    wantsToBalance = 1;
+
+                if (KeyboardInputManager.isPressed(Keyboard.Key.Right))
+                    wantsToBalance = -1;
+
+                if (KeyboardInputManager.upward(Keyboard.Key.Left) || KeyboardInputManager.upward(Keyboard.Key.Left))
+                    wantsToBalance = 0;
+
                 jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.Space);
             }
 
@@ -140,11 +150,16 @@ namespace UnicycleSheep
 
             if(wantsToBalance != 0)
             {
-                Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;
-                targetVel = wantsToBalance == 1 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
-                targetVel.normalize();
+                //Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;
+                //targetVel = wantsToBalance == 1 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
+                //targetVel.normalize();
+                Vector2 theAngVec = head.GetPosition() - body.GetPosition();
+                //Vector2 targetVec = wantsToBalance == 1 ? new Vector2 ((float) -(Math.Sin((double) head.GetAngle())),(float) Math.Cos((double) head.GetAngle())) : new Vector2((float)Math.Sin((double)head.GetAngle()), (float)-Math.Cos((double)head.GetAngle()));
+                Vector2 targetVec = wantsToBalance == 1 ? new Vector2(-theAngVec.Y, theAngVec.X) : new Vector2(theAngVec.Y, -theAngVec.X);
+                targetVec.normalize();
+                float scalfact = (float) Math.Atan2((double) targetVec.Y, (double) targetVec.X);
 
-                head.ApplyImpulse(targetVel, head.GetWorldCenter());
+                head.ApplyForce(targetVec*Counterfactf*scalfact, head.GetWorldCenter());
             }
             if(isOnGround)
             {
