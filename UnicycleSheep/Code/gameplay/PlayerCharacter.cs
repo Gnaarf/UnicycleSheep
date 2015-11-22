@@ -182,7 +182,6 @@ namespace UnicycleSheep
         public override void draw(RenderWindow win, View view)
         {
             Vector2 sheepLoc = head.GetWorldCenter();
-            Vector2 radius = (Vector2)head.GetWorldCenter() - location;
 
             sheepSprite.Position = sheepLoc.toScreenCoord();
             sheepSprite.Rotation = wheelToSheepRot;
@@ -195,7 +194,12 @@ namespace UnicycleSheep
             win.Draw(sheepSprite);
 
             //debugDraw for sheepBody
-            //SFML.Graphics.CircleShape bodyDebug = new SFML.Graphics.CircleShape(((head. Vector2.Zero.toScreenCoord))
+            SFML.Graphics.RectangleShape body_Debug = new SFML.Graphics.RectangleShape(new Vector2(2,6).toScreenCoord() - Vector2.Zero.toScreenCoord());
+            body_Debug.Origin = (Vector2)body_Debug.Size / 2F;
+            body_Debug.Position = ((Vector2)head.GetPosition()).toScreenCoord();
+            body_Debug.Rotation = -head.GetAngle() * Helper.RadianToDegree;
+            body_Debug.FillColor = SFML.Graphics.Color.Red;
+            win.Draw(body_Debug);
         }
 
         // ********************************************************** //

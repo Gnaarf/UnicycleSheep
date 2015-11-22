@@ -32,7 +32,7 @@ namespace UnicycleSheep
             physicsWorld.SetContactListener(contactManager);
             
              // Set new Players
-            ResetPlayers(2);
+            ResetPlayers(1);
             
             groundPolygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 15.0f), 0xF0A58A4, Actors.FunctionType.GradientNoise, 4);
 
