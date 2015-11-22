@@ -82,7 +82,7 @@ namespace UnicycleSheep
 
             Texture wheelTexture = AssetManager.getTexture(AssetManager.TextureName.ShoopWheel);
             wheelSprite = new AnimatedSprite(wheelTexture, 1.0f, 1, (Vector2)wheelTexture.Size);
-            wheelSprite.Scale = Vector2.Zero.toScreenCoord() - (Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord();
+            wheelSprite.Scale = (Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord() - Vector2.Zero.toScreenCoord();
             wheelSprite.Origin = ((Vector2)wheelSprite.spriteSize) / 2F;
 
             sheepSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Shoop));
@@ -193,8 +193,19 @@ namespace UnicycleSheep
             //draw after to overlap
             win.Draw(sheepSprite);
 
+            DebugDraw(win);
+        }
+
+        private void DebugDraw(RenderWindow win)
+        {
+            SFML.Graphics.CircleShape wheel_Debug = new SFML.Graphics.CircleShape(Vector2.Zero.toScreenCoord().X - Vector2.One.toScreenCoord().X);
+            wheel_Debug.Origin = Vector2.One * wheel_Debug.Radius;
+            wheel_Debug.Position = ((Vector2)body.GetPosition()).toScreenCoord();
+            wheel_Debug.FillColor = SFML.Graphics.Color.Red;
+            win.Draw(wheel_Debug);
+
             //debugDraw for sheepBody
-            SFML.Graphics.RectangleShape body_Debug = new SFML.Graphics.RectangleShape(new Vector2(2,6).toScreenCoord() - Vector2.Zero.toScreenCoord());
+            SFML.Graphics.RectangleShape body_Debug = new SFML.Graphics.RectangleShape(new Vector2(2, 6).toScreenCoord() - Vector2.Zero.toScreenCoord());
             body_Debug.Origin = (Vector2)body_Debug.Size / 2F;
             body_Debug.Position = ((Vector2)head.GetPosition()).toScreenCoord();
             body_Debug.Rotation = -head.GetAngle() * Helper.RadianToDegree;
