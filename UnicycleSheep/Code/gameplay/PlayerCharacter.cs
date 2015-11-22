@@ -23,7 +23,8 @@ namespace UnicycleSheep
         protected float rotation = 0;
         private float wantsToBalance = 0;
         private float RotationFakt = 1f;
-        public float Counterfactf = 5f;
+        //verstärkung der gegensteuerung
+        public float Counterfactf = 10f;
 
         private float maxJump = 42f;
 
@@ -56,26 +57,28 @@ namespace UnicycleSheep
             
             //build the head and connect with the wheel
             BodyDef bodydef = new BodyDef();
-            bodydef.Position = _position + new Vector2(0.0f, 4.0f);
-            bodydef.Angle = -1f;
+            bodydef.Position = _position + new Vector2(0.0f, 3.5f);
+            bodydef.Angle = 0f;
 
             head = _world.CreateBody(bodydef);
 
             rotationHead = _position;
 
             PolygonDef Boxdef = new PolygonDef();
-            Boxdef.SetAsBox(1, 3);
+            Boxdef.SetAsBox(1, 1.5f);
             Boxdef.Density = 0.25f;
             Boxdef.Friction = 0.0f;
             Box2DX.Collision.Shape s2 = this.head.CreateShape(Boxdef);
             this.head.SetMassFromShapes();
 
             //Jointshit
-            DistanceJointDef jointDefKW = new DistanceJointDef();
-            jointDefKW.Body1 = head;
-            jointDefKW.Body2 = body;
+            RevoluteJointDef jointDefKW = new RevoluteJointDef();
+            jointDefKW.Body2 = head;
+            jointDefKW.Body1 = body;
             jointDefKW.CollideConnected = false;
-            jointDefKW.Length = 4f;
+            jointDefKW.LocalAnchor2 = new Vector2(0, -3.5f);
+            jointDefKW.LocalAnchor1 = new Vector2(0, 0);
+            jointDefKW.EnableLimit = false;
 
             //       jointDef.Type = JointType.DistanceJoint;
 
@@ -156,10 +159,13 @@ namespace UnicycleSheep
                 Vector2 theAngVec = head.GetPosition() - body.GetPosition();
                 //Vector2 targetVec = wantsToBalance == 1 ? new Vector2 ((float) -(Math.Sin((double) head.GetAngle())),(float) Math.Cos((double) head.GetAngle())) : new Vector2((float)Math.Sin((double)head.GetAngle()), (float)-Math.Cos((double)head.GetAngle()));
                 Vector2 targetVec = wantsToBalance == 1 ? new Vector2(-theAngVec.Y, theAngVec.X) : new Vector2(theAngVec.Y, -theAngVec.X);
-                targetVec.normalize();
-                float scalfact = (float) Math.Atan2((double) targetVec.Y, (double) targetVec.X);
+                if (wantsToBalance != 0)
+                {
+                    targetVec.normalize();
+                    float scalfact = (float)Math.Atan2((double)targetVec.Y, (double)targetVec.X);
 
-                head.ApplyForce(targetVec*Counterfactf*scalfact, head.GetWorldCenter());
+                    head.ApplyForce(targetVec * Counterfactf * scalfact, head.GetWorldCenter());
+                }
             }
             if(isOnGround)
             {
@@ -176,11 +182,11 @@ namespace UnicycleSheep
                 if (len < 0.05f * 0.05f) return;
 
                 targetVel.normalize();
-                
+
                 // Cord: this caused a DevideByZero and the variable seems to be unused, so I commented it
                 //float dif = (currentVel.normalize() - targetVel).length;
 
-                head.ApplyImpulse(targetVel , head.GetWorldCenter());//(Vector2)(body.GetLinearVelocity()*/
+                head.ApplyImpulse(targetVel, head.GetWorldCenter());//(Vector2)(body.GetLinearVelocity()*/
             }
         }
 
@@ -209,7 +215,7 @@ namespace UnicycleSheep
             win.Draw(sheepSprite);
 
             //debugDraw for sheepBody
-            SFML.Graphics.RectangleShape body_Debug = new SFML.Graphics.RectangleShape(new Vector2(2,6).toScreenCoord() - Vector2.Zero.toScreenCoord());
+            SFML.Graphics.RectangleShape body_Debug = new SFML.Graphics.RectangleShape(new Vector2(2,5).toScreenCoord() - Vector2.Zero.toScreenCoord());
             body_Debug.Origin = (Vector2)body_Debug.Size / 2F;
             body_Debug.Position = ((Vector2)head.GetPosition()).toScreenCoord();
             body_Debug.Rotation = -head.GetAngle() * Helper.RadianToDegree;
