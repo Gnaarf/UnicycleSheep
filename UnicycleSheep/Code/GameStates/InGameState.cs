@@ -94,7 +94,7 @@ namespace UnicycleSheep
             {
                 PlayerCharacter player = new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count], uint.MaxValue);
                 dekoHands.Add(new DekoElements.RemoteControllHand(player));
-                playerChars.Add(new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count], uint.MaxValue));
+                playerChars.Add(player);
             }
         }
         public GameState update() 
