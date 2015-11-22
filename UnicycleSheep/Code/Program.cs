@@ -9,8 +9,6 @@ namespace UnicycleSheep
         public static GameTime gameTime;
         public static int inGameFrameCount {get; private set; }
 
-        public static GamePadInputManager gamePadInputManager;
-
         static bool running = true;
 
         static GameState currentGameState = GameState.MainMenu;
