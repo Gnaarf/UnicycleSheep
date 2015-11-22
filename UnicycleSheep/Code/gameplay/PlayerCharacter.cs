@@ -120,9 +120,7 @@ namespace UnicycleSheep
 
                 if (KeyboardInputManager.isPressed(Keyboard.Key.Right))
                     wantsToBalance = -1;
-
-                if (KeyboardInputManager.upward(Keyboard.Key.Left) || KeyboardInputManager.upward(Keyboard.Key.Left))
-                    wantsToBalance = 0;
+                
 
                 jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.Space);
             }
@@ -159,34 +157,56 @@ namespace UnicycleSheep
                 Vector2 theAngVec = head.GetPosition() - body.GetPosition();
                 //Vector2 targetVec = wantsToBalance == 1 ? new Vector2 ((float) -(Math.Sin((double) head.GetAngle())),(float) Math.Cos((double) head.GetAngle())) : new Vector2((float)Math.Sin((double)head.GetAngle()), (float)-Math.Cos((double)head.GetAngle()));
                 Vector2 targetVec = wantsToBalance == 1 ? new Vector2(-theAngVec.Y, theAngVec.X) : new Vector2(theAngVec.Y, -theAngVec.X);
-                if (wantsToBalance != 0)
-                {
+                
                     targetVec.normalize();
-                    float scalfact = (float)Math.Atan2((double)targetVec.Y, (double)targetVec.X);
+                    float scalfact = (float) Math.Acos(Math.Abs((double)targetVec.X));
+                Console.WriteLine(scalfact);
 
-                    head.ApplyForce(targetVec * Counterfactf * scalfact, head.GetWorldCenter());
-                }
+                //head.ApplyForce(targetVec * Counterfactf * scalfact, head.GetWorldCenter());
+                
+                head.ApplyTorque(wantsToBalance == 1 ? 70* scalfact*4 : -70* scalfact*4);
+
+                wantsToBalance = 0;
             }
             if(isOnGround)
             {
-                //some auto correction to make it easier to not fall over
-                Vector2 headPos = head.GetWorldCenter();
-                Vector2 optPos = location + new Vector2(0.0f, 4.0f);
-                Vector2 currentVel = head.GetLinearVelocity();
+                float scalfact = 0;
+                Vector2 theAngVec = head.GetPosition() - body.GetPosition();
+                theAngVec.normalize();
+                scalfact = (float)Math.Acos(Math.Abs((double)theAngVec.X));
+                if(float.IsNaN(scalfact))
+                {
+                    Console.WriteLine(theAngVec.X);
+                }
+                float angVel = head.GetAngularVelocity();
+                Console.WriteLine(scalfact);
 
-                Vector2 targetDir = optPos - headPos;
-                Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;
-                targetVel = targetDir.Y < 0 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
+                if (theAngVec.X > 0 && !float.IsNaN(scalfact))
+                {
+                   head.ApplyTorque(scalfact * 50);
+                }
+                if (theAngVec.X < 0 && !float.IsNaN(scalfact))
+                {
+                   head.ApplyTorque(scalfact * -50);
+                }
+                ////some auto correction to make it easier to not fall over
+                //Vector2 headPos = head.GetWorldCenter();
+                //Vector2 optPos = location + new Vector2(0.0f, 4.0f);
+                //Vector2 currentVel = head.GetLinearVelocity();
 
-                float len = targetDir.lengthSqr;
-                if (len < 0.05f * 0.05f) return;
+                //Vector2 targetDir = optPos - headPos;
+                //Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;
+                //targetVel = targetDir.Y < 0 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
 
-                targetVel.normalize();
+                //float len = targetDir.lengthSqr;
+                //if (len < 0.05f * 0.05f) return;
 
-                // Cord: this caused a DevideByZero and the variable seems to be unused, so I commented it
-                //float dif = (currentVel.normalize() - targetVel).length;
+                //targetVel.normalize();
 
-                head.ApplyImpulse(targetVel, head.GetWorldCenter());//(Vector2)(body.GetLinearVelocity()*/
+                //// Cord: this caused a DevideByZero and the variable seems to be unused, so I commented it
+                ////float dif = (currentVel.normalize() - targetVel).length;
+
+                //head.ApplyImpulse(targetVel, head.GetWorldCenter());//(Vector2)(body.GetLinearVelocity()*/
             }
         }
 
@@ -226,7 +246,7 @@ namespace UnicycleSheep
             win.Draw(wheel_Debug);
 
             //debugDraw for sheepBody
-            SFML.Graphics.RectangleShape body_Debug = new SFML.Graphics.RectangleShape(new Vector2(2,5).toScreenCoord() - Vector2.Zero.toScreenCoord());
+            SFML.Graphics.RectangleShape body_Debug = new SFML.Graphics.RectangleShape(new Vector2(2,3).toScreenCoord() - Vector2.Zero.toScreenCoord());
             body_Debug.Origin = (Vector2)body_Debug.Size / 2F;
             body_Debug.Position = ((Vector2)head.GetPosition()).toScreenCoord();
             body_Debug.Rotation = -head.GetAngle() * Helper.RadianToDegree;
