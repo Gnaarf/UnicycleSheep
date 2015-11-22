@@ -5,7 +5,7 @@ using UnicycleSheep;
 
 namespace DekoElements
 {
-    public class RemoteControllHand
+    class RemoteControllHand
     {
         Sprite baseSprite;
         Sprite leftThumbSprite;
@@ -17,15 +17,13 @@ namespace DekoElements
 
         bool mirrored { get { return baseSprite.Scale.X < 0F; } }
 
-        uint index;
-
         PlayerCharacter player;
 
-        public RemoteControllHand(uint index, Vector2 PlayerStartingPos)
+        public RemoteControllHand(PlayerCharacter player)
         {
-            this.index = index;
+            this.player = player;
 
-            Vector2 pos = PlayerStartingPos.toScreenCoord();
+            Vector2 pos = player.location.toScreenCoord();
             pos.X = (pos.X - Constants.windowSizeX * 0.5F) * 0.8F + Constants.windowSizeX * 0.5F;
             pos.Y = 500;
             Vector2 scale = Vector2.One * 0.5F;
@@ -89,30 +87,30 @@ namespace DekoElements
             leftThumbSprite.Color = Helper.Lerp(fromColor, toColor, t);
             rightThumbSprite.Color = Helper.Lerp(fromColor, toColor, t);
 
-            if (GamePadInputManager.isConnected(index))
+            if (GamePadInputManager.isConnected(player.controllerIndex))
             {
                 float threshold = 0.8F;
 
-                float leftStickValue = GamePadInputManager.getLeftStick(index).X;
+                float leftStickValue = GamePadInputManager.getLeftStick(player.controllerIndex).X;
                 if (leftStickValue < -threshold)          { setLeftThumb(Horizontal.Leftmost); }
                 else if (leftStickValue < -float.Epsilon) { setLeftThumb(Horizontal.Left); }
                 else if (leftStickValue <= float.Epsilon) { setLeftThumb(Horizontal.Mid); }
                 else if (leftStickValue <= threshold)     { setLeftThumb(Horizontal.Right); }
                 else                                      { setLeftThumb(Horizontal.Rightmost); }
-                
-                float rightStickValue = GamePadInputManager.getRightStick(index).X;
+
+                float rightStickValue = GamePadInputManager.getRightStick(player.controllerIndex).X;
                 if (rightStickValue < -threshold)          { setRightThumb(Horizontal.Leftmost); }
                 else if (rightStickValue < -float.Epsilon) { setRightThumb(Horizontal.Left); }
                 else if (rightStickValue <= float.Epsilon) { setRightThumb(Horizontal.Mid); }
                 else if (rightStickValue <= threshold)     { setRightThumb(Horizontal.Right); }
                 else { setRightThumb(Horizontal.Rightmost); }
 
-                if (GamePadInputManager.isPressed(GamePadButton.LT, index))
+                if (GamePadInputManager.isPressed(GamePadButton.LT, player.controllerIndex))
                 { setLeftFinger(Vertical.Down); }
                 else
                 { setLeftFinger(Vertical.Up); }
 
-                if (GamePadInputManager.isPressed(GamePadButton.RT, index))
+                if (GamePadInputManager.isPressed(GamePadButton.RT, player.controllerIndex))
                 { setRightFinger(Vertical.Down); }
                 else
                 { setRightFinger(Vertical.Up); }
@@ -152,7 +150,7 @@ namespace DekoElements
 
         public void drawJumpBar(RenderWindow win)
         {
-            float jumpLoad = (float)Program.gameTime.TotalTime.TotalSeconds / 1.5F % 1F;
+            float jumpLoad = player.jumpLoadPercentage;
             if (jumpLoad < float.Epsilon) { return; }
             else if (jumpLoad < 0.05F) { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar1); }
             else if (jumpLoad < 0.15F) { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar2); }
