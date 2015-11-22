@@ -14,7 +14,7 @@ namespace UnicycleSheep
 
         //test
         List<PlayerCharacter> playerChars;
-        Vector2[] startPostitions = new Vector2[] { new Vec2(5.0f, 50.0f), new Vec2(75.0f, 50.0f), new Vec2(40.0f, 50.0f), new Vec2(60.0f, 50.0f) };
+        public readonly Vector2[] startPostitions = new Vector2[] { new Vec2(5.0f, 50.0f), new Vec2(75.0f, 50.0f), new Vec2(40.0f, 50.0f), new Vec2(60.0f, 50.0f) };
         
         List<DekoElements.RemoteControllHand> dekoHands;
 
@@ -34,7 +34,7 @@ namespace UnicycleSheep
              // Set new Players
             ResetPlayers(2);
             
-            groundPolygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 0.0f), 0xF0A58A4, Actors.FunctionType.GradientNoise, 4);
+            groundPolygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 15.0f), 0xF0A58A4, Actors.FunctionType.GradientNoise, 4);
 
             //left and right borders of the map
             BodyDef bodydef = new BodyDef();
