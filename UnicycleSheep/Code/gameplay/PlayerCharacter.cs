@@ -166,7 +166,7 @@ namespace UnicycleSheep
                 jump = false;
                 jumpStrength = 0f;
             }
-            if (isOnGround /* && wantsToBalance == 0 */)
+            if (true /* isOnGround && wantsToBalance == 0 */)
             {
                 float scalfact = 0;
                 Vector2 theAngVec = chest.GetPosition() - body.GetPosition();
