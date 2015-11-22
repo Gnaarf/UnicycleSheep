@@ -1,4 +1,5 @@
 ﻿using System;
+using Box2DX.Common;
 
 public struct Vector2
 {
@@ -92,7 +93,7 @@ public struct Vector2
     //------------------------------------------//
     //             Instance Functions           //
     //------------------------------------------//
-    public float length { get { return (float)Math.Sqrt(X * X + Y * Y); } }
+    public float length { get { return (float)System.Math.Sqrt(X * X + Y * Y); } }
     public float lengthSqr { get { return X * X + Y * Y; } }
 
     public Vector2 normalized 

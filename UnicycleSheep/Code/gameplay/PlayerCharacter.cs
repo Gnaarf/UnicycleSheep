@@ -16,6 +16,7 @@ namespace UnicycleSheep
         Sprite sheepSprite;
 
         Body head;
+        Vector2 rotationHead;
 
         //movement input and constant
         private float wheelToSheepRot = 0.0f; //basicly the rotation of the unicycle's frame
@@ -39,33 +40,45 @@ namespace UnicycleSheep
             this.controllerIndex = controllerIndex;
 
             this.angVelocity = 0;
+            //build the unicycle
             CircleDef circleDef = new CircleDef();
             circleDef.Radius = 1;
-            circleDef.Density = 1.0f;
+            circleDef.Density = 1f;
             circleDef.Friction = 1.0f;
+            circleDef.Restitution = 0.0f;
             circleDef.LocalPosition.Set(0, 0);
 
-            Box2DX.Collision.Shape s = body.CreateShape(circleDef);
+            Box2DX.Collision.Shape s = this.body.CreateShape(circleDef);
             body.SetMassFromShapes();
             body.SetUserData(this); // link body and this to register collisions in this
-
+            
+            
             //build the head and connect with the wheel
             BodyDef bodydef = new BodyDef();
             bodydef.Position = _position + new Vector2(0.0f, 4.0f);
-            bodydef.Angle = 0.0f;
+            bodydef.Angle = -1f;
 
             head = _world.CreateBody(bodydef);
-            head.CreateShape(circleDef);
-            head.SetMassFromShapes();
 
-            DistanceJointDef jointDef = new DistanceJointDef();
-            jointDef.Body1 = head;
-            jointDef.Body2 = body;
-            jointDef.CollideConnected = false;
-            jointDef.Length = 4f;
-     //       jointDef.Type = JointType.DistanceJoint;
+            rotationHead = _position;
 
-            _world.CreateJoint(jointDef);
+            PolygonDef Boxdef = new PolygonDef();
+            Boxdef.SetAsBox(1, 3);
+            Boxdef.Density = 0.25f;
+            Boxdef.Friction = 0.0f;
+            Box2DX.Collision.Shape s2 = this.head.CreateShape(Boxdef);
+            this.head.SetMassFromShapes();
+
+            //Jointshit
+            DistanceJointDef jointDefKW = new DistanceJointDef();
+            jointDefKW.Body1 = head;
+            jointDefKW.Body2 = body;
+            jointDefKW.CollideConnected = false;
+            jointDefKW.Length = 4f;
+
+            //       jointDef.Type = JointType.DistanceJoint;
+
+            _world.CreateJoint(jointDefKW);
 
             Texture wheelTexture = AssetManager.getTexture(AssetManager.TextureName.ShoopWheel);
             wheelSprite = new AnimatedSprite(wheelTexture, 1.0f, 1, (Vector2)wheelTexture.Size);
@@ -118,7 +131,7 @@ namespace UnicycleSheep
             if (jump && /*isOnGround &&*/ jumpStrength > 0f)
             {
                 body.ApplyImpulse(new Vector2(0, jumpStrength), body.GetWorldCenter());
-
+                head.ApplyImpulse(new Vector2(0, jumpStrength * 0.01f), body.GetWorldCenter());
                 jump = false;
                 jumpStrength = 0f;
             }
