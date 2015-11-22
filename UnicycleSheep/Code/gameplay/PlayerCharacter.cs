@@ -174,20 +174,31 @@ namespace UnicycleSheep
                 Vector2 theAngVec = head.GetPosition() - body.GetPosition();
                 theAngVec.normalize();
                 scalfact = (float)Math.Acos(Math.Abs((double)theAngVec.X));
-                if(float.IsNaN(scalfact))
-                {
-                    Console.WriteLine(theAngVec.X);
-                }
+                //if(float.IsNaN(scalfact))
+                //{
+                //    Console.WriteLine(theAngVec.X);
+                //}
                 float angVel = head.GetAngularVelocity();
-                Console.WriteLine(scalfact);
+                Console.WriteLine(angVel);
 
                 if (theAngVec.X > 0 && !float.IsNaN(scalfact))
                 {
-                   head.ApplyTorque(scalfact * 50);
+                   if(angVel < -2)
+                    {
+                        head.ApplyTorque(scalfact * 50 * Math.Abs(angVel));
+                    }
+                   else
+                        head.ApplyTorque(scalfact * 50);
+
                 }
                 if (theAngVec.X < 0 && !float.IsNaN(scalfact))
                 {
-                   head.ApplyTorque(scalfact * -50);
+                    if (angVel > 2)
+                    {
+                        head.ApplyTorque(scalfact * -50 * Math.Abs(angVel));
+                    }
+                    else
+                        head.ApplyTorque(scalfact * -50);
                 }
                 ////some auto correction to make it easier to not fall over
                 //Vector2 headPos = head.GetWorldCenter();
