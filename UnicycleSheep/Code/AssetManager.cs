@@ -58,6 +58,9 @@ public class AssetManager
         textures.Add(TextureName.FlagRed, new Texture("Assets/Textures/flagRed.png"));
         textures.Add(TextureName.FlagGreen, new Texture("Assets/Textures/flagGreen.png"));
 
+        textures.Add(TextureName.InGameBackGroundBack, new Texture("Assets/Textures/backgroundBack.png"));
+        textures.Add(TextureName.InGameBackGroundFront, new Texture("Assets/Textures/backgroundFront.png"));
+
     }
 
     public enum TextureName
@@ -98,5 +101,8 @@ public class AssetManager
 
         FlagRed,
         FlagGreen,
+
+        InGameBackGroundBack,
+        InGameBackGroundFront,
     }
 }

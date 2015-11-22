@@ -19,6 +19,9 @@ namespace UnicycleSheep
         List<DekoElements.RemoteControllHand> dekoHands;
         List<Sprite> flags;
 
+        Sprite BackgroundBackSprite;
+        Sprite BackgroundFrontSprite;
+
         int resetFrameCounter;
         const int resetFrameCount = 400;
 
@@ -42,6 +45,11 @@ namespace UnicycleSheep
             setDekoFlags();
             //0xF0A58A4
             groundPolygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 15.0f), 0xFBA58A4, Actors.FunctionType.GradientNoise, 4);
+
+            BackgroundBackSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.InGameBackGroundBack));
+            BackgroundBackSprite.Scale = 0.5F * Vector2.One;
+            BackgroundFrontSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.InGameBackGroundFront));
+            BackgroundFrontSprite.Scale = 0.5F * Vector2.One;
 
             //left and right borders of the map
             BodyDef bodydef = new BodyDef();
@@ -67,8 +75,8 @@ namespace UnicycleSheep
         {
             flags = new List<Sprite>();
             float count = 4F;
-            Vector2 start = new Vector2(60, 250);
-            Vector2 end = new Vector2(Constants.windowSizeX - 60, 250);
+            Vector2 start = new Vector2(130, 320);
+            Vector2 end = new Vector2(Constants.windowSizeX - 130, 320);
             bool redGreenToggle = true;
             for (float t = 0; t <= 1F; t += 1F / (count - 1))
             {
@@ -159,6 +167,8 @@ namespace UnicycleSheep
 
         public void draw(RenderWindow win, View view)
         {
+            win.Draw(BackgroundBackSprite);
+
             // Draw Flag
             foreach (Sprite flag in flags)
             {
@@ -175,6 +185,8 @@ namespace UnicycleSheep
             }
             // Draw Ground
             groundPolygonAct.draw(win, view);
+
+            win.Draw(BackgroundFrontSprite);
 
             // Draw deko Hands
             foreach (DekoElements.RemoteControllHand hand in dekoHands)
