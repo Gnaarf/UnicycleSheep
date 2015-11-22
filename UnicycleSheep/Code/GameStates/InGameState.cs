@@ -164,10 +164,15 @@ namespace UnicycleSheep
         }
 
         Sprite winnerSprite;
+        bool showBackground = true;
 
         public void draw(RenderWindow win, View view)
         {
-            win.Draw(BackgroundBackSprite);
+            if (KeyboardInputManager.downward(SFML.Window.Keyboard.Key.O))
+                showBackground = !showBackground;
+
+            if(showBackground)
+                win.Draw(BackgroundBackSprite);
 
             // Draw Flag
             foreach (Sprite flag in flags)
@@ -186,7 +191,8 @@ namespace UnicycleSheep
             // Draw Ground
             groundPolygonAct.draw(win, view);
 
-            win.Draw(BackgroundFrontSprite);
+            if (showBackground)
+                win.Draw(BackgroundFrontSprite);
 
             // Draw deko Hands
             foreach (DekoElements.RemoteControllHand hand in dekoHands)

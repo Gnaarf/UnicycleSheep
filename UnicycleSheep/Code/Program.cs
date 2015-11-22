@@ -22,7 +22,7 @@ namespace UnicycleSheep
         static void Main(string[] args)
         {
             // initialize window and view
-            win = new RenderWindow(new VideoMode(Constants.windowSizeX, Constants.windowSizeY), "2D Game Project");
+            win = new RenderWindow(new VideoMode(Constants.windowSizeX, Constants.windowSizeY), "Shøøp");
             view = new View();
             resetView();
             gui = new GUI(win, view);
