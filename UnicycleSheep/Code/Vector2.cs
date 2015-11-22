@@ -111,6 +111,19 @@ public struct Vector2
         return this /= l; 
     }
 
+    //returs a vector rotated around the given angle
+    public Vector2 rotate(float _angle)
+    {
+        Vector2 ret = new Vector2();
+        float cosA = (float)System.Math.Cos(_angle);
+        float sinA = (float)System.Math.Sin(_angle);
+
+        ret.X = X * cosA - Y * sinA;
+        ret.Y = Y * cosA + X * sinA;
+
+        return ret;
+    }
+
     public Vector2 right { get { return new Vector2(Y, -X); } }
     public Vector2 rightNormalized { get { return new Vector2(Y, -X) / length; } }
 
