@@ -234,6 +234,8 @@ namespace UnicycleSheep
 
             sheepSprite.Position = sheepLoc.toScreenCoord();
             sheepSprite.Rotation = wheelToSheepRot;
+            if (isDead)
+                sheepSprite.Color = new SFML.Graphics.Color(255, 255, 255, 100);
 
             wheelSprite.Position = location.toScreenCoord();
             wheelSprite.Rotation = -body.GetAngle() * Helper.RadianToDegree;
