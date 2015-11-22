@@ -7,6 +7,7 @@ namespace UnicycleSheep
     class Program
     {
         public static GameTime gameTime;
+        public static int inGameFrameCount {get; private set; }
 
         public static GamePadInputManager gamePadInputManager;
 
@@ -44,6 +45,7 @@ namespace UnicycleSheep
                 GamePadInputManager.update();
                 KeyboardInputManager.update();
 
+                if (currentGameState == GameState.InGame) { inGameFrameCount++; }
                 currentGameState = state.update();
 
                 if (currentGameState != prevGameState)
