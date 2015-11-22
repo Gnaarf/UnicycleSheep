@@ -29,7 +29,7 @@ namespace UnicycleSheep
         public float Counterfactf = 10f;
 
         private float maxJump = 84f;
-        private float Jumptime;
+        private float Jumptime = Program.inGameFrameCount;
         public float JumptimePassed;
         bool jump = false;
         float jumpStrength = 0.0f;
@@ -159,6 +159,11 @@ namespace UnicycleSheep
         {
             if (isDead) return;
 
+            if (!isOnGround)
+            {
+                JumptimePassed = Program.inGameFrameCount - Jumptime;
+            }
+
             if((this.angVelocity < 100) && this.rotation == 1)
                 this.angVelocity += RotationFakt;
             else if ((this.angVelocity > -100) && this.rotation == -1)
@@ -173,7 +178,7 @@ namespace UnicycleSheep
                 jump = false;
                 jumpStrength = 0f;
             }
-            if (JumptimePassed < 30 /* && wantsToBalance == 0 */)
+            if (JumptimePassed < 40 /* && wantsToBalance == 0 */)
             {
                 Console.WriteLine(JumptimePassed);
                 float scalfact = 0;
@@ -310,7 +315,6 @@ namespace UnicycleSheep
                 if (_lastContact == _other)
                 {
                     isOnGround = false;
-                    JumptimePassed = Program.inGameFrameCount - Jumptime; 
                 }
             }
         }
