@@ -29,7 +29,7 @@ namespace UnicycleSheep
 
             physicsWorld = new World(aabb, new Vec2(0.0f, -9.81f), false);
 
-            contactManager = new Physics.ContactManager();
+            contactManager = Physics.ContactManager.g_contactManager;
             physicsWorld.SetContactListener(contactManager);
             
              // Set new Players and appending dekoHands
@@ -45,12 +45,17 @@ namespace UnicycleSheep
             PolygonDef box = new PolygonDef();
             box.SetAsBox(1f, Constants.worldSizeY);
 
-            Body leftEdge = physicsWorld.CreateBody(bodydef); leftEdge.CreateShape(box);
+            Body leftEdge = physicsWorld.CreateBody(bodydef);
+            contactManager.addNonLethalShape(leftEdge.CreateShape(box));
+
             bodydef.Position = new Vector2(Constants.worldSizeX-1, 0);
-            Body rightEdge = physicsWorld.CreateBody(bodydef); rightEdge.CreateShape(box);
+            Body rightEdge = physicsWorld.CreateBody(bodydef); 
+            contactManager.addNonLethalShape(rightEdge.CreateShape(box));
+
             bodydef.Position = new Vector2(0, Constants.worldSizeY);
             box.SetAsBox(Constants.worldSizeX, 1f);
-            Body topEdge = physicsWorld.CreateBody(bodydef); topEdge.CreateShape(box);
+            Body topEdge = physicsWorld.CreateBody(bodydef); 
+            contactManager.addNonLethalShape(topEdge.CreateShape(box));
         }
 
         private void setDekoFlags()
