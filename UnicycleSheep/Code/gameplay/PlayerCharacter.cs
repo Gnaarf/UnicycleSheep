@@ -161,8 +161,40 @@ namespace UnicycleSheep
                 jump = false;
                 jumpStrength = 0f;
             }
+            if (isOnGround /* && wantsToBalance == 0 */)
+            {
+                float scalfact = 0;
+                Vector2 theAngVec = chest.GetPosition() - body.GetPosition();
+                theAngVec.normalize();
+                scalfact = (float)Math.Acos(Math.Abs((double)theAngVec.X));
+                //if(float.IsNaN(scalfact))
+                //{
+                //    Console.WriteLine(theAngVec.X);
+                //}
+                float angVel = chest.GetAngularVelocity();
+                Console.WriteLine("MÖÖÖÖÖÖÖÖ");
 
-            if(wantsToBalance != 0)
+                if (theAngVec.X > 0 && !float.IsNaN(scalfact))
+                {
+                    if (angVel < -2.5f)
+                    {
+                        chest.ApplyTorque(scalfact * 50 * Math.Abs(angVel * 10));
+                    }
+                    else
+                        chest.ApplyTorque(scalfact * 50);
+
+                }
+                if (theAngVec.X < 0 && !float.IsNaN(scalfact))
+                {
+                    if (angVel > 2.5f)
+                    {
+                        chest.ApplyTorque(scalfact * -50 * Math.Abs(angVel * 10));
+                    }
+                    else
+                        chest.ApplyTorque(scalfact * -50);
+                }
+            }
+            if (wantsToBalance != 0)
             {
                 //Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;
                 //targetVel = wantsToBalance == 1 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
@@ -177,62 +209,10 @@ namespace UnicycleSheep
 
                 //head.ApplyForce(targetVec * Counterfactf * scalfact, head.GetWorldCenter());
                 
-                chest.ApplyTorque(80* scalfact * wantsToBalance);
+                chest.ApplyTorque(isOnGround ? 80 * scalfact * wantsToBalance : 50 * wantsToBalance);
+                Console.WriteLine("ÖÖÖÖMMMMM");
 
                 wantsToBalance = 0;
-            }
-            if(isOnGround)
-            {
-                float scalfact = 0;
-                Vector2 theAngVec = chest.GetPosition() - body.GetPosition();
-                theAngVec.normalize();
-                scalfact = (float)Math.Acos(Math.Abs((double)theAngVec.X));
-                //if(float.IsNaN(scalfact))
-                //{
-                //    Console.WriteLine(theAngVec.X);
-                //}
-                float angVel = chest.GetAngularVelocity();
-                Console.WriteLine(angVel);
-
-                if (theAngVec.X > 0 && !float.IsNaN(scalfact))
-                {
-                   chest.ApplyTorque(scalfact * 50);
-                   if(angVel < -2)
-                    {
-                        head.ApplyTorque(scalfact * 50 * Math.Abs(angVel));
-                    }
-                   else
-                        head.ApplyTorque(scalfact * 50);
-
-                }
-                if (theAngVec.X < 0 && !float.IsNaN(scalfact))
-                {
-                   chest.ApplyTorque(scalfact * -50);
-                    if (angVel > 2)
-                    {
-                        head.ApplyTorque(scalfact * -50 * Math.Abs(angVel));
-                    }
-                    else
-                        head.ApplyTorque(scalfact * -50);
-                }
-                ////some auto correction to make it easier to not fall over
-                //Vector2 headPos = head.GetWorldCenter();
-                //Vector2 optPos = location + new Vector2(0.0f, 4.0f);
-                //Vector2 currentVel = head.GetLinearVelocity();
-
-                //Vector2 targetDir = optPos - headPos;
-                //Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;
-                //targetVel = targetDir.Y < 0 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
-
-                //float len = targetDir.lengthSqr;
-                //if (len < 0.05f * 0.05f) return;
-
-                //targetVel.normalize();
-
-                //// Cord: this caused a DevideByZero and the variable seems to be unused, so I commented it
-                ////float dif = (currentVel.normalize() - targetVel).length;
-
-                //head.ApplyImpulse(targetVel, head.GetWorldCenter());//(Vector2)(body.GetLinearVelocity()*/
             }
         }
 
@@ -312,9 +292,13 @@ namespace UnicycleSheep
         {
             if (wheel == _self)
             {
+                Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 //only when the tile is left which was just hit
                 if (_lastContact == _other)
+                {
                     isOnGround = false;
+                    Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                }
             }
         }
 
