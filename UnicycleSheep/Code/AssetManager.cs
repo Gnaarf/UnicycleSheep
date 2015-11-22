@@ -21,7 +21,8 @@ public class AssetManager
         textures[TextureName.MainMenuBackground].Smooth = true;
 
         textures.Add(TextureName.ShoopWheel, new Texture("Assets/Textures/Wheel.png"));
-        textures.Add(TextureName.Shoop, new Texture("Assets/Textures/Sheep.png"));
+        textures.Add(TextureName.ShoopRed, new Texture("Assets/Textures/SheepRed.png"));
+        textures.Add(TextureName.ShoopGreen, new Texture("Assets/Textures/SheepGreen.png"));
 
 
         textures.Add(TextureName.Hand, new Texture("Assets/Textures/Hands/Hand1/Base.png"));
@@ -66,7 +67,8 @@ public class AssetManager
 
         //characterStuff
         ShoopWheel,
-        Shoop,
+        ShoopGreen,
+        ShoopRed,
 
         Hand,
         LeftThumb_Leftmost,

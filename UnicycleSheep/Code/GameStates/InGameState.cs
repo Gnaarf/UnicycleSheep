@@ -67,13 +67,15 @@ namespace UnicycleSheep
         {
             flags = new List<Sprite>();
             float count = 4F;
-            Vector2 start = new Vector2(40, 250);
-            Vector2 end = new Vector2(Constants.windowSizeX - 40, 250);
-            for (float t = 0; t <= 1F; t += 1F / count)
+            Vector2 start = new Vector2(60, 250);
+            Vector2 end = new Vector2(Constants.windowSizeX - 60, 250);
+            bool redGreenToggle = true;
+            for (float t = 0; t <= 1F; t += 1F / (count - 1))
             {
-                Sprite flagSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagRed));
+                Sprite flagSprite = new Sprite(AssetManager.getTexture(redGreenToggle ? AssetManager.TextureName.FlagRed : AssetManager.TextureName.FlagGreen));
+                redGreenToggle = !redGreenToggle;
                 flagSprite.Origin = (Vector2)flagSprite.Texture.Size * 0.5F;
-                flagSprite.Scale = new Vector2(60, 90) / (Vector2)flagSprite.Texture.Size;
+                flagSprite.Scale = new Vector2((redGreenToggle ? 1 : -1) * 60, 90) / (Vector2)flagSprite.Texture.Size;
                 flagSprite.Position = Vector2.lerp(start, end, t);
                 flags.Add(flagSprite);
             }

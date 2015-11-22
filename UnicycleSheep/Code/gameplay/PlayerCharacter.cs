@@ -107,7 +107,7 @@ namespace UnicycleSheep
             wheelSprite.Scale = new Vector2(0.2f, 0.2f); //(Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord() - Vector2.Zero.toScreenCoord();//new Vector2(0.08f, 0.08f);
             wheelSprite.Origin = ((Vector2)wheelSprite.spriteSize) / 2F;
 
-            sheepSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Shoop));
+            sheepSprite = new Sprite(AssetManager.getTexture(playerIndex == 0 ? AssetManager.TextureName.ShoopRed : AssetManager.TextureName.ShoopGreen));
             sheepSprite.Scale = new Vector2(0.2f, 0.2f);
             if(_position.X > Constants.worldSizeX / 2F)
                 sheepSprite.Scale = new Vector2(-0.2f, 0.2f);
