@@ -177,7 +177,6 @@ namespace UnicycleSheep
                 //    Console.WriteLine(theAngVec.X);
                 //}
                 float angVel = chest.GetAngularVelocity();
-                Console.WriteLine("MÖÖÖÖÖÖÖÖ");
 
                 if (theAngVec.X > 0 && !float.IsNaN(scalfact))
                 {
@@ -214,7 +213,6 @@ namespace UnicycleSheep
                 //head.ApplyForce(targetVec * Counterfactf * scalfact, head.GetWorldCenter());
                 
                 chest.ApplyTorque(isOnGround ? 80 * scalfact * wantsToBalance : 50 * wantsToBalance);
-                Console.WriteLine("ÖÖÖÖMMMMM");
 
                 wantsToBalance = 0;
             }
@@ -296,12 +294,10 @@ namespace UnicycleSheep
         {
       //      if (wheel == _self)
             {
-                Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 //only when the tile is left which was just hit
                 if (_lastContact == _other)
                 {
                     isOnGround = false;
-                    Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 }
             }
         }
