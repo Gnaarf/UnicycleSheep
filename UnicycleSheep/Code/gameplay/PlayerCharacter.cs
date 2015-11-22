@@ -161,7 +161,9 @@ namespace UnicycleSheep
                 if (len < 0.05f * 0.05f) return;
 
                 targetVel.normalize();
-                float dif = (currentVel.normalize() - targetVel).length;
+                
+                // Cord: this caused a DevideByZero and the variable seems to be unused, so I commented it
+                //float dif = (currentVel.normalize() - targetVel).length;
 
                 head.ApplyImpulse(targetVel , head.GetWorldCenter());//(Vector2)(body.GetLinearVelocity()*/
             }
@@ -191,6 +193,9 @@ namespace UnicycleSheep
             win.Draw(wheelSprite);
             //draw after to overlap
             win.Draw(sheepSprite);
+
+            //debugDraw for sheepBody
+            //SFML.Graphics.CircleShape bodyDebug = new SFML.Graphics.CircleShape(((head. Vector2.Zero.toScreenCoord))
         }
 
         // ********************************************************** //
