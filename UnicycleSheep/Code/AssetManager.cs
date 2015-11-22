@@ -23,18 +23,33 @@ public class AssetManager
         textures.Add(TextureName.ShoopWheel, new Texture("Assets/Textures/Wheel.png"));
         textures.Add(TextureName.Shoop, new Texture("Assets/Textures/Sheep.png"));
 
-        textures.Add(TextureName.Hand1, new Texture("Assets/Textures/Hands/Hand1/Base.png"));
-        textures.Add(TextureName.Hand1_LeftThumb_Leftmost, new Texture("Assets/Textures/Hands/Hand1/leftThumb_leftmost.png"));
-        textures.Add(TextureName.Hand1_LeftThumb_Left, new Texture("Assets/Textures/Hands/Hand1/leftThumb_left.png"));
-        textures.Add(TextureName.Hand1_LeftThumb_Mid, new Texture("Assets/Textures/Hands/Hand1/leftThumb_mid.png"));
-        textures.Add(TextureName.Hand1_LeftThumb_Right, new Texture("Assets/Textures/Hands/Hand1/leftThumb_right.png"));
-        textures.Add(TextureName.Hand1_LeftThumb_Rightmost, new Texture("Assets/Textures/Hands/Hand1/leftThumb_rightmost.png"));
 
-        textures.Add(TextureName.Hand1_RightThumb_Leftmost, new Texture("Assets/Textures/Hands/Hand1/rightThumb_leftmost.png"));
-        textures.Add(TextureName.Hand1_RightThumb_Left, new Texture("Assets/Textures/Hands/Hand1/rightThumb_left.png"));
-        textures.Add(TextureName.Hand1_RightThumb_Mid, new Texture("Assets/Textures/Hands/Hand1/rightThumb_mid.png"));
-        textures.Add(TextureName.Hand1_RightThumb_Right, new Texture("Assets/Textures/Hands/Hand1/rightThumb_right.png"));
-        textures.Add(TextureName.Hand1_RightThumb_Rightmost, new Texture("Assets/Textures/Hands/Hand1/rightThumb_rightmost.png"));
+        textures.Add(TextureName.Hand, new Texture("Assets/Textures/Hands/Hand1/Base.png"));
+
+        textures.Add(TextureName.LeftThumb_Leftmost, new Texture("Assets/Textures/Hands/Hand1/leftThumb_leftmost.png"));
+        textures.Add(TextureName.LeftThumb_Left, new Texture("Assets/Textures/Hands/Hand1/leftThumb_left.png"));
+        textures.Add(TextureName.LeftThumb_Mid, new Texture("Assets/Textures/Hands/Hand1/leftThumb_mid.png"));
+        textures.Add(TextureName.LeftThumb_Right, new Texture("Assets/Textures/Hands/Hand1/leftThumb_right.png"));
+        textures.Add(TextureName.LeftThumb_Rightmost, new Texture("Assets/Textures/Hands/Hand1/leftThumb_rightmost.png"));
+
+        textures.Add(TextureName.RightThumb_Leftmost, new Texture("Assets/Textures/Hands/Hand1/rightThumb_leftmost.png"));
+        textures.Add(TextureName.RightThumb_Left, new Texture("Assets/Textures/Hands/Hand1/rightThumb_left.png"));
+        textures.Add(TextureName.RightThumb_Mid, new Texture("Assets/Textures/Hands/Hand1/rightThumb_mid.png"));
+        textures.Add(TextureName.RightThumb_Right, new Texture("Assets/Textures/Hands/Hand1/rightThumb_right.png"));
+        textures.Add(TextureName.RightThumb_Rightmost, new Texture("Assets/Textures/Hands/Hand1/rightThumb_rightmost.png"));
+
+        textures.Add(TextureName.LeftFinger_Down, new Texture("Assets/Textures/Hands/Hand1/leftFinger_down.png"));
+        textures.Add(TextureName.LeftFinger_Up, new Texture("Assets/Textures/Hands/Hand1/leftFinger_up.png"));
+        textures.Add(TextureName.RightFinger_Down, new Texture("Assets/Textures/Hands/Hand1/rightFinger_down.png"));
+        textures.Add(TextureName.RightFinger_Up, new Texture("Assets/Textures/Hands/Hand1/rightFinger_up.png"));
+
+        textures.Add(TextureName.Jumpbar1, new Texture("Assets/Textures/Hands/Hand1/Jumpbar1.png"));
+        textures.Add(TextureName.Jumpbar2, new Texture("Assets/Textures/Hands/Hand1/Jumpbar2.png"));
+        textures.Add(TextureName.Jumpbar3, new Texture("Assets/Textures/Hands/Hand1/Jumpbar3.png"));
+        textures.Add(TextureName.Jumpbar4, new Texture("Assets/Textures/Hands/Hand1/Jumpbar4.png"));
+        textures.Add(TextureName.Jumpbar5, new Texture("Assets/Textures/Hands/Hand1/Jumpbar5.png"));
+        textures.Add(TextureName.Jumpbar6, new Texture("Assets/Textures/Hands/Hand1/Jumpbar6.png"));
+
 
         textures.Add(TextureName.Flag, new Texture("Assets/Textures/flag.png"));
 
@@ -49,18 +64,30 @@ public class AssetManager
         ShoopWheel,
         Shoop,
 
-        Hand1,
-        Hand1_LeftThumb_Leftmost,
-        Hand1_LeftThumb_Left,
-        Hand1_LeftThumb_Mid,
-        Hand1_LeftThumb_Right,
-        Hand1_LeftThumb_Rightmost,
-        Hand1_RightThumb_Leftmost,
-        Hand1_RightThumb_Left,
-        Hand1_RightThumb_Mid,
-        Hand1_RightThumb_Right,
-        Hand1_RightThumb_Rightmost,
-        
+        Hand,
+        LeftThumb_Leftmost,
+        LeftThumb_Left,
+        LeftThumb_Mid,
+        LeftThumb_Right,
+        LeftThumb_Rightmost,
+        RightThumb_Leftmost,
+        RightThumb_Left,
+        RightThumb_Mid,
+        RightThumb_Right,
+        RightThumb_Rightmost,
+        LeftFinger_Down,
+        LeftFinger_Up,
+        RightFinger_Down,
+        RightFinger_Up,
+
+        Jumpbar1,
+        Jumpbar2,
+        Jumpbar3,
+        Jumpbar4,
+        Jumpbar5,
+        Jumpbar6,
+
+
         Flag,
     }
 }
