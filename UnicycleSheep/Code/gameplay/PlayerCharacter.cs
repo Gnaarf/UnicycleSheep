@@ -32,13 +32,12 @@ namespace UnicycleSheep
         //state vars
         bool isOnGround;
 
-        static uint count = 0;
-        uint index;
+        uint controllerIndex;
 
-        public PlayerCharacter(World _world, Vector2 _position)
+        public PlayerCharacter(World _world, Vector2 _position, uint controllerIndex)
             :base(_world, _position)
         {
-            index = count++;
+            this.controllerIndex = controllerIndex;
 
             this.angVelocity = 0;
             //build the unicycle
@@ -88,6 +87,8 @@ namespace UnicycleSheep
 
             sheepSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Shoop));
             sheepSprite.Scale = new Vector2(0.2f, 0.2f);
+            if(_position.X > Constants.worldSizeX / 2F)
+                sheepSprite.Scale = new Vector2(-0.2f, 0.2f);
             sheepSprite.Origin = ((Vector2)sheepSprite.Texture.Size) / 2F;
         }
 
@@ -95,12 +96,12 @@ namespace UnicycleSheep
         {
             bool jumpButtonIsPressed;
 
-            if(GamePadInputManager.isConnected(index))
+            if(GamePadInputManager.isConnected(controllerIndex))
             {
-                rotation = -GamePadInputManager.getLeftStick(index).X;
-                wantsToBalance = -GamePadInputManager.getRightStick(index).X;
+                rotation = -GamePadInputManager.getLeftStick(controllerIndex).X;
+                wantsToBalance = -GamePadInputManager.getRightStick(controllerIndex).X;
 
-                jumpButtonIsPressed = GamePadInputManager.isPressed(GamePadButton.RB, index);
+                jumpButtonIsPressed = GamePadInputManager.isPressed(GamePadButton.RB, controllerIndex);
             }
             else
             {
@@ -174,7 +175,9 @@ namespace UnicycleSheep
                 if (len < 0.05f * 0.05f) return;
 
                 targetVel.normalize();
-                float dif = (currentVel.normalize() - targetVel).length;
+                
+                // Cord: this caused a DevideByZero and the variable seems to be unused, so I commented it
+                //float dif = (currentVel.normalize() - targetVel).length;
 
                 head.ApplyImpulse(targetVel , head.GetWorldCenter());//(Vector2)(body.GetLinearVelocity()*/
             }
@@ -193,7 +196,6 @@ namespace UnicycleSheep
         public override void draw(RenderWindow win, View view)
         {
             Vector2 sheepLoc = head.GetWorldCenter();
-            Vector2 radius = (Vector2)head.GetWorldCenter() - location;
 
             sheepSprite.Position = sheepLoc.toScreenCoord();
             sheepSprite.Rotation = wheelToSheepRot;
@@ -204,6 +206,14 @@ namespace UnicycleSheep
             win.Draw(wheelSprite);
             //draw after to overlap
             win.Draw(sheepSprite);
+
+            //debugDraw for sheepBody
+            SFML.Graphics.RectangleShape body_Debug = new SFML.Graphics.RectangleShape(new Vector2(2,6).toScreenCoord() - Vector2.Zero.toScreenCoord());
+            body_Debug.Origin = (Vector2)body_Debug.Size / 2F;
+            body_Debug.Position = ((Vector2)head.GetPosition()).toScreenCoord();
+            body_Debug.Rotation = -head.GetAngle() * Helper.RadianToDegree;
+            body_Debug.FillColor = SFML.Graphics.Color.Red;
+            win.Draw(body_Debug);
         }
 
         // ********************************************************** //

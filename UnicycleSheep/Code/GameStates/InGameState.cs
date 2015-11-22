@@ -2,6 +2,7 @@
 using Box2DX.Common;
 using Box2DX.Dynamics;
 using Box2DX.Collision;
+using System.Collections.Generic;
 
 namespace UnicycleSheep
 {
@@ -12,10 +13,12 @@ namespace UnicycleSheep
         Physics.ContactManager contactManager;
 
         //test
-        PlayerCharacter playerChar;
-        Actors.PolygonActor polygonAct;
+        List<PlayerCharacter> playerChars;
+        public readonly Vector2[] startPostitions = new Vector2[] { new Vec2(5.0f, 50.0f), new Vec2(75.0f, 50.0f), new Vec2(40.0f, 50.0f), new Vec2(60.0f, 50.0f) };
+        
+        List<DekoElements.RemoteControllHand> dekoHands;
 
-        DekoElements.RemoteControllHand dekoHand;
+        Actors.PolygonActor groundPolygonAct;
 
         public InGameState()
         {
@@ -27,11 +30,11 @@ namespace UnicycleSheep
 
             contactManager = new Physics.ContactManager();
             physicsWorld.SetContactListener(contactManager);
-
-            playerChar = new PlayerCharacter(physicsWorld, new Vec2(5.0f, 50.0f));
-            polygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 0.0f), 0xF0A58A4, Actors.FunctionType.GradientNoise, 4);
-
-            dekoHand = new DekoElements.RemoteControllHand(1);
+            
+             // Set new Players
+            ResetPlayers(1);
+            
+            groundPolygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 15.0f), 0xF0A58A4, Actors.FunctionType.GradientNoise, 4);
 
             //left and right borders of the map
             BodyDef bodydef = new BodyDef();
@@ -47,21 +50,58 @@ namespace UnicycleSheep
             box.SetAsBox(Constants.worldSizeX, 1f);
             Body topEdge = physicsWorld.CreateBody(bodydef); topEdge.CreateShape(box);
         }
+
+        private void ResetPlayers(int numPlayers)
+        {
+            if (playerChars == null) { playerChars = new List<PlayerCharacter>(); }
+            else { playerChars.Clear(); }
+
+            if (dekoHands == null) { dekoHands = new List<DekoElements.RemoteControllHand>(); }
+            else { dekoHands.Clear(); }
+
+            // find a controller for the Players
+            foreach (uint i in GamePadInputManager.connectedPadIndices)
+            {
+                playerChars.Add(new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count], i));
+                dekoHands.Add(new DekoElements.RemoteControllHand(i));
+                
+                if (playerChars.Count == numPlayers)
+                    break;
+            }
+
+            // if there are more Players than GamePads, give them invalid indices, so they will use Keyboard-Input
+            // Cord: nullable would be better code, I guess...
+            while (playerChars.Count < numPlayers)
+            {
+                playerChars.Add(new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count], uint.MaxValue));
+                dekoHands.Add(new DekoElements.RemoteControllHand(uint.MaxValue));
+            }
+        }
         public GameState update() 
         {
-            playerChar.KeyboardInput();
-            playerChar.Move();
-            playerChar.update();
+            foreach (PlayerCharacter playerChar in playerChars)
+            {
+                playerChar.KeyboardInput();
+                playerChar.Move();
+                playerChar.update();
+            }
             physicsWorld.Step(1 / 60.0f, 8, 1);
             return GameState.InGame; 
         }
         public void draw(RenderWindow win, View view) 
         {
-            playerChar.draw(win, view);
-            polygonAct.draw(win, view);
+            foreach (PlayerCharacter playerChar in playerChars)
+            {
+                playerChar.draw(win, view);
+            }
+            groundPolygonAct.draw(win, view);
 
-            dekoHand.draw(win);
+            foreach (DekoElements.RemoteControllHand hand in dekoHands)
+            {
+                hand.draw(win);
+            }
         }
+
         public void drawGUI(GUI gui) { }
     }
 }
