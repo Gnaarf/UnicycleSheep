@@ -33,13 +33,15 @@ namespace UnicycleSheep
         bool jump = false;
         float jumpStrength = 0.0f;
 
+        public float jumpLoadPercentage { get { return jumpStrength / maxJump; } }
+
         //state vars
         bool isOnGround;
 
         bool bIsDead = false;
         public bool isDead { get { return bIsDead; } private set { bIsDead = value; } }
 
-        uint controllerIndex;
+        public uint controllerIndex { get; private set; }
 
         public PlayerCharacter(World _world, Vector2 _position, uint controllerIndex)
             :base(_world, _position)
@@ -108,7 +110,8 @@ namespace UnicycleSheep
         public void KeyboardInput()
         {
             //discard any input when dead
-            if (isDead) return;
+            if (isDead) 
+                return;
 
             bool jumpButtonIsPressed;
 
@@ -254,7 +257,7 @@ namespace UnicycleSheep
             SFML.Graphics.CircleShape wheel_Debug = new SFML.Graphics.CircleShape(Vector2.Zero.toScreenCoord().X - Vector2.One.toScreenCoord().X);
             wheel_Debug.Origin = Vector2.One * wheel_Debug.Radius;
             wheel_Debug.Position = ((Vector2)body.GetPosition()).toScreenCoord();
-            wheel_Debug.FillColor = SFML.Graphics.Color.Red;
+            wheel_Debug.FillColor = isDead ? SFML.Graphics.Color.Black : SFML.Graphics.Color.Red;
             win.Draw(wheel_Debug);
 
             //debugDraw for sheepBody
@@ -262,7 +265,7 @@ namespace UnicycleSheep
             body_Debug.Origin = (Vector2)body_Debug.Size / 2F;
             body_Debug.Position = ((Vector2)chest.GetPosition()).toScreenCoord();
             body_Debug.Rotation = -chest.GetAngle() * Helper.RadianToDegree;
-            body_Debug.FillColor = SFML.Graphics.Color.Red;
+            body_Debug.FillColor = isDead ? SFML.Graphics.Color.Black : SFML.Graphics.Color.Red;
             win.Draw(body_Debug);
 
             //the head
@@ -270,7 +273,7 @@ namespace UnicycleSheep
             headDeb.Origin = Vector2.One * headDeb.Radius;
             headDeb.Position = ((Vector2)chest.GetPosition() + new Vector2(0, 2)).toScreenCoord();
             headDeb.Rotation = -chest.GetAngle() * Helper.RadianToDegree;
-            headDeb.FillColor = SFML.Graphics.Color.Red;
+            headDeb.FillColor = isDead ? SFML.Graphics.Color.Black : SFML.Graphics.Color.Red;
 
             win.Draw(headDeb);    
         }

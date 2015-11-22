@@ -80,8 +80,9 @@ namespace UnicycleSheep
             // find a controller for the Players
             foreach (uint i in GamePadInputManager.connectedPadIndices)
             {
-                dekoHands.Add(new DekoElements.RemoteControllHand(i, startPostitions[playerChars.Count]));
-                playerChars.Add(new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count], i));
+                PlayerCharacter player = new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count], i);
+                dekoHands.Add(new DekoElements.RemoteControllHand(player));
+                playerChars.Add(player);
                 
                 if (playerChars.Count == numPlayers)
                     break;
@@ -91,7 +92,8 @@ namespace UnicycleSheep
             // Cord: nullable would be better code, I guess...
             while (playerChars.Count < numPlayers)
             {
-                dekoHands.Add(new DekoElements.RemoteControllHand(uint.MaxValue, startPostitions[playerChars.Count]));
+                PlayerCharacter player = new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count], uint.MaxValue);
+                dekoHands.Add(new DekoElements.RemoteControllHand(player));
                 playerChars.Add(new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count], uint.MaxValue));
             }
         }
