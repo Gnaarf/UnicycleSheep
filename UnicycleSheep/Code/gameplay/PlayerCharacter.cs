@@ -36,15 +36,14 @@ namespace UnicycleSheep
         //state vars
         bool isOnGround;
 
-        public bool isDead{get { return isDead;} private set{ isDead = value;}}
+        bool bIsDead = false;
+        public bool isDead { get { return bIsDead; } private set { bIsDead = value; } }
 
         uint controllerIndex;
 
         public PlayerCharacter(World _world, Vector2 _position, uint controllerIndex)
             :base(_world, _position)
         {
-            isDead = false;
-
             this.controllerIndex = controllerIndex;
 
             this.angVelocity = 0;
@@ -267,12 +266,13 @@ namespace UnicycleSheep
             win.Draw(body_Debug);
 
             //the head
-     /*       SFML.Graphics.CircleShape head = new SFML.Graphics.CircleShape(Vector2.Zero.toScreenCoord().X - Vector2.One.toScreenCoord().X);
-            head.Origin = Vector2.One * head.Radius;
-            head.Position = ((Vector2)chest.GetPosition() + new Vector2(0, 2)).toScreenCoord();
-            head.FillColor = SFML.Graphics.Color.Red;
+            SFML.Graphics.CircleShape headDeb = new SFML.Graphics.CircleShape(Vector2.Zero.toScreenCoord().X - Vector2.One.toScreenCoord().X);
+            headDeb.Origin = Vector2.One * headDeb.Radius;
+            headDeb.Position = ((Vector2)chest.GetPosition() + new Vector2(0, 2)).toScreenCoord();
+            headDeb.Rotation = -chest.GetAngle() * Helper.RadianToDegree;
+            headDeb.FillColor = SFML.Graphics.Color.Red;
 
-            win.Draw(head);  */     
+            win.Draw(headDeb);    
         }
 
         // ********************************************************** //
