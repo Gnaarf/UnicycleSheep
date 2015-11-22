@@ -8,6 +8,7 @@ namespace DekoElements
     class RemoteControllHand
     {
         Sprite baseSprite;
+        Sprite flagSprite;
         Sprite leftThumbSprite;
         Sprite rightThumbSprite;
         Sprite leftFingerSprite;
@@ -30,15 +31,16 @@ namespace DekoElements
             if (pos.X > Constants.windowSizeX * 0.5F)
                 scale.X *= -1F;
 
-            jumpbarSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Jumpbar1));
-            jumpbarSprite.Origin = ((Vector2)jumpbarSprite.Texture.Size) * 0.5F;
-            jumpbarSprite.Scale = scale;
-            jumpbarSprite.Position = pos;
-
             baseSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Hand));
             baseSprite.Origin = ((Vector2)baseSprite.Texture.Size) * 0.5F;
             baseSprite.Scale = scale;
             baseSprite.Position = pos;
+
+            // Player 0 red, Player 1 green
+            flagSprite = new Sprite(AssetManager.getTexture(player.playerIndex == 0 ? AssetManager.TextureName.RemoteFlagRed : AssetManager.TextureName.RemoteFlagGreen));
+            flagSprite.Origin = ((Vector2)flagSprite.Texture.Size) * 0.5F;
+            flagSprite.Scale = scale;
+            flagSprite.Position = pos;
 
             leftThumbSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.LeftThumb_Mid));
             leftThumbSprite.Origin = ((Vector2)leftThumbSprite.Texture.Size) * 0.5F;
@@ -60,6 +62,11 @@ namespace DekoElements
             rightFingerSprite.Origin = ((Vector2)rightThumbSprite.Texture.Size) * 0.5F;
             rightFingerSprite.Scale = scale;
             rightFingerSprite.Position = pos;
+
+            jumpbarSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Jumpbar1));
+            jumpbarSprite.Origin = ((Vector2)jumpbarSprite.Texture.Size) * 0.5F;
+            jumpbarSprite.Scale = scale;
+            jumpbarSprite.Position = pos;
         }
 
         public void draw(RenderWindow win)
@@ -140,6 +147,7 @@ namespace DekoElements
             win.Draw(leftFingerSprite);
             win.Draw(rightFingerSprite);
 
+            win.Draw(flagSprite);
             win.Draw(baseSprite);
 
             win.Draw(leftThumbSprite);

@@ -50,6 +50,9 @@ public class AssetManager
         textures.Add(TextureName.Jumpbar5, new Texture("Assets/Textures/Hands/Hand1/Jumpbar5.png"));
         textures.Add(TextureName.Jumpbar6, new Texture("Assets/Textures/Hands/Hand1/Jumpbar6.png"));
 
+        textures.Add(TextureName.RemoteFlagGreen, new Texture("Assets/Textures/Hands/Hand1/FlagGreen.png"));
+        textures.Add(TextureName.RemoteFlagRed, new Texture("Assets/Textures/Hands/Hand1/FlagRed.png"));
+
 
         textures.Add(TextureName.Flag, new Texture("Assets/Textures/flag.png"));
 
@@ -87,6 +90,8 @@ public class AssetManager
         Jumpbar5,
         Jumpbar6,
 
+        RemoteFlagGreen,
+        RemoteFlagRed,
 
         Flag,
     }
