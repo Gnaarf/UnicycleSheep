@@ -32,7 +32,7 @@ namespace UnicycleSheep
             physicsWorld.SetContactListener(contactManager);
             
              // Set new Players
-            ResetPlayers(1);
+            ResetPlayers(2);
             
             groundPolygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 15.0f), 0xF0A58A4, Actors.FunctionType.GradientNoise, 4);
 
@@ -62,8 +62,8 @@ namespace UnicycleSheep
             // find a controller for the Players
             foreach (uint i in GamePadInputManager.connectedPadIndices)
             {
+                dekoHands.Add(new DekoElements.RemoteControllHand(i, startPostitions[playerChars.Count]));
                 playerChars.Add(new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count], i));
-                dekoHands.Add(new DekoElements.RemoteControllHand(i));
                 
                 if (playerChars.Count == numPlayers)
                     break;
@@ -73,8 +73,8 @@ namespace UnicycleSheep
             // Cord: nullable would be better code, I guess...
             while (playerChars.Count < numPlayers)
             {
+                dekoHands.Add(new DekoElements.RemoteControllHand(uint.MaxValue, startPostitions[playerChars.Count]));
                 playerChars.Add(new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count], uint.MaxValue));
-                dekoHands.Add(new DekoElements.RemoteControllHand(uint.MaxValue));
             }
         }
         public GameState update() 
