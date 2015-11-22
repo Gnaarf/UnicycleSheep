@@ -40,12 +40,20 @@ namespace Actors
             //repeatable random sequenze
             Rand rnd = new Rand(_seed);
 
+            //start and end have even ground
             verts[0] = new Vec2(0, 6);
+            verts[1] = new Vec2(_res, 6);
+            verts[2] = new Vec2(_res + _res, 6);
+
+            verts[lineCount - 2] = new Vec2(_res * (lineCount - 2), 6);
+            verts[lineCount-1] = new Vec2(_res * (lineCount-1), 6);
+            verts[lineCount] = new Vec2(_res * lineCount, 6);
+
             vertexBuffer.Append(new Vertex(((Vector2)verts[0] + _position).toScreenCoord()));
             //create the function
             if (_funcType == FunctionType.Simple)
             {
-                for (int i = 1; i <= lineCount; ++i)
+                for (int i = 2; i <= lineCount; ++i)
                 {
                     //Vector2 pos = new Vec2(i * 5, 10 + Rand.IntValue(10));
                     Vector2 pos = new Vec2(i * _res, System.Math.Max((verts[i - 1].Y + (int)rnd.next(6) - 3), 0));
@@ -54,20 +62,25 @@ namespace Actors
             }
             else if(_funcType == FunctionType.GradientNoise)
             {
-                for (int i = 0; i <= lineCount; i += 4)
+                for (int i = 2; i < lineCount-3;)
                 {
-                    //the random points
-                 //   verts[i] = new Vec2(i * _res, rnd.next((int)maxHeight));
                     int nextGrad = i + 4;
-                    verts[nextGrad] = new Vec2(nextGrad * _res, rnd.next((int)maxHeight));
+
+                    if (nextGrad < lineCount - 2)
+                    {
+                        verts[nextGrad] = new Vec2(nextGrad * _res, rnd.next((int)maxHeight));
+                    }
+                    else nextGrad = lineCount - 2;
 
                     //interpolate between
                     float relativeA = verts[i].Y / maxHeight;
-                    float relativeB = verts[i + 4].Y / maxHeight;
+                    float relativeB = verts[nextGrad].Y / maxHeight;
                     for (int c = i + 1; c < nextGrad; ++c)
                     {
                         verts[c] = new Vec2(c * _res, maxHeight * interpolateCos(relativeA, relativeB, (float)(c - i) / 4));
                     }
+
+                    i = nextGrad;
                 }
 
 
