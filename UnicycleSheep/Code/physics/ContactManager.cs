@@ -31,7 +31,7 @@ namespace Physics
             }
             if (s2 != null)
             {
-                s2.OnContactRemove(point.Shape1, point.Shape1, point);
+                s2.OnContactRemove(point.Shape1, point.Shape2, point);
             }
         }
     }
