@@ -31,13 +31,12 @@ namespace UnicycleSheep
         //state vars
         bool isOnGround;
 
-        static uint count = 0;
-        uint index;
+        uint controllerIndex;
 
-        public PlayerCharacter(World _world, Vector2 _position)
+        public PlayerCharacter(World _world, Vector2 _position, uint controllerIndex)
             :base(_world, _position)
         {
-            index = count++;
+            this.controllerIndex = controllerIndex;
 
             this.angVelocity = 0;
             CircleDef circleDef = new CircleDef();
@@ -82,12 +81,12 @@ namespace UnicycleSheep
         {
             bool jumpButtonIsPressed;
 
-            if(GamePadInputManager.isConnected(index))
+            if(GamePadInputManager.isConnected(controllerIndex))
             {
-                rotation = -GamePadInputManager.getLeftStick(index).X;
-                wantsToBalance = -GamePadInputManager.getRightStick(index).X;
+                rotation = -GamePadInputManager.getLeftStick(controllerIndex).X;
+                wantsToBalance = -GamePadInputManager.getRightStick(controllerIndex).X;
 
-                jumpButtonIsPressed = GamePadInputManager.isPressed(GamePadButton.RB, index);
+                jumpButtonIsPressed = GamePadInputManager.isPressed(GamePadButton.RB, controllerIndex);
             }
             else
             {
