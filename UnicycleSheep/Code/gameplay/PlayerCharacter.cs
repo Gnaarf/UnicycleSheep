@@ -41,7 +41,7 @@ namespace UnicycleSheep
         uint controllerIndex;
 
         public PlayerCharacter(World _world, Vector2 _position, uint controllerIndex)
-            :base(_world, _position),
+            :base(_world, _position)
         {
             isDead = false;
 
