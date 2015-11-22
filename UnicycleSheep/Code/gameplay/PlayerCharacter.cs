@@ -23,6 +23,7 @@ namespace UnicycleSheep
         protected float rotation = 0;
         private float wantsToBalance = 0;
         private float RotationFakt = 1f;
+        public float Counterfactf = 5f;
 
         private float maxJump = 42f;
 
@@ -158,7 +159,7 @@ namespace UnicycleSheep
                 targetVec.normalize();
                 float scalfact = (float) Math.Atan2((double) targetVec.Y, (double) targetVec.X);
 
-                head.ApplyForce(targetVec*5f*scalfact, head.GetWorldCenter());
+                head.ApplyForce(targetVec*Counterfactf*scalfact, head.GetWorldCenter());
             }
             if(isOnGround)
             {
