@@ -71,7 +71,7 @@ namespace UnicycleSheep
             Vector2 end = new Vector2(Constants.windowSizeX - 40, 250);
             for (float t = 0; t <= 1F; t += 1F / count)
             {
-                Sprite flagSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Flag));
+                Sprite flagSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagRed));
                 flagSprite.Origin = (Vector2)flagSprite.Texture.Size * 0.5F;
                 flagSprite.Scale = new Vector2(60, 90) / (Vector2)flagSprite.Texture.Size;
                 flagSprite.Position = Vector2.lerp(start, end, t);
@@ -81,6 +81,8 @@ namespace UnicycleSheep
 
         private void ResetPlayers()
         {
+            PlayerCharacter.playerCount = 0;
+
             resetFrameCounter = 0;
 
             if (playerChars == null) { playerChars = new List<PlayerCharacter>(); }
@@ -126,6 +128,23 @@ namespace UnicycleSheep
 
             if(numDeadPlayers >= playerChars.Count - 1)
             {
+                int winnerIndex = -1;
+                foreach (PlayerCharacter playerChar in playerChars)
+                {
+                    if (!playerChar.isDead)
+                        winnerIndex = playerChar.playerIndex;
+                }
+
+                // Player 0 red, Player 1 green
+                if(winnerIndex == 0)
+                    winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagRed));
+                else if(winnerIndex == 1)
+                    winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagGreen));
+
+                winnerSprite.Origin = ((Vector2)winnerSprite.Texture.Size) * 0.5F;
+                winnerSprite.Position = new Vector2(Constants.windowSizeX * 0.5F, Constants.windowSizeY * 0.5F);
+
+
                 resetFrameCounter++;
                 if (resetFrameCounter >= resetFrameCount)
                     return GameState.Reset;
@@ -133,16 +152,19 @@ namespace UnicycleSheep
 
             return GameState.InGame; 
         }
+
+        Sprite winnerSprite;
+
         public void draw(RenderWindow win, View view)
         {
-            if(resetFrameCounter > 0)
-                win.Draw(new Sprite(AssetManager.getTexture(AssetManager.TextureName.Flag)));
-
             // Draw Flag
             foreach (Sprite flag in flags)
             {
                 win.Draw(flag);
             }
+
+            if (resetFrameCounter > 0)
+                win.Draw(winnerSprite);
 
             //Draw Players
             foreach (PlayerCharacter playerChar in playerChars)

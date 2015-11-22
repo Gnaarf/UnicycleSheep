@@ -44,7 +44,7 @@ namespace UnicycleSheep
         public uint controllerIndex { get; private set; }
 
         public int playerIndex { get; private set; }
-        static int playerCount = 0;
+        public static int playerCount = 0;
 
         public PlayerCharacter(World _world, Vector2 _position, uint controllerIndex)
             :base(_world, _position)

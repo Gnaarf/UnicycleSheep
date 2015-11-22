@@ -76,7 +76,6 @@
     <Compile Include="Code\AnimatedSprite.cs" />
     <Compile Include="Code\AssetManager.cs" />
     <Compile Include="Code\Constants.cs" />
-    <Compile Include="Code\DekoElements\ParticleSpawner.cs" />
     <Compile Include="Code\DekoElements\RemoteControllHand.cs" />
     <Compile Include="Code\KeyboardInputManager.cs" />
     <Compile Include="Code\GamePadInputManager.cs" />
