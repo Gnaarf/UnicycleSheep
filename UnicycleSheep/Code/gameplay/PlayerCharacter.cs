@@ -33,12 +33,14 @@ namespace UnicycleSheep
         bool jump = false;
         float jumpStrength = 0.0f;
 
+        public float jumpLoadPercentage { get { return jumpStrength / maxJump; } }
+
         //state vars
         bool isOnGround;
 
         public bool isDead { get; private set; }
 
-        uint controllerIndex;
+        public uint controllerIndex { get; private set; }
 
         public PlayerCharacter(World _world, Vector2 _position, uint controllerIndex)
             :base(_world, _position)
@@ -109,7 +111,8 @@ namespace UnicycleSheep
         public void KeyboardInput()
         {
             //discard any input when dead
-            if (isDead) return;
+            if (isDead) 
+                return;
 
             bool jumpButtonIsPressed;
 
@@ -156,8 +159,10 @@ namespace UnicycleSheep
 
             if (jump && /*isOnGround &&*/ jumpStrength > 0f)
             {
-                body.ApplyImpulse(new Vector2(0, jumpStrength), body.GetWorldCenter());
-                chest.ApplyImpulse(new Vector2(0, jumpStrength * 0.01f), body.GetWorldCenter());
+                Vector2 jumpDir = chest.GetWorldCenter() - body.GetWorldCenter();
+                jumpDir.normalize(); jumpDir *= jumpStrength;
+                body.ApplyImpulse(jumpDir, body.GetWorldCenter());
+                chest.ApplyImpulse(jumpDir * 0.01f, chest.GetWorldCenter());
                 jump = false;
                 jumpStrength = 0f;
             }
@@ -205,7 +210,6 @@ namespace UnicycleSheep
                 
                     targetVec.normalize();
                     float scalfact = (float) Math.Acos(Math.Abs((double)targetVec.X));
-                Console.WriteLine(scalfact);
 
                 //head.ApplyForce(targetVec * Counterfactf * scalfact, head.GetWorldCenter());
                 
@@ -248,7 +252,7 @@ namespace UnicycleSheep
             SFML.Graphics.CircleShape wheel_Debug = new SFML.Graphics.CircleShape(Vector2.Zero.toScreenCoord().X - Vector2.One.toScreenCoord().X);
             wheel_Debug.Origin = Vector2.One * wheel_Debug.Radius;
             wheel_Debug.Position = ((Vector2)body.GetPosition()).toScreenCoord();
-            wheel_Debug.FillColor = SFML.Graphics.Color.Red;
+            wheel_Debug.FillColor = isDead ? SFML.Graphics.Color.Black : SFML.Graphics.Color.Red;
             win.Draw(wheel_Debug);
 
             //debugDraw for sheepBody
@@ -256,7 +260,7 @@ namespace UnicycleSheep
             body_Debug.Origin = (Vector2)body_Debug.Size / 2F;
             body_Debug.Position = ((Vector2)chest.GetPosition()).toScreenCoord();
             body_Debug.Rotation = -chest.GetAngle() * Helper.RadianToDegree;
-            body_Debug.FillColor = SFML.Graphics.Color.Red;
+            body_Debug.FillColor = isDead ? SFML.Graphics.Color.Black : SFML.Graphics.Color.Red;
             win.Draw(body_Debug);
 
             //the head
@@ -264,9 +268,9 @@ namespace UnicycleSheep
             headDeb.Origin = Vector2.One * headDeb.Radius;
             headDeb.Position = ((Vector2)chest.GetPosition() + (new Vector2(0, 3)).rotate(chest.GetAngle())).toScreenCoord();
             headDeb.Rotation = -chest.GetAngle() * Helper.RadianToDegree;
-            headDeb.FillColor = SFML.Graphics.Color.Red;
+            headDeb.FillColor = isDead ? SFML.Graphics.Color.Black : SFML.Graphics.Color.Red;
 
-            win.Draw(headDeb); 
+            win.Draw(headDeb);
         }
 
         // ********************************************************** //
@@ -290,7 +294,7 @@ namespace UnicycleSheep
 
         public void OnContactRemove(Box2DX.Collision.Shape _other, Box2DX.Collision.Shape _self, ContactPoint _point)
         {
-            if (wheel == _self)
+      //      if (wheel == _self)
             {
                 Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 //only when the tile is left which was just hit
