@@ -1,4 +1,5 @@
-﻿using Box2DX.Dynamics;
+﻿using Box2DX.Collision;
+using Box2DX.Dynamics;
 using System;
 using System.Collections.Generic;
 using UnicycleSheep;
@@ -7,6 +8,8 @@ namespace Physics
 {
     class ContactManager : ContactListener
     {
+        public static ContactManager g_contactManager = new ContactManager();
+
         public override void Add(ContactPoint point)
         {
             IContactEvent s1 = point.Shape1.GetBody().GetUserData() as IContactEvent;
@@ -33,6 +36,18 @@ namespace Physics
             {
                 s2.OnContactRemove(point.Shape1, point.Shape2, point);
             }
+        }
+
+        List<Shape> shapes = new List<Shape>();
+
+        public void addNonLethalShape(Shape _shape)
+        {
+            shapes.Add(_shape);
+        }
+
+        public bool isLethal(Shape _shape)
+        {
+            return !shapes.Contains(_shape);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace UnicycleSheep
         //verstärkung der gegensteuerung
         public float Counterfactf = 10f;
 
-        private float maxJump = 42f;
+        private float maxJump = 84f;
 
         bool jump = false;
         float jumpStrength = 0.0f;
@@ -284,7 +284,7 @@ namespace UnicycleSheep
                 _lastContact = _other;
                 isOnGround = true;
             }
-            else if(head == _self)
+            else if(head == _self && Physics.ContactManager.g_contactManager.isLethal(_other))
             {
                 isDead = true;
             }
