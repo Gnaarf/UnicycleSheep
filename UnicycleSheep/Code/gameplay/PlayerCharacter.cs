@@ -156,8 +156,10 @@ namespace UnicycleSheep
 
             if (jump && /*isOnGround &&*/ jumpStrength > 0f)
             {
-                body.ApplyImpulse(new Vector2(0, jumpStrength), body.GetWorldCenter());
-                chest.ApplyImpulse(new Vector2(0, jumpStrength * 0.01f), body.GetWorldCenter());
+                Vector2 jumpDir = chest.GetWorldCenter() - body.GetWorldCenter();
+                jumpDir.normalize(); jumpDir *= jumpStrength;
+                body.ApplyImpulse(jumpDir, body.GetWorldCenter());
+                chest.ApplyImpulse(jumpDir * 0.01f, chest.GetWorldCenter());
                 jump = false;
                 jumpStrength = 0f;
             }
