@@ -87,6 +87,8 @@ namespace UnicycleSheep
 
             sheepSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Shoop));
             sheepSprite.Scale = new Vector2(0.2f, 0.2f);
+            if(_position.X > Constants.worldSizeX / 2F)
+                sheepSprite.Scale = new Vector2(-0.2f, 0.2f);
             sheepSprite.Origin = ((Vector2)sheepSprite.Texture.Size) / 2F;
         }
 
