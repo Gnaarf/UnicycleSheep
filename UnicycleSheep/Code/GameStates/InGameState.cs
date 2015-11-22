@@ -35,8 +35,8 @@ namespace UnicycleSheep
              // Set new Players and appending dekoHands
             ResetPlayers(2);
             setDekoFlags();
-
-            groundPolygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 15.0f), 0xF0A58A4, Actors.FunctionType.GradientNoise, 4);
+            //0xF0A58A4
+            groundPolygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 15.0f), 0xFBA58A4, Actors.FunctionType.GradientNoise, 4);
 
             //left and right borders of the map
             BodyDef bodydef = new BodyDef();
