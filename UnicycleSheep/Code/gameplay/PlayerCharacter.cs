@@ -29,7 +29,7 @@ namespace UnicycleSheep
         public float Counterfactf = 10f;
 
         private float maxJump = 42f;
-
+        private float Jumptime;
         bool jump = false;
         float jumpStrength = 0.0f;
 
@@ -166,8 +166,9 @@ namespace UnicycleSheep
                 jump = false;
                 jumpStrength = 0f;
             }
-            if (true /* isOnGround && wantsToBalance == 0 */)
+            if (Program.inGameFrameCount-Jumptime < 300 /* && wantsToBalance == 0 */)
             {
+                Console.WriteLine(Program.inGameFrameCount - Jumptime);
                 float scalfact = 0;
                 Vector2 theAngVec = chest.GetPosition() - body.GetPosition();
                 theAngVec.normalize();
@@ -283,6 +284,7 @@ namespace UnicycleSheep
             {
                 _lastContact = _other;
                 isOnGround = true;
+                Jumptime = Program.inGameFrameCount;
             }
             else if(head == _self)
             {
