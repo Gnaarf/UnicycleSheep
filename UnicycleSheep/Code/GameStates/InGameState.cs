@@ -19,6 +19,11 @@ namespace UnicycleSheep
         List<DekoElements.RemoteControllHand> dekoHands;
         List<Sprite> flags;
 
+        int resetFrameCounter;
+        const int resetFrameCount = 400;
+
+        const int numPlayers = 2;
+
         Actors.PolygonActor groundPolygonAct;
 
         public InGameState()
@@ -33,7 +38,7 @@ namespace UnicycleSheep
             physicsWorld.SetContactListener(contactManager);
             
              // Set new Players and appending dekoHands
-            ResetPlayers(2);
+            ResetPlayers();
             setDekoFlags();
             //0xF0A58A4
             groundPolygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 15.0f), 0xFBA58A4, Actors.FunctionType.GradientNoise, 4);
@@ -74,8 +79,10 @@ namespace UnicycleSheep
             }
         }
 
-        private void ResetPlayers(int numPlayers)
+        private void ResetPlayers()
         {
+            resetFrameCounter = 0;
+
             if (playerChars == null) { playerChars = new List<PlayerCharacter>(); }
             else { playerChars.Clear(); }
 
@@ -104,17 +111,33 @@ namespace UnicycleSheep
         }
         public GameState update() 
         {
+            int numDeadPlayers = 0;
+
             foreach (PlayerCharacter playerChar in playerChars)
             {
+                if (playerChar.isDead)
+                    numDeadPlayers++;
+
                 playerChar.KeyboardInput();
                 playerChar.Move();
                 playerChar.update();
             }
             physicsWorld.Step(1 / 60.0f, 8, 1);
+
+            if(numDeadPlayers >= playerChars.Count - 1)
+            {
+                resetFrameCounter++;
+                if (resetFrameCounter >= resetFrameCount)
+                    return GameState.Reset;
+            }
+
             return GameState.InGame; 
         }
         public void draw(RenderWindow win, View view)
         {
+            if(resetFrameCounter > 0)
+                win.Draw(new Sprite(AssetManager.getTexture(AssetManager.TextureName.Flag)));
+
             // Draw Flag
             foreach (Sprite flag in flags)
             {

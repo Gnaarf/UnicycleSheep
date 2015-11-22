@@ -84,6 +84,12 @@ namespace UnicycleSheep
                 case GameState.InGame:
                     state = new InGameState();
                     break;
+
+                case GameState.Reset:
+                    currentGameState = prevGameState;
+                    prevGameState = GameState.Reset;
+                    handleNewGameState();
+                    break;
             }
 
             prevGameState = currentGameState;

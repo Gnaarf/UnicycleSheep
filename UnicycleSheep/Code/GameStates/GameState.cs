@@ -10,6 +10,7 @@ namespace UnicycleSheep
     {
         None,
         MainMenu,
-        InGame
+        InGame,
+        Reset
     }
 }
