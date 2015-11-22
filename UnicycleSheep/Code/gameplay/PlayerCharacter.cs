@@ -28,7 +28,7 @@ namespace UnicycleSheep
         //verstärkung der gegensteuerung
         public float Counterfactf = 10f;
 
-        private float maxJump = 42f;
+        private float maxJump = 84f;
         private float Jumptime;
         bool jump = false;
         float jumpStrength = 0.0f;
@@ -71,7 +71,7 @@ namespace UnicycleSheep
 
             //add the head
             circleDef.Density = 0.0001f;
-            circleDef.Radius = 0.5f;
+            circleDef.Radius = 0.75f;
             circleDef.LocalPosition.Set(0, 3);
             head = chest.CreateShape(circleDef);
 
@@ -80,7 +80,7 @@ namespace UnicycleSheep
             PolygonDef Boxdef = new PolygonDef();
             Boxdef.SetAsBox(1, 1.5f);
             Boxdef.Density = 0.25f;
-            Boxdef.Friction = 0.0f;
+            Boxdef.Friction = 0.4f;
             Box2DX.Collision.Shape s2 = chest.CreateShape(Boxdef);
             chest.SetMassFromShapes();
             chest.SetUserData(this);
@@ -90,7 +90,7 @@ namespace UnicycleSheep
             jointDefKW.Body2 = chest;
             jointDefKW.Body1 = body;
             jointDefKW.CollideConnected = false;
-            jointDefKW.LocalAnchor2 = new Vector2(0, -3.5f);
+            jointDefKW.LocalAnchor2 = new Vector2(-0.0f, -3.8f);
             jointDefKW.LocalAnchor1 = new Vector2(0, 0);
             jointDefKW.EnableLimit = false;
 
@@ -98,7 +98,7 @@ namespace UnicycleSheep
 
             Texture wheelTexture = AssetManager.getTexture(AssetManager.TextureName.ShoopWheel);
             wheelSprite = new AnimatedSprite(wheelTexture, 1.0f, 1, (Vector2)wheelTexture.Size);
-            wheelSprite.Scale = (Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord() - Vector2.Zero.toScreenCoord();
+            wheelSprite.Scale = new Vector2(0.2f, 0.2f); //(Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord() - Vector2.Zero.toScreenCoord();//new Vector2(0.08f, 0.08f);
             wheelSprite.Origin = ((Vector2)wheelSprite.spriteSize) / 2F;
 
             sheepSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Shoop));
@@ -111,8 +111,7 @@ namespace UnicycleSheep
         public void KeyboardInput()
         {
             //discard any input when dead
-            if (isDead) 
-                return;
+            if (isDead) return;
 
             bool jumpButtonIsPressed;
 
@@ -152,6 +151,8 @@ namespace UnicycleSheep
         }
         public void Move()
         {
+            if (isDead) return;
+
             if((this.angVelocity < 100) && this.rotation == 1)
                 this.angVelocity += RotationFakt;
             else if ((this.angVelocity > -100) && this.rotation == -1)
@@ -235,6 +236,8 @@ namespace UnicycleSheep
 
             sheepSprite.Position = sheepLoc.toScreenCoord();
             sheepSprite.Rotation = wheelToSheepRot;
+            if (isDead)
+                sheepSprite.Color = new SFML.Graphics.Color(255, 255, 255, 100);
 
             wheelSprite.Position = location.toScreenCoord();
             wheelSprite.Rotation = -body.GetAngle() * Helper.RadianToDegree;
@@ -243,7 +246,7 @@ namespace UnicycleSheep
             //draw after to overlap
             win.Draw(sheepSprite);
 
-            DebugDraw(win);
+       //     DebugDraw(win);
         }
 
         private void DebugDraw(RenderWindow win)
@@ -263,7 +266,7 @@ namespace UnicycleSheep
             win.Draw(body_Debug);
 
             //the head
-            SFML.Graphics.CircleShape headDeb = new SFML.Graphics.CircleShape(Vector2.Zero.toScreenCoord().X - (0.5f * Vector2.One).toScreenCoord().X);
+            SFML.Graphics.CircleShape headDeb = new SFML.Graphics.CircleShape(Vector2.Zero.toScreenCoord().X - (0.75f * Vector2.One).toScreenCoord().X);
             headDeb.Origin = Vector2.One * headDeb.Radius;
             headDeb.Position = ((Vector2)chest.GetPosition() + (new Vector2(0, 3)).rotate(chest.GetAngle())).toScreenCoord();
             headDeb.Rotation = -chest.GetAngle() * Helper.RadianToDegree;
@@ -286,7 +289,7 @@ namespace UnicycleSheep
                 isOnGround = true;
                 Jumptime = Program.inGameFrameCount;
             }
-            else if(head == _self)
+            else if(head == _self && Physics.ContactManager.g_contactManager.isLethal(_other))
             {
                 isDead = true;
             }
