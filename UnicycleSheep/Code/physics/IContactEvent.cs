@@ -5,7 +5,7 @@ namespace Physics
 {
     interface IContactEvent
     {
-        void OnContact(Shape _other, ContactPoint _point);
-        void OnContactRemove(Shape _other, ContactPoint _point);
+        void OnContact(Shape _other, Shape _self, ContactPoint _point);
+        void OnContactRemove(Shape _other, Shape _self, ContactPoint _point);
     }
 }
