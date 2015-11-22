@@ -17,6 +17,7 @@ namespace UnicycleSheep
         public readonly Vector2[] startPostitions = new Vector2[] { new Vec2(5.0f, 50.0f), new Vec2(75.0f, 50.0f), new Vec2(40.0f, 50.0f), new Vec2(60.0f, 50.0f) };
         
         List<DekoElements.RemoteControllHand> dekoHands;
+        List<Sprite> flags;
 
         Actors.PolygonActor groundPolygonAct;
 
@@ -31,9 +32,10 @@ namespace UnicycleSheep
             contactManager = new Physics.ContactManager();
             physicsWorld.SetContactListener(contactManager);
             
-             // Set new Players
+             // Set new Players and appending dekoHands
             ResetPlayers(2);
-            
+            setDekoFlags();
+
             groundPolygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 15.0f), 0xF0A58A4, Actors.FunctionType.GradientNoise, 4);
 
             //left and right borders of the map
@@ -49,6 +51,22 @@ namespace UnicycleSheep
             bodydef.Position = new Vector2(0, Constants.worldSizeY);
             box.SetAsBox(Constants.worldSizeX, 1f);
             Body topEdge = physicsWorld.CreateBody(bodydef); topEdge.CreateShape(box);
+        }
+
+        private void setDekoFlags()
+        {
+            flags = new List<Sprite>();
+            float count = 4F;
+            Vector2 start = new Vector2(40, 250);
+            Vector2 end = new Vector2(Constants.windowSizeX - 40, 250);
+            for (float t = 0; t <= 1F; t += 1F / count)
+            {
+                Sprite flagSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Flag));
+                flagSprite.Origin = (Vector2)flagSprite.Texture.Size * 0.5F;
+                flagSprite.Scale = new Vector2(60, 90) / (Vector2)flagSprite.Texture.Size;
+                flagSprite.Position = Vector2.lerp(start, end, t);
+                flags.Add(flagSprite);
+            }
         }
 
         private void ResetPlayers(int numPlayers)
@@ -88,14 +106,23 @@ namespace UnicycleSheep
             physicsWorld.Step(1 / 60.0f, 8, 1);
             return GameState.InGame; 
         }
-        public void draw(RenderWindow win, View view) 
+        public void draw(RenderWindow win, View view)
         {
+            // Draw Flag
+            foreach (Sprite flag in flags)
+            {
+                win.Draw(flag);
+            }
+
+            //Draw Players
             foreach (PlayerCharacter playerChar in playerChars)
             {
                 playerChar.draw(win, view);
             }
+            // Draw Ground
             groundPolygonAct.draw(win, view);
 
+            // Draw deko Hands
             foreach (DekoElements.RemoteControllHand hand in dekoHands)
             {
                 hand.draw(win);

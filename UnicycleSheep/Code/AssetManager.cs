@@ -36,6 +36,8 @@ public class AssetManager
         textures.Add(TextureName.Hand1_RightThumb_Right, new Texture("Assets/Textures/Hands/Hand1/rightThumb_right.png"));
         textures.Add(TextureName.Hand1_RightThumb_Rightmost, new Texture("Assets/Textures/Hands/Hand1/rightThumb_rightmost.png"));
 
+        textures.Add(TextureName.Flag, new Texture("Assets/Textures/flag.png"));
+
     }
 
     public enum TextureName
@@ -59,5 +61,6 @@ public class AssetManager
         Hand1_RightThumb_Right,
         Hand1_RightThumb_Rightmost,
         
+        Flag,
     }
 }
