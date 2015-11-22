@@ -38,14 +38,15 @@ namespace UnicycleSheep
         //state vars
         bool isOnGround;
 
-        bool bIsDead = false;
-        public bool isDead { get { return bIsDead; } private set { bIsDead = value; } }
+        public bool isDead { get; private set; }
 
         public uint controllerIndex { get; private set; }
 
         public PlayerCharacter(World _world, Vector2 _position, uint controllerIndex)
             :base(_world, _position)
         {
+            isDead = false;
+
             this.controllerIndex = controllerIndex;
 
             this.angVelocity = 0;
@@ -158,8 +159,10 @@ namespace UnicycleSheep
 
             if (jump && /*isOnGround &&*/ jumpStrength > 0f)
             {
-                body.ApplyImpulse(new Vector2(0, jumpStrength), body.GetWorldCenter());
-                chest.ApplyImpulse(new Vector2(0, jumpStrength * 0.01f), body.GetWorldCenter());
+                Vector2 jumpDir = chest.GetWorldCenter() - body.GetWorldCenter();
+                jumpDir.normalize(); jumpDir *= jumpStrength;
+                body.ApplyImpulse(jumpDir, body.GetWorldCenter());
+                chest.ApplyImpulse(jumpDir * 0.01f, chest.GetWorldCenter());
                 jump = false;
                 jumpStrength = 0f;
             }
@@ -271,11 +274,11 @@ namespace UnicycleSheep
             //the head
             SFML.Graphics.CircleShape headDeb = new SFML.Graphics.CircleShape(Vector2.Zero.toScreenCoord().X - Vector2.One.toScreenCoord().X);
             headDeb.Origin = Vector2.One * headDeb.Radius;
-            headDeb.Position = ((Vector2)chest.GetPosition() + new Vector2(0, 2)).toScreenCoord();
+            headDeb.Position = ((Vector2)chest.GetPosition() + (new Vector2(0, 3)).rotate(chest.GetAngle())).toScreenCoord();
             headDeb.Rotation = -chest.GetAngle() * Helper.RadianToDegree;
             headDeb.FillColor = isDead ? SFML.Graphics.Color.Black : SFML.Graphics.Color.Red;
 
-            win.Draw(headDeb);    
+            win.Draw(headDeb); 
         }
 
         // ********************************************************** //
