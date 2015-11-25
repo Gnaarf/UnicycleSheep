@@ -134,15 +134,15 @@ namespace UnicycleSheep
                 jumpButtonIsPressed = false;
                 if (playerIndex == 0)
                 {
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.A))
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.S))
                         rotation += 1F;
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.D))
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.W))
                         rotation += -1F;
 
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.F))
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.A))
                         wantsToBalance = 1;
 
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.H))
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.D))
                         wantsToBalance = -1;
 
 
@@ -150,19 +150,19 @@ namespace UnicycleSheep
                 }
                 if (playerIndex == 1)
                 {
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.Left))
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.Up))
                         rotation += 1F;
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.Right))
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.Down))
                         rotation += -1F;
 
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.Numpad4))
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.Left))
                         wantsToBalance = 1;
 
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.Numpad6))
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.Right))
                         wantsToBalance = -1;
 
 
-                    jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.Numpad0);
+                    jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.RControl);
                 }
 
             }
