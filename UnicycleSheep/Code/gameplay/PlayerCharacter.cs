@@ -246,7 +246,7 @@ namespace UnicycleSheep
 
                 //head.ApplyForce(targetVec * Counterfactf * scalfact, head.GetWorldCenter());
                 
-                chest.ApplyTorque(JumptimePassed < 30 ? 80 * scalfact * wantsToBalance : 60 * wantsToBalance);
+                chest.ApplyTorque(JumptimePassed < 30 ? 80 * scalfact * wantsToBalance : 65 * wantsToBalance);
 
                 wantsToBalance = 0;
             }
