@@ -131,19 +131,40 @@ namespace UnicycleSheep
             else
             {
                 rotation = 0F;
-                if (KeyboardInputManager.isPressed(Keyboard.Key.A))
-                    rotation += 1F;
-                if (KeyboardInputManager.isPressed(Keyboard.Key.D))
-                    rotation += -1F;
+                jumpButtonIsPressed = false;
+                if (playerIndex == 0)
+                {
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.A))
+                        rotation += 1F;
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.D))
+                        rotation += -1F;
 
-                if(KeyboardInputManager.isPressed(Keyboard.Key.Left))
-                    wantsToBalance = 1;
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.F))
+                        wantsToBalance = 1;
 
-                if (KeyboardInputManager.isPressed(Keyboard.Key.Right))
-                    wantsToBalance = -1;
-                
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.H))
+                        wantsToBalance = -1;
 
-                jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.Space);
+
+                    jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.Space);
+                }
+                if (playerIndex == 1)
+                {
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.Left))
+                        rotation += 1F;
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.Right))
+                        rotation += -1F;
+
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.Numpad4))
+                        wantsToBalance = 1;
+
+                    if (KeyboardInputManager.isPressed(Keyboard.Key.Numpad6))
+                        wantsToBalance = -1;
+
+
+                    jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.Numpad0);
+                }
+
             }
 
             if (jumpButtonIsPressed)
