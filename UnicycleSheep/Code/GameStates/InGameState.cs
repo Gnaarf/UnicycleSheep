@@ -146,10 +146,12 @@ namespace UnicycleSheep
                 }
 
                 // Player 0 red, Player 1 green
-                if(winnerIndex == 0)
+                if (winnerIndex == 0)
                     winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagRed));
-                else if(winnerIndex == 1)
+                else if (winnerIndex == 1)
                     winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagGreen));
+                else if(winnerSprite == null)
+                    winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagGray));
 
                 winnerSprite.Origin = ((Vector2)winnerSprite.Texture.Size) * 0.5F;
                 winnerSprite.Position = new Vector2(Constants.windowSizeX * 0.5F, Constants.windowSizeY * 0.5F);
