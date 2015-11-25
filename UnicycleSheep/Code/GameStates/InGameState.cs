@@ -8,6 +8,10 @@ namespace UnicycleSheep
 {
     class InGameState : IGameState
     {
+        public static int WinCount0 = 0;
+        public static int WinCount1 = 0;
+        bool roundIsOver = false;
+
         //singletons
         World physicsWorld;
         Physics.ContactManager contactManager;
@@ -136,31 +140,43 @@ namespace UnicycleSheep
             }
             physicsWorld.Step(1 / 60.0f, 8, 1);
 
-            if(numDeadPlayers >= playerChars.Count - 1)
+            if (!roundIsOver)
             {
-                int winnerIndex = -1;
-                foreach (PlayerCharacter playerChar in playerChars)
+                if (numDeadPlayers >= playerChars.Count - 1)
                 {
-                    if (!playerChar.isDead)
-                        winnerIndex = playerChar.playerIndex;
+                    int winnerIndex = -1;
+                    foreach (PlayerCharacter playerChar in playerChars)
+                    {
+                        if (!playerChar.isDead)
+                            winnerIndex = playerChar.playerIndex;
+                    }
+
+                    // Player 0 red, Player 1 green
+                    if (winnerIndex == 0)
+                    {
+                        winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagRed));
+                        WinCount0++;
+                    }
+                    else if (winnerIndex == 1)
+                    {
+                        winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagGreen));
+                        WinCount1++;
+                    }
+                    else
+                        winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagGray));
+
+                    winnerSprite.Origin = ((Vector2)winnerSprite.Texture.Size) * 0.5F;
+                    winnerSprite.Position = new Vector2(Constants.windowSizeX * 0.5F, Constants.windowSizeY * 0.5F);
+
+                    roundIsOver = true;
                 }
-
-                // Player 0 red, Player 1 green
-                if (winnerIndex == 0)
-                    winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagRed));
-                else if (winnerIndex == 1)
-                    winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagGreen));
-                else if(winnerSprite == null)
-                    winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagGray));
-
-                winnerSprite.Origin = ((Vector2)winnerSprite.Texture.Size) * 0.5F;
-                winnerSprite.Position = new Vector2(Constants.windowSizeX * 0.5F, Constants.windowSizeY * 0.5F);
-
-
+            }
+            else
+            {
                 resetFrameCounter++;
                 if (resetFrameCounter >= resetFrameCount)
                     return GameState.Reset;
-            }
+                }
 
             return GameState.InGame; 
         }
