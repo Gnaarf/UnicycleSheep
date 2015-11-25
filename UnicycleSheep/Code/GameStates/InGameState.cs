@@ -150,7 +150,7 @@ namespace UnicycleSheep
                     winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagRed));
                 else if (winnerIndex == 1)
                     winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagGreen));
-                else
+                else if(winnerSprite == null)
                     winnerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.FlagGray));
 
                 winnerSprite.Origin = ((Vector2)winnerSprite.Texture.Size) * 0.5F;
