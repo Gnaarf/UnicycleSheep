@@ -124,12 +124,12 @@ namespace DekoElements
             }
             else
             {
-                if (KeyboardInputManager.isPressed(Keyboard.Key.A))      { setLeftThumb(Horizontal.Leftmost); }
-                else if (KeyboardInputManager.isPressed(Keyboard.Key.D)) { setLeftThumb(Horizontal.Rightmost); }
+                if (KeyboardInputManager.isPressed(Keyboard.Key.S))      { setLeftThumb(Horizontal.Leftmost); }
+                else if (KeyboardInputManager.isPressed(Keyboard.Key.W)) { setLeftThumb(Horizontal.Rightmost); }
                 else                                                     { setLeftThumb(Horizontal.Mid); }
 
-                if (KeyboardInputManager.isPressed(Keyboard.Key.Left))       { setRightThumb(Horizontal.Leftmost); }
-                else if (KeyboardInputManager.isPressed(Keyboard.Key.Right)) { setRightThumb(Horizontal.Rightmost); }
+                if (KeyboardInputManager.isPressed(Keyboard.Key.A))       { setRightThumb(Horizontal.Leftmost); }
+                else if (KeyboardInputManager.isPressed(Keyboard.Key.D)) { setRightThumb(Horizontal.Rightmost); }
                 else                                                         { setRightThumb(Horizontal.Mid); }
 
                 if (KeyboardInputManager.isPressed(Keyboard.Key.Space))
