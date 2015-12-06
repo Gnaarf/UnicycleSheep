@@ -22,38 +22,36 @@ namespace UnicycleSheep
 
         //movement input and constant
         private float wheelToSheepRot = 0.0f; //basicly the rotation of the unicycle's frame
-        protected float rotation = 0;
-        private float wantsToBalance = 0;
+        public float rotation;
+        public float wantsToBalance;
         private float RotationFakt = 1f;
         //verstärkung der gegensteuerung
         public float Counterfactf = 10f;
 
-        private float maxJump = 84f;
         private float Jumptime = Program.inGameFrameCount;
         public float JumptimePassed;
-        bool jump = false;
-        float jumpStrength = 0.0f;
+        public bool jump = false;
+        public bool isLoadingJump = false;
+        public float jumpStrength = 0.0f;
 
-        public float jumpLoadPercentage { get { return jumpStrength / maxJump; } }
+        public float jumpLoadPercentage { get { return jumpStrength / Constants.maxJumpStrength; } }
 
         //state vars
         bool isOnGround;
 
         public bool isDead { get; private set; }
 
-        public uint controllerIndex { get; private set; }
-
         public int playerIndex { get; private set; }
         public static int playerCount = 0;
 
-        public PlayerCharacter(World _world, Vector2 _position, uint controllerIndex)
+        public PlayerCharacter(World _world, Vector2 _position)
             :base(_world, _position)
         {
             playerIndex = playerCount++;
+            rotation = 0;
+            wantsToBalance = 0;
 
             isDead = false;
-
-            this.controllerIndex = controllerIndex;
 
             this.angVelocity = 0;
             //build the unicycle
@@ -114,68 +112,6 @@ namespace UnicycleSheep
             sheepSprite.Origin = ((Vector2)sheepSprite.Texture.Size) / 2F;
         }
 
-        public void KeyboardInput()
-        {
-            //discard any input when dead
-            if (isDead) return;
-
-            bool jumpButtonIsPressed;
-
-            if(GamePadInputManager.isConnected(controllerIndex))
-            {
-                rotation = -GamePadInputManager.getLeftStick(controllerIndex).X;
-                wantsToBalance = -GamePadInputManager.getRightStick(controllerIndex).X;
-
-                jumpButtonIsPressed = GamePadInputManager.isPressed(GamePadButton.RB, controllerIndex);
-            }
-            else
-            {
-                rotation = 0F;
-                jumpButtonIsPressed = false;
-                if (playerIndex == 0)
-                {
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.S))
-                        rotation += 1F;
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.W))
-                        rotation += -1F;
-
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.A))
-                        wantsToBalance = 1;
-
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.D))
-                        wantsToBalance = -1;
-
-
-                    jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.Space);
-                }
-                if (playerIndex == 1)
-                {
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.Up))
-                        rotation += 1F;
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.Down))
-                        rotation += -1F;
-
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.Left))
-                        wantsToBalance = 1;
-
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.Right))
-                        wantsToBalance = -1;
-
-
-                    jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.RControl);
-                }
-
-            }
-
-            if (jumpButtonIsPressed)
-            {
-                if (jumpStrength < maxJump)
-                    jumpStrength += 0.8f;
-                jump = false;
-            }
-            else if (jumpStrength > 0) jump = true;  
-
-        }
         public void Move()
         {
             if (isDead) return;
@@ -189,6 +125,9 @@ namespace UnicycleSheep
                 this.angVelocity += RotationFakt;
             else if ((this.angVelocity > -100) && this.rotation == -1)
                 this.angVelocity -= RotationFakt;
+
+            if (isLoadingJump && jumpStrength < Constants.maxJumpStrength)
+                jumpStrength += 0.8f;
 
             if (jump && /*isOnGround &&*/ jumpStrength > 0f)
             {

@@ -80,6 +80,8 @@
     <Compile Include="Code\AssetManager.cs" />
     <Compile Include="Code\Constants.cs" />
     <Compile Include="Code\DekoElements\RemoteControllHand.cs" />
+    <Compile Include="Code\gameplay\Controller.cs" />
+    <Compile Include="Code\gameplay\PlayerController.cs" />
     <Compile Include="Code\KeyboardInputManager.cs" />
     <Compile Include="Code\GamePadInputManager.cs" />
     <Compile Include="Code\gameplay\Actor.cs" />
