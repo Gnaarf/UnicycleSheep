@@ -53,6 +53,7 @@ public class AssetManager
 
         textures.Add(TextureName.RemoteFlagGreen, new Texture("Assets/Textures/Hands/Hand1/FlagGreen.png"));
         textures.Add(TextureName.RemoteFlagRed, new Texture("Assets/Textures/Hands/Hand1/FlagRed.png"));
+        textures.Add(TextureName.RemoteFlagWhitePart, new Texture("Assets/Textures/Hands/Hand1/FlagWhitePart.png"));
 
 
         textures.Add(TextureName.FlagRed, new Texture("Assets/Textures/flagRed.png"));
@@ -99,6 +100,7 @@ public class AssetManager
 
         RemoteFlagGreen,
         RemoteFlagRed,
+        RemoteFlagWhitePart,
 
         FlagRed,
         FlagGreen,

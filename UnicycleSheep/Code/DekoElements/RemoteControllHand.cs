@@ -9,12 +9,15 @@ namespace DekoElements
     {
         Sprite baseSprite;
         Sprite flagSprite;
+        Sprite flagColorablePartSprite;
         Sprite leftThumbSprite;
         Sprite rightThumbSprite;
         Sprite leftFingerSprite;
         Sprite rightFingerSprite;
 
         Sprite jumpbarSprite;
+
+        Color playerColor;
 
         bool mirrored { get { return baseSprite.Scale.X < 0F; } }
 
@@ -23,6 +26,8 @@ namespace DekoElements
         public RemoteControllHand(PlayerCharacter player)
         {
             this.player = player;
+
+            playerColor = player.playerIndex == 0 ? Color.Black : Color.Magenta;
 
             Vector2 pos = player.location.toScreenCoord();
             pos.X = (pos.X - Constants.windowSizeX * 0.5F) * 0.8F + Constants.windowSizeX * 0.5F;
@@ -41,6 +46,12 @@ namespace DekoElements
             flagSprite.Origin = ((Vector2)flagSprite.Texture.Size) * 0.5F;
             flagSprite.Scale = scale;
             flagSprite.Position = pos;
+
+            flagColorablePartSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.RemoteFlagWhitePart));
+            flagColorablePartSprite.Origin = ((Vector2)flagSprite.Texture.Size) * 0.5F;
+            flagColorablePartSprite.Scale = scale;
+            flagColorablePartSprite.Position = pos;
+            flagColorablePartSprite.Color = playerColor;
 
             leftThumbSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.LeftThumb_Mid));
             leftThumbSprite.Origin = ((Vector2)leftThumbSprite.Texture.Size) * 0.5F;
@@ -74,11 +85,8 @@ namespace DekoElements
             float totalTime = (float)Program.gameTime.TotalTime.TotalSeconds;
             float blinkTime = 3F; 
             Color fromColor = new Color(255, 255, 255);
-            Color toColor;
-            if (totalTime < 15F)
-                toColor = Helper.Lerp(new Color(255, 100, 100), new Color(255, 200, 200), totalTime / 30F);
-            else
-                toColor = new Color(255, 200, 200);
+            float toColorT = Helper.LerpClamp(0.2F, 0.5F, totalTime / 15F);
+            Color toColor = Helper.Lerp(playerColor, Color.White, toColorT);
 
             float t;
             if (totalTime % blinkTime < blinkTime * 0.5F)
@@ -148,6 +156,7 @@ namespace DekoElements
             win.Draw(rightFingerSprite);
 
             win.Draw(flagSprite);
+            win.Draw(flagColorablePartSprite);
             win.Draw(baseSprite);
 
             win.Draw(leftThumbSprite);
