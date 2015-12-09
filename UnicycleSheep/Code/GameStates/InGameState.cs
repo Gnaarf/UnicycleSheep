@@ -18,6 +18,7 @@ namespace UnicycleSheep
 
         //test
         List<PlayerCharacter> playerChars;
+        List<Controller> controllers;
         public readonly Vector2[] startPostitions = new Vector2[] { new Vec2(5.0f, 50.0f), new Vec2(75.0f, 50.0f), new Vec2(40.0f, 50.0f), new Vec2(60.0f, 50.0f) };
         
         List<DekoElements.RemoteControllHand> dekoHands;
@@ -101,6 +102,8 @@ namespace UnicycleSheep
 
             if (playerChars == null) { playerChars = new List<PlayerCharacter>(); }
             else { playerChars.Clear(); }
+            if (controllers == null) { controllers = new List<Controller>(); }
+            else { controllers.Clear(); }
 
             if (dekoHands == null) { dekoHands = new List<DekoElements.RemoteControllHand>(); }
             else { dekoHands.Clear(); }
@@ -108,9 +111,13 @@ namespace UnicycleSheep
             // find a controller for the Players
             foreach (uint i in GamePadInputManager.connectedPadIndices)
             {
-                PlayerCharacter player = new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count], i);
-                dekoHands.Add(new DekoElements.RemoteControllHand(player));
+                PlayerCharacter player = new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count]);
+                PlayerController playerController = new PlayerController(player, i);
+                
+                dekoHands.Add(new DekoElements.RemoteControllHand(playerController));
+                
                 playerChars.Add(player);
+                controllers.Add(playerController);
                 
                 if (playerChars.Count == numPlayers)
                     break;
@@ -120,21 +127,28 @@ namespace UnicycleSheep
             // Cord: nullable would be better code, I guess...
             while (playerChars.Count < numPlayers)
             {
-                PlayerCharacter player = new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count], uint.MaxValue);
-                dekoHands.Add(new DekoElements.RemoteControllHand(player));
+                PlayerCharacter player = new PlayerCharacter(physicsWorld, startPostitions[playerChars.Count]);
+                PlayerController playerController = new PlayerController(player, uint.MaxValue);
+                dekoHands.Add(new DekoElements.RemoteControllHand(playerController));
+                
                 playerChars.Add(player);
+                controllers.Add(playerController);
             }
         }
         public GameState update() 
         {
             int numDeadPlayers = 0;
 
+            foreach (Controller controller in controllers)
+            {
+                controller.update();
+            }
+
             foreach (PlayerCharacter playerChar in playerChars)
             {
                 if (playerChar.isDead)
                     numDeadPlayers++;
 
-                playerChar.KeyboardInput();
                 playerChar.Move();
                 playerChar.update();
             }

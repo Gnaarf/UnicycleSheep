@@ -9,4 +9,7 @@
 
         public const float worldSizeX = 80.0f;
         public const float worldSizeY = worldSizeX * screenRatio;
+
+        // gameplay
+        public const float maxJumpStrength = 84f;
     }
