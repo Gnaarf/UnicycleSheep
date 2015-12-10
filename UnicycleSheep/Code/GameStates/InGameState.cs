@@ -20,7 +20,7 @@ namespace UnicycleSheep
         List<PlayerCharacter> playerChars;
         List<Controller> controllers;
         public readonly Vector2[] startPostitions = new Vector2[] { new Vec2(5.0f, 50.0f), new Vec2(75.0f, 50.0f), new Vec2(40.0f, 50.0f), new Vec2(60.0f, 50.0f) };
-        
+
         List<DekoElements.RemoteControllHand> dekoHands;
         List<Sprite> flags;
 

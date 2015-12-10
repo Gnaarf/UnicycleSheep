@@ -11,6 +11,16 @@ namespace UnicycleSheep
 {
     class PlayerCharacter : PhysicsActor, IContactEvent
     {
+        public static readonly SFML.Graphics.Color[] Colors = new SFML.Graphics.Color[] 
+        {
+            new SFML.Graphics.Color(206,   0,   0), // Red
+            new SFML.Graphics.Color( 12, 183,   0), // Green
+            new SFML.Graphics.Color(  0,  34, 183), // Blue
+            new SFML.Graphics.Color(156,   0, 158)  // Violett
+        };
+
+        public SFML.Graphics.Color color { get; protected set; }
+
         //remove after manager exists
         AnimatedSprite wheelSprite;
         Sprite sheepSprite;
@@ -48,6 +58,7 @@ namespace UnicycleSheep
             :base(_world, _position)
         {
             playerIndex = playerCount++;
+            color = PlayerCharacter.Colors[playerIndex];
             rotation = 0;
             wantsToBalance = 0;
 
@@ -110,6 +121,7 @@ namespace UnicycleSheep
             if(_position.X > Constants.worldSizeX / 2F)
                 sheepSprite.Scale = new Vector2(-0.2f, 0.2f);
             sheepSprite.Origin = ((Vector2)sheepSprite.Texture.Size) / 2F;
+            sheepSprite.Color = Helper.Lerp(color, SFML.Graphics.Color.White, 0.9F);    //HACK: temporary solution
         }
 
         public void Move()
@@ -208,7 +220,7 @@ namespace UnicycleSheep
             sheepSprite.Position = sheepLoc.toScreenCoord();
             sheepSprite.Rotation = wheelToSheepRot;
             if (isDead)
-                sheepSprite.Color = new SFML.Graphics.Color(255, 255, 255, 100);
+                sheepSprite.Color = new SFML.Graphics.Color(color.R, color.G, color.B, 100);
 
             wheelSprite.Position = location.toScreenCoord();
             wheelSprite.Rotation = -body.GetAngle() * Helper.RadianToDegree;
@@ -225,7 +237,7 @@ namespace UnicycleSheep
             SFML.Graphics.CircleShape wheel_Debug = new SFML.Graphics.CircleShape(Vector2.Zero.toScreenCoord().X - Vector2.One.toScreenCoord().X);
             wheel_Debug.Origin = Vector2.One * wheel_Debug.Radius;
             wheel_Debug.Position = ((Vector2)body.GetPosition()).toScreenCoord();
-            wheel_Debug.FillColor = isDead ? SFML.Graphics.Color.Black : SFML.Graphics.Color.Red;
+            wheel_Debug.FillColor = isDead ? SFML.Graphics.Color.Black : PlayerCharacter.Colors[playerIndex];
             win.Draw(wheel_Debug);
 
             //debugDraw for sheepBody
@@ -233,7 +245,7 @@ namespace UnicycleSheep
             body_Debug.Origin = (Vector2)body_Debug.Size / 2F;
             body_Debug.Position = ((Vector2)chest.GetPosition()).toScreenCoord();
             body_Debug.Rotation = -chest.GetAngle() * Helper.RadianToDegree;
-            body_Debug.FillColor = isDead ? SFML.Graphics.Color.Black : SFML.Graphics.Color.Red;
+            body_Debug.FillColor = isDead ? SFML.Graphics.Color.Black : PlayerCharacter.Colors[playerIndex];
             win.Draw(body_Debug);
 
             //the head

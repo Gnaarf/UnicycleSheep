@@ -28,7 +28,7 @@ namespace DekoElements
             playerController = _controller;
             PlayerCharacter player = _controller.character;
 
-            playerColor = player.playerIndex == 0 ? Color.Black : Color.Magenta;
+            playerColor = player.color;
 
             Vector2 pos = player.location.toScreenCoord();
             pos.X = (pos.X - Constants.windowSizeX * 0.5F) * 0.8F + Constants.windowSizeX * 0.5F;

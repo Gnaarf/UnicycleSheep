@@ -10,13 +10,18 @@ namespace UnicycleSheep
     {
         public PlayerCharacter character { get; private set; }
 
-        protected float rotation = 0;
-        protected float wantsToBalance = 0;
-        protected bool jump = false;
-        protected bool isLoadingJump = false;
+        public float rotation { get; protected set; }
+        public float wantsToBalance { get; protected set; }
+        public bool jump { get; protected set; }
+        public bool isLoadingJump { get; protected set; }
 
         public Controller(PlayerCharacter _playerCharacter)
         {
+            rotation = 0;
+            wantsToBalance = 0;
+            jump = false;
+            isLoadingJump = false;
+            
             character = _playerCharacter;
         }
 
