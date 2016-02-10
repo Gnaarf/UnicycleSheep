@@ -22,8 +22,8 @@ namespace UnicycleSheep
         public SFML.Graphics.Color color { get; protected set; }
 
         //remove after manager exists
-        AnimatedSprite wheelSprite;
         Sprite sheepSprite;
+        AnimatedSprite wheelSprite;
 
         Box2DX.Collision.Shape head;
         Box2DX.Collision.Shape wheel;
@@ -116,12 +116,12 @@ namespace UnicycleSheep
             wheelSprite.Scale = new Vector2(0.2f, 0.2f); //(Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord() - Vector2.Zero.toScreenCoord();//new Vector2(0.08f, 0.08f);
             wheelSprite.Origin = ((Vector2)wheelSprite.spriteSize) / 2F;
 
-            sheepSprite = new Sprite(AssetManager.getTexture(playerIndex == 0 ? AssetManager.TextureName.ShoopRed : AssetManager.TextureName.ShoopGreen));
-            sheepSprite.Scale = new Vector2(0.2f, 0.2f);
-            if(_position.X > Constants.worldSizeX / 2F)
-                sheepSprite.Scale = new Vector2(-0.2f, 0.2f);
+            sheepSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.ShoopInfronUnicycle));
             sheepSprite.Origin = ((Vector2)sheepSprite.Texture.Size) / 2F;
-            sheepSprite.Color = Helper.Lerp(color, SFML.Graphics.Color.White, 0.9F);    //HACK: temporary solution
+            sheepSprite.Scale = new Vector2(0.2f, 0.2f);
+            if (_position.X > Constants.worldSizeX / 2F)
+                sheepSprite.Scale = new Vector2(-0.2f, 0.2f);
+            
         }
 
         public void Move()
@@ -224,11 +224,24 @@ namespace UnicycleSheep
             if (isDead)
                 sheepSprite.Color = new SFML.Graphics.Color(color.R, color.G, color.B, 100);
 
+
             wheelSprite.Position = location.toScreenCoord();
             wheelSprite.Rotation = -body.GetAngle() * Helper.RadianToDegree;
 
+            // draw in correct order, to have correct overlap
             win.Draw(wheelSprite);
-            //draw after to overlap
+
+            sheepSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.ShoopBehindUnicycle);
+            win.Draw(sheepSprite);
+            
+            sheepSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.ShoopUnicycle);
+            SFML.Graphics.Color c = sheepSprite.Color;
+            if (!isDead)
+                sheepSprite.Color = Helper.Lerp(color, SFML.Graphics.Color.White, 0.1F);
+            win.Draw(sheepSprite);
+
+            sheepSprite.Color = c;
+            sheepSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.ShoopInfronUnicycle);
             win.Draw(sheepSprite);
 
        //     DebugDraw(win);

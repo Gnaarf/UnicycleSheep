@@ -20,9 +20,10 @@ public class AssetManager
         textures.Add(TextureName.MainMenuBackground, new Texture("Assets/Textures/Background.png"));
         textures[TextureName.MainMenuBackground].Smooth = true;
 
+        textures.Add(TextureName.ShoopInfronUnicycle, new Texture("Assets/Textures/SheepFront.png"));
+        textures.Add(TextureName.ShoopBehindUnicycle, new Texture("Assets/Textures/SheepBack.png"));
+        textures.Add(TextureName.ShoopUnicycle, new Texture("Assets/Textures/unicycle.png"));
         textures.Add(TextureName.ShoopWheel, new Texture("Assets/Textures/Wheel.png"));
-        textures.Add(TextureName.ShoopRed, new Texture("Assets/Textures/SheepRed.png"));
-        textures.Add(TextureName.ShoopGreen, new Texture("Assets/Textures/SheepGreen.png"));
 
 
         textures.Add(TextureName.Hand, new Texture("Assets/Textures/Hands/Hand1/Base.png"));
@@ -70,9 +71,10 @@ public class AssetManager
         MainMenuBackground,
 
         //characterStuff
+        ShoopInfronUnicycle,
+        ShoopBehindUnicycle,
+        ShoopUnicycle,
         ShoopWheel,
-        ShoopGreen,
-        ShoopRed,
 
         Hand,
         LeftThumb_Leftmost,
