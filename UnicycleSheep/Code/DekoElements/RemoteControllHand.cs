@@ -38,48 +38,61 @@ namespace DekoElements
                 scale.X *= -1F;
 
             baseSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Hand));
-            baseSprite.Origin = ((Vector2)baseSprite.Texture.Size) * 0.5F;
-            baseSprite.Scale = scale;
-            baseSprite.Position = pos;
+            CenterSpriteOriginAndSetAttributes(baseSprite, scale, pos);
 
             // Player 0 red, Player 1 green
             flagSprite = new Sprite(AssetManager.getTexture(player.playerIndex == 0 ? AssetManager.TextureName.RemoteFlagRed : AssetManager.TextureName.RemoteFlagGreen));
-            flagSprite.Origin = ((Vector2)flagSprite.Texture.Size) * 0.5F;
-            flagSprite.Scale = scale;
-            flagSprite.Position = pos;
+            CenterSpriteOriginAndSetAttributes(flagSprite, scale, pos);
 
             flagColorablePartSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.RemoteFlagWhitePart));
-            flagColorablePartSprite.Origin = ((Vector2)flagSprite.Texture.Size) * 0.5F;
-            flagColorablePartSprite.Scale = scale;
-            flagColorablePartSprite.Position = pos;
-            flagColorablePartSprite.Color = playerColor;
+            CenterSpriteOriginAndSetAttributes(flagColorablePartSprite, scale, pos, playerColor);
 
             leftThumbSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.LeftThumb_Mid));
-            leftThumbSprite.Origin = ((Vector2)leftThumbSprite.Texture.Size) * 0.5F;
-            leftThumbSprite.Scale = scale;
-            leftThumbSprite.Position = pos;
+            CenterSpriteOriginAndSetAttributes(leftThumbSprite, scale, pos);
 
             rightThumbSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.RightThumb_Mid));
-            rightThumbSprite.Origin = ((Vector2)rightThumbSprite.Texture.Size) * 0.5F;
-            rightThumbSprite.Scale = scale;
-            rightThumbSprite.Position = pos;
+            CenterSpriteOriginAndSetAttributes(rightThumbSprite, scale, pos);
 
 
             leftFingerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.LeftFinger_Up));
-            leftFingerSprite.Origin = ((Vector2)leftThumbSprite.Texture.Size) * 0.5F;
-            leftFingerSprite.Scale = scale;
-            leftFingerSprite.Position = pos;
+            CenterSpriteOriginAndSetAttributes(leftFingerSprite, scale, pos);
 
             rightFingerSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.RightFinger_Down));
-            rightFingerSprite.Origin = ((Vector2)rightThumbSprite.Texture.Size) * 0.5F;
-            rightFingerSprite.Scale = scale;
-            rightFingerSprite.Position = pos;
+            CenterSpriteOriginAndSetAttributes(rightFingerSprite, scale, pos);
 
             jumpbarSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Jumpbar1));
-            jumpbarSprite.Origin = ((Vector2)jumpbarSprite.Texture.Size) * 0.5F;
-            jumpbarSprite.Scale = scale;
-            jumpbarSprite.Position = pos;
+            CenterSpriteOriginAndSetAttributes(jumpbarSprite, scale, pos);
         }
+
+        #region SpriteModifier
+        private void CenterSpriteOriginAndSetAttributes(Sprite sprite, Vector2 scale, Vector2 position)
+        {
+            CenterSpriteOriginAndSetAttributes(sprite, scale, position, Color.White);
+        }
+
+        private void CenterSpriteOriginAndSetAttributes(Sprite sprite, Vector2 scale, Vector2 position, Color color)
+        {
+            CenterSpriteOrigin(sprite);
+            SetSpriteAttributes(sprite, scale, position, color);
+        }
+
+        private void CenterSpriteOrigin(Sprite sprite)
+        {
+            sprite.Origin = ((Vector2)sprite.Texture.Size) * 0.5F;
+        }
+
+        private void SetSpriteAttributes(Sprite sprite, Vector2 scale, Vector2 position)
+        {
+            SetSpriteAttributes(sprite, scale, position, Color.White);
+        }
+
+        private void SetSpriteAttributes(Sprite sprite, Vector2 scale, Vector2 position, Color color)
+        {
+            sprite.Scale = scale;
+            sprite.Position = position;
+            sprite.Color = color;
+        }
+        #endregion SpriteModifier
 
         public void draw(RenderWindow win)
         {
@@ -103,30 +116,30 @@ namespace DekoElements
             leftThumbSprite.Color = Helper.Lerp(fromColor, toColor, t);
             rightThumbSprite.Color = Helper.Lerp(fromColor, toColor, t);
 
-            if (GamePadInputManager.isConnected(playerController.controllerIndex))
+            if (true)
             {
                 float threshold = 0.8F;
 
-                float leftStickValue = GamePadInputManager.getLeftStick(playerController.controllerIndex).X;
+                float leftStickValue = playerController.rotation;
                 if (leftStickValue < -threshold)          { setLeftThumb(Horizontal.Leftmost); }
                 else if (leftStickValue < -float.Epsilon) { setLeftThumb(Horizontal.Left); }
                 else if (leftStickValue <= float.Epsilon) { setLeftThumb(Horizontal.Mid); }
                 else if (leftStickValue <= threshold)     { setLeftThumb(Horizontal.Right); }
                 else                                      { setLeftThumb(Horizontal.Rightmost); }
 
-                float rightStickValue = GamePadInputManager.getRightStick(playerController.controllerIndex).X;
+                float rightStickValue = -playerController.wantsToBalance;
                 if (rightStickValue < -threshold)          { setRightThumb(Horizontal.Leftmost); }
                 else if (rightStickValue < -float.Epsilon) { setRightThumb(Horizontal.Left); }
                 else if (rightStickValue <= float.Epsilon) { setRightThumb(Horizontal.Mid); }
                 else if (rightStickValue <= threshold)     { setRightThumb(Horizontal.Right); }
-                else { setRightThumb(Horizontal.Rightmost); }
+                else                                       { setRightThumb(Horizontal.Rightmost); }
 
-                if (GamePadInputManager.isPressed(GamePadButton.LT, playerController.controllerIndex))
+                if (playerController.isLoadingJump)
                 { setLeftFinger(Vertical.Down); }
                 else
                 { setLeftFinger(Vertical.Up); }
 
-                if (GamePadInputManager.isPressed(GamePadButton.RT, playerController.controllerIndex))
+                if (playerController.isLoadingJump)
                 { setRightFinger(Vertical.Down); }
                 else
                 { setRightFinger(Vertical.Up); }

@@ -27,40 +27,8 @@ namespace UnicycleSheep
             }
             else
             {
-                rotation = 0F;
-                jumpButtonIsPressed = false;
-                if (character.playerIndex == 0)
-                {
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.S))
-                        rotation += 1F;
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.W))
-                        rotation += -1F;
-
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.A))
-                        wantsToBalance = 1;
-
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.D))
-                        wantsToBalance = -1;
-
-
-                    jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.Space);
-                }
-                else if (character.playerIndex == 1)
-                {
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.Up))
-                        rotation += 1F;
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.Down))
-                        rotation += -1F;
-
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.Left))
-                        wantsToBalance = 1;
-
-                    if (KeyboardInputManager.isPressed(Keyboard.Key.Right))
-                        wantsToBalance = -1;
-
-
-                    jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.RControl);
-                }
+                // Fallback, if no Controller is connected
+                jumpButtonIsPressed = ProcessKeyboardInput();
 
             }
 
@@ -76,5 +44,43 @@ namespace UnicycleSheep
             }
         }
 
+        private bool ProcessKeyboardInput()
+        {
+            bool jumpButtonIsPressed;
+            rotation = 0F;
+            wantsToBalance = 0F;
+            jumpButtonIsPressed = false;
+            if (character.playerIndex == 0)
+            {
+                if (KeyboardInputManager.isPressed(Keyboard.Key.S))
+                    rotation += 1F;
+                if (KeyboardInputManager.isPressed(Keyboard.Key.W))
+                    rotation += -1F;
+
+                if (KeyboardInputManager.isPressed(Keyboard.Key.A))
+                    wantsToBalance = 1;
+                if (KeyboardInputManager.isPressed(Keyboard.Key.D))
+                    wantsToBalance = -1;
+
+
+                jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.Space);
+            }
+            else if (character.playerIndex == 1)
+            {
+                if (KeyboardInputManager.isPressed(Keyboard.Key.Up))
+                    rotation += 1F;
+                if (KeyboardInputManager.isPressed(Keyboard.Key.Down))
+                    rotation += -1F;
+
+                if (KeyboardInputManager.isPressed(Keyboard.Key.Left))
+                    wantsToBalance = 1;
+                if (KeyboardInputManager.isPressed(Keyboard.Key.Right))
+                    wantsToBalance = -1;
+
+
+                jumpButtonIsPressed = KeyboardInputManager.isPressed(Keyboard.Key.RControl);
+            }
+            return jumpButtonIsPressed;
+        }
     }
 }
