@@ -18,7 +18,7 @@ namespace UnicycleSheep
         public MainMenuState()
         {
             backgroundSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.MainMenuBackground));
-            //BackgroundMusic = new Sound(new SoundBuffer("Assets/BackGround1.wav"));
+            //BackgroundMusic = new Sound(new SoundBuffer("Assets/Audio/BackGround1.wav"));
             //BackgroundMusic.Loop = true;
             //BackgroundMusic.Volume = 100;
             //BackgroundMusic.Pitch = 1.0f; // Geschwindigkeit des liedes
