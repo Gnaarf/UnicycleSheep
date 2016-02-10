@@ -138,8 +138,10 @@ namespace UnicycleSheep
             else if ((this.angVelocity > -100) && this.rotation == -1)
                 this.angVelocity -= RotationFakt;
 
-            if (isLoadingJump && jumpStrength < Constants.maxJumpStrength)
-                jumpStrength += 0.8f;
+            if (isLoadingJump)
+            {
+                jumpStrength += Math.Min(0.8f, Constants.maxJumpStrength - jumpStrength);
+            }
 
             if (jump && /*isOnGround &&*/ jumpStrength > 0f)
             {

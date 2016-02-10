@@ -40,8 +40,7 @@ namespace DekoElements
             baseSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.Hand));
             CenterSpriteOriginAndSetAttributes(baseSprite, scale, pos);
 
-            // Player 0 red, Player 1 green
-            flagSprite = new Sprite(AssetManager.getTexture(player.playerIndex == 0 ? AssetManager.TextureName.RemoteFlagRed : AssetManager.TextureName.RemoteFlagGreen));
+            flagSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.RemoteFlag));
             CenterSpriteOriginAndSetAttributes(flagSprite, scale, pos);
 
             flagColorablePartSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.RemoteFlagWhitePart));
@@ -96,12 +95,34 @@ namespace DekoElements
 
         public void draw(RenderWindow win)
         {
+            // Update Sprites
+            UpdateFingerSprites();
+            UpdateJumpBarSprite();
+
+            // Draw Sprites in correct order
+            win.Draw(leftFingerSprite);
+            win.Draw(rightFingerSprite);
+
+            win.Draw(flagSprite);
+            win.Draw(flagColorablePartSprite);
+            win.Draw(baseSprite);
+
+            win.Draw(leftThumbSprite);
+            win.Draw(rightThumbSprite);
+
+            win.Draw(jumpbarSprite);
+        }
+
+        /// <summary>Updates the Textures and Color for Finger- and ThumbSprites</summary>
+        private void UpdateFingerSprites()
+        {
             float totalTime = (float)Program.gameTime.TotalTime.TotalSeconds;
-            float blinkTime = 3F; 
+            float blinkTime = 3F;
             Color fromColor = new Color(255, 255, 255);
             float toColorT = Helper.LerpClamp(0.2F, 0.5F, totalTime / 15F);
             Color toColor = Helper.Lerp(playerColor, Color.White, toColorT);
 
+            // Set Finger/Thumb-Color
             float t;
             if (totalTime % blinkTime < blinkTime * 0.5F)
             {
@@ -116,81 +137,49 @@ namespace DekoElements
             leftThumbSprite.Color = Helper.Lerp(fromColor, toColor, t);
             rightThumbSprite.Color = Helper.Lerp(fromColor, toColor, t);
 
-            if (true)
-            {
-                float threshold = 0.8F;
+            // Set Finger/Thumb-Textures
+            float threshold = 0.8F;
 
-                float leftStickValue = playerController.rotation;
-                if (leftStickValue < -threshold)          { setLeftThumb(Horizontal.Leftmost); }
-                else if (leftStickValue < -float.Epsilon) { setLeftThumb(Horizontal.Left); }
-                else if (leftStickValue <= float.Epsilon) { setLeftThumb(Horizontal.Mid); }
-                else if (leftStickValue <= threshold)     { setLeftThumb(Horizontal.Right); }
-                else                                      { setLeftThumb(Horizontal.Rightmost); }
+            float leftStickValue = playerController.rotation;
+            if (leftStickValue < -threshold) { setLeftThumb(Horizontal.Leftmost); }
+            else if (leftStickValue < -float.Epsilon) { setLeftThumb(Horizontal.Left); }
+            else if (leftStickValue <= float.Epsilon) { setLeftThumb(Horizontal.Mid); }
+            else if (leftStickValue <= threshold) { setLeftThumb(Horizontal.Right); }
+            else { setLeftThumb(Horizontal.Rightmost); }
 
-                float rightStickValue = -playerController.wantsToBalance;
-                if (rightStickValue < -threshold)          { setRightThumb(Horizontal.Leftmost); }
-                else if (rightStickValue < -float.Epsilon) { setRightThumb(Horizontal.Left); }
-                else if (rightStickValue <= float.Epsilon) { setRightThumb(Horizontal.Mid); }
-                else if (rightStickValue <= threshold)     { setRightThumb(Horizontal.Right); }
-                else                                       { setRightThumb(Horizontal.Rightmost); }
+            float rightStickValue = -playerController.wantsToBalance;
+            if (rightStickValue < -threshold) { setRightThumb(Horizontal.Leftmost); }
+            else if (rightStickValue < -float.Epsilon) { setRightThumb(Horizontal.Left); }
+            else if (rightStickValue <= float.Epsilon) { setRightThumb(Horizontal.Mid); }
+            else if (rightStickValue <= threshold) { setRightThumb(Horizontal.Right); }
+            else { setRightThumb(Horizontal.Rightmost); }
 
-                if (playerController.isLoadingJump)
-                { setLeftFinger(Vertical.Down); }
-                else
-                { setLeftFinger(Vertical.Up); }
-
-                if (playerController.isLoadingJump)
-                { setRightFinger(Vertical.Down); }
-                else
-                { setRightFinger(Vertical.Up); }
-            }
+            if (playerController.isLoadingJump)
+            { setLeftFinger(Vertical.Down); }
             else
-            {
-                if (KeyboardInputManager.isPressed(Keyboard.Key.S))      { setLeftThumb(Horizontal.Leftmost); }
-                else if (KeyboardInputManager.isPressed(Keyboard.Key.W)) { setLeftThumb(Horizontal.Rightmost); }
-                else                                                     { setLeftThumb(Horizontal.Mid); }
+            { setLeftFinger(Vertical.Up); }
 
-                if (KeyboardInputManager.isPressed(Keyboard.Key.A))       { setRightThumb(Horizontal.Leftmost); }
-                else if (KeyboardInputManager.isPressed(Keyboard.Key.D)) { setRightThumb(Horizontal.Rightmost); }
-                else                                                         { setRightThumb(Horizontal.Mid); }
-
-                if (KeyboardInputManager.isPressed(Keyboard.Key.Space))
-                {
-                    setRightFinger(Vertical.Down);
-                    setLeftFinger(Vertical.Down);
-                }
-                else
-                {
-                    setRightFinger(Vertical.Up);
-                    setLeftFinger(Vertical.Up);
-                }
-            }
-
-            win.Draw(leftFingerSprite);
-            win.Draw(rightFingerSprite);
-
-            win.Draw(flagSprite);
-            win.Draw(flagColorablePartSprite);
-            win.Draw(baseSprite);
-
-            win.Draw(leftThumbSprite);
-            win.Draw(rightThumbSprite);
-
-            drawJumpBar(win);
+            if (playerController.isLoadingJump)
+            { setRightFinger(Vertical.Down); }
+            else
+            { setRightFinger(Vertical.Up); }
         }
 
-        public void drawJumpBar(RenderWindow win)
+        public void UpdateJumpBarSprite()
         {
             float jumpLoad = playerController.character.jumpLoadPercentage;
-            if (jumpLoad < float.Epsilon) { return; }
-            else if (jumpLoad < 0.05F) { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar1); }
-            else if (jumpLoad < 0.15F) { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar2); }
-            else if (jumpLoad < 0.3F) { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar3); }
-            else if (jumpLoad < 0.5F) { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar4); }
-            else if (jumpLoad < 0.8F) { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar5); }
-            else { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar6); }
-
-            win.Draw(jumpbarSprite);
+            if (jumpLoad < float.Epsilon) 
+            { jumpbarSprite.Color = Color.Transparent; }
+            else
+            {
+                jumpbarSprite.Color = Color.White;
+                if (jumpLoad < 0.05F) { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar1); }
+                else if (jumpLoad < 0.15F) { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar2); }
+                else if (jumpLoad < 0.3F) { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar3); }
+                else if (jumpLoad < 0.5F) { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar4); }
+                else if (jumpLoad < 0.8F) { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar5); }
+                else { jumpbarSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.Jumpbar6); }
+            }
         }
 
         void setRightFinger(Vertical v)

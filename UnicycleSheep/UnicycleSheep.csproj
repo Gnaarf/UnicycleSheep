@@ -134,10 +134,7 @@
     <Content Include="Assets\Textures\Hands\Hand1\Base.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Textures\Hands\Hand1\FlagGreen.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Textures\Hands\Hand1\FlagRed.png">
+    <Content Include="Assets\Textures\Hands\Hand1\Flag.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\Hands\Hand1\FlagWhitePart.png">
