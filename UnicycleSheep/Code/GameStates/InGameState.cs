@@ -38,7 +38,7 @@ namespace UnicycleSheep
         {
             AABB aabb = new AABB();
             aabb.LowerBound.Set(0.0f, 0.0f);
-            aabb.UpperBound.Set(Constants.worldSizeX, Constants.worldSizeX * Constants.screenRatio);
+            aabb.UpperBound.Set(800, 600/*Constants.worldSizeX * Constants.screenRatio*/);
 
             physicsWorld = new World(aabb, new Vec2(0.0f, -9.81f), false);
 
@@ -52,9 +52,9 @@ namespace UnicycleSheep
             groundPolygonAct = new Actors.PolygonActor(physicsWorld, new Vec2(0.0f, 15.0f), 0xFBA58A4, Actors.FunctionType.GradientNoise, 4);
 
             BackgroundBackSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.InGameBackGroundBack));
-            BackgroundBackSprite.Scale = 0.5F * Vector2.One;
+			BackgroundBackSprite.Scale = new Vector2(Constants.windowSizeX / (float)BackgroundBackSprite.TextureRect.Width, Constants.windowSizeY / (float)BackgroundBackSprite.TextureRect.Height);//0.5F * Vector2.One;
             BackgroundFrontSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.InGameBackGroundFront));
-            BackgroundFrontSprite.Scale = 0.5F * Vector2.One;
+			BackgroundFrontSprite.Scale = BackgroundBackSprite.Scale;
 
             //left and right borders of the map
             BodyDef bodydef = new BodyDef();
@@ -80,15 +80,15 @@ namespace UnicycleSheep
         {
             flags = new List<Sprite>();
             float count = 4F;
-            Vector2 start = new Vector2(130, 320);
-            Vector2 end = new Vector2(Constants.windowSizeX - 130, 320);
+			Vector2 start = new Vector2(130, Constants.windowScaleFatctor * 320);
+			Vector2 end = new Vector2(Constants.windowSizeX - 130, Constants.windowScaleFatctor * 320);
             bool redGreenToggle = true;
             for (float t = 0; t <= 1F; t += 1F / (count - 1))
             {
                 Sprite flagSprite = new Sprite(AssetManager.getTexture(redGreenToggle ? AssetManager.TextureName.FlagRed : AssetManager.TextureName.FlagGreen));
                 redGreenToggle = !redGreenToggle;
                 flagSprite.Origin = (Vector2)flagSprite.Texture.Size * 0.5F;
-                flagSprite.Scale = new Vector2((redGreenToggle ? 1 : -1) * 60, 90) / (Vector2)flagSprite.Texture.Size;
+                flagSprite.Scale = Constants.windowScaleFatctor * (new Vector2((redGreenToggle ? 1 : -1) * 60, 90) / (Vector2)flagSprite.Texture.Size);
                 flagSprite.Position = Vector2.lerp(start, end, t);
                 flags.Add(flagSprite);
             }
@@ -152,7 +152,7 @@ namespace UnicycleSheep
                 playerChar.Move();
                 playerChar.update();
             }
-            physicsWorld.Step(1 / 60.0f, 8, 1);
+			physicsWorld.Step(1f / 60f, 8, 1);
 
             if (!roundIsOver)
             {

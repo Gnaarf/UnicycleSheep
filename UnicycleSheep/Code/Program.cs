@@ -36,10 +36,12 @@ namespace UnicycleSheep
 
             // initialize GameTime
             gameTime = new GameTime();
-            gameTime.Start();
 
+            gameTime.Start();
             while (running && win.IsOpen())
             {
+			//	gameTime.Update();
+
                 GamePadInputManager.update();
                 KeyboardInputManager.update();
 
@@ -62,10 +64,12 @@ namespace UnicycleSheep
                 // check for window-events. e.g. window closed        
                 win.DispatchEvents();
 
-                // update GameTime
-                gameTime.Update();
-                int waitTime = (int)(16.667f - gameTime.EllapsedTime.Milliseconds);
-                System.Threading.Thread.Sleep(waitTime >= 0 ? waitTime : 0 );
+				// update GameTime
+				// is measured incorrectly: sleep times are counted in resulting into fast frames with out delays
+				// speeding the game up by ~2
+				gameTime.Update();
+				int waitTime = (int)(16.667f - gameTime.EllapsedTime.Milliseconds);
+				if (waitTime > 0) System.Threading.Thread.Sleep(waitTime);
             }
         }
 

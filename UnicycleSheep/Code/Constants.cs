@@ -1,8 +1,11 @@
 ﻿
     public static class Constants
     {
-        public const int windowSizeX = 800;
-        public const int windowSizeY = 600;
+        public const int windowSizeY = 1080; //600
+		public const int windowSizeX = windowSizeY * 4 / 3; //800
+
+		public const float windowScaleFatctor = windowSizeY / 600f;
+
         public const float screenRatio = (float)windowSizeY / windowSizeX;
 
         public const float worldToScreenRatio = Constants.windowSizeX / Constants.worldSizeX;
