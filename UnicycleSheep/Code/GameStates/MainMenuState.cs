@@ -26,7 +26,7 @@ namespace UnicycleSheep
            // Spielanfang = new Sound(new SoundBuffer("Assets/Mah.m4a"));
         }
 
-        public GameState update() 
+        public GameState update(float _deltaTime) 
         {
             foreach (var i in GamePadInputManager.connectedPadIndices)
             {

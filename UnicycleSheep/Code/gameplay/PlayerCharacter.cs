@@ -111,6 +111,7 @@ namespace UnicycleSheep
 
             _world.CreateJoint(jointDefKW);
 
+			// add visuals
             Texture wheelTexture = AssetManager.getTexture(AssetManager.TextureName.ShoopWheel);
             wheelSprite = new AnimatedSprite(wheelTexture, 1.0f, 1, (Vector2)wheelTexture.Size);
 			wheelSprite.Scale = Constants.windowScaleFatctor * new Vector2(0.2f, 0.2f); //(Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord() - Vector2.Zero.toScreenCoord();//new Vector2(0.08f, 0.08f);
@@ -140,6 +141,7 @@ namespace UnicycleSheep
                 jumpStrength += Math.Min(0.8f, Constants.maxJumpStrength - jumpStrength);
             }
 
+			//perform a jump
             if (jump && /*isOnGround &&*/ jumpStrength > 0f)
             {
                 Vector2 jumpDir = chest.GetWorldCenter() - body.GetWorldCenter();
@@ -149,6 +151,8 @@ namespace UnicycleSheep
                 jump = false;
                 jumpStrength = 0f;
             }
+
+			//balance if not in the air
             if (JumptimePassed < 40 /* && wantsToBalance == 0 */)
             {
                 Console.WriteLine(JumptimePassed);
@@ -182,6 +186,8 @@ namespace UnicycleSheep
                         chest.ApplyTorque(scalfact * -55);
                 }
             }
+
+			// perform player controlled balancing
             if (wantsToBalance != 0)
             {
                 //Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;

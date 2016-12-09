@@ -28,7 +28,7 @@ namespace UnicycleSheep
         Sprite BackgroundFrontSprite;
 
         int resetFrameCounter;
-        const int resetFrameCount = 400;
+        const int resetFrameCount = (int)(400f / Constants.gameSpeedFactor);
 
         const int numPlayers = 2;
 
@@ -135,7 +135,7 @@ namespace UnicycleSheep
                 controllers.Add(playerController);
             }
         }
-        public GameState update() 
+        public GameState update(float _deltaTime) 
         {
             int numDeadPlayers = 0;
 
@@ -152,7 +152,7 @@ namespace UnicycleSheep
                 playerChar.Move();
                 playerChar.update();
             }
-			physicsWorld.Step(1f / 60f, 8, 1);
+			physicsWorld.Step(_deltaTime, 8, 3);
 
             if (!roundIsOver)
             {

@@ -15,4 +15,5 @@
 
         // gameplay
         public const float maxJumpStrength = 84f;
+		public const float gameSpeedFactor = 1.5f;
     }
