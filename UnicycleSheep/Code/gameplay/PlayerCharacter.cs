@@ -114,12 +114,12 @@ namespace UnicycleSheep
 			// add visuals
             Texture wheelTexture = AssetManager.getTexture(AssetManager.TextureName.ShoopWheel);
             wheelSprite = new AnimatedSprite(wheelTexture, 1.0f, 1, (Vector2)wheelTexture.Size);
-			wheelSprite.Scale = Constants.windowScaleFatctor * new Vector2(0.2f, 0.2f); //(Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord() - Vector2.Zero.toScreenCoord();//new Vector2(0.08f, 0.08f);
+			wheelSprite.Scale = Constants.windowScaleFactor * new Vector2(0.2f, 0.2f); //(Vector2.One / (Vector2)wheelTexture.Size * 2F * circleDef.Radius).toScreenCoord() - Vector2.Zero.toScreenCoord();//new Vector2(0.08f, 0.08f);
             wheelSprite.Origin = ((Vector2)wheelSprite.spriteSize) / 2F;
 
             sheepSprite = new Sprite(AssetManager.getTexture(AssetManager.TextureName.ShoopInfronUnicycle));
             sheepSprite.Origin = ((Vector2)sheepSprite.Texture.Size) / 2F;
-			sheepSprite.Scale = Constants.windowScaleFatctor *  new Vector2(_position.X > Constants.worldSizeX / 2F ? -0.2f : 0.2f, 0.2f);
+			sheepSprite.Scale = Constants.windowScaleFactor *  new Vector2(_position.X > Constants.worldSizeX / 2F ? -0.2f : 0.2f, 0.2f);
         }
 
         public void Move()

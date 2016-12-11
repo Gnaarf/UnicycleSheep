@@ -32,8 +32,8 @@ namespace DekoElements
 
             Vector2 pos = player.location.toScreenCoord();
             pos.X = (pos.X - Constants.windowSizeX * 0.5F) * 0.8F + Constants.windowSizeX * 0.5F;
-            pos.Y = Constants.windowScaleFatctor * 500;
-            Vector2 scale = Vector2.One * 0.5F * Constants.windowScaleFatctor;
+            pos.Y = Constants.windowScaleFactor * 500;
+            Vector2 scale = Vector2.One * 0.5F * Constants.windowScaleFactor;
             if (pos.X > Constants.windowSizeX * 0.5F)
                 scale.X *= -1F;
 

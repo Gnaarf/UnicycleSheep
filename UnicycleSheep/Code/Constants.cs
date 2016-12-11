@@ -1,19 +1,21 @@
 ﻿
     public static class Constants
     {
-        public const int windowSizeY = 1080; //600
-		public const int windowSizeX = windowSizeY * 4 / 3; //800
+		// all screen depended constants are now initialized in Program.cs
 
-		public const float windowScaleFatctor = windowSizeY / 600f;
+        public static int windowSizeY; //600
+		public static int windowSizeX; //800
 
-        public const float screenRatio = (float)windowSizeY / windowSizeX;
+		public static float windowScaleFactor = windowSizeY / 600f;
 
-        public const float worldToScreenRatio = Constants.windowSizeX / Constants.worldSizeX;
+        public static float screenRatio = (float)windowSizeY / windowSizeX;
+
+        public static float worldToScreenRatio;
 
         public const float worldSizeX = 80.0f;
-        public const float worldSizeY = worldSizeX * screenRatio;
+        public static float worldSizeY;
 
         // gameplay
         public const float maxJumpStrength = 84f;
-		public const float gameSpeedFactor = 1.5f;
+		public const float gameSpeedFactor = 1.2f;
     }

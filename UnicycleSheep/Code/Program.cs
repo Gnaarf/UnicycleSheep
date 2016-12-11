@@ -21,8 +21,15 @@ namespace UnicycleSheep
 
         static void Main(string[] args)
         {
-            // initialize window and view
-            win = new RenderWindow(new VideoMode(Constants.windowSizeX, Constants.windowSizeY), "Shøøp");
+			Constants.windowSizeY = (int)VideoMode.DesktopMode.Height;
+			Constants.windowSizeX = Constants.windowSizeY * 4 / 3;
+			Constants.windowScaleFactor = Constants.windowSizeY / 600f;
+			Constants.screenRatio = (float)Constants.windowSizeY / Constants.windowSizeX;
+			Constants.worldToScreenRatio = Constants.windowSizeX / Constants.worldSizeX;
+			Constants.worldSizeY = Constants.worldSizeX * Constants.screenRatio;
+
+			// initialize window and view
+            win = new RenderWindow(new VideoMode((uint)Constants.windowSizeX, (uint)Constants.windowSizeY), "Shøøp");
             view = new View();
             resetView();
             gui = new GUI(win, view);
@@ -46,7 +53,7 @@ namespace UnicycleSheep
                 KeyboardInputManager.update();
 
                 if (currentGameState == GameState.InGame) { inGameFrameCount++; }
-                currentGameState = state.update(deltaTime);
+				currentGameState = state.update(deltaTime * Constants.gameSpeedFactor);
 
                 if (currentGameState != prevGameState)
                 {
