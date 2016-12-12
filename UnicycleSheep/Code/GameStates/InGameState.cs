@@ -27,8 +27,8 @@ namespace UnicycleSheep
         Sprite BackgroundBackSprite;
         Sprite BackgroundFrontSprite;
 
-        int resetFrameCounter;
-        const int resetFrameCount = (int)(400f / Constants.gameSpeedFactor);
+        float resetCounter;
+        const float resetValue = 4f;
 
         const int numPlayers = 2;
 
@@ -98,7 +98,7 @@ namespace UnicycleSheep
         {
             PlayerCharacter.playerCount = 0;
 
-            resetFrameCounter = 0;
+            resetCounter = 0;
 
             if (playerChars == null) { playerChars = new List<PlayerCharacter>(); }
             else { playerChars.Clear(); }
@@ -150,7 +150,7 @@ namespace UnicycleSheep
                     numDeadPlayers++;
 
                 playerChar.Move();
-                playerChar.update();
+                playerChar.update(_deltaTime);
             }
 			physicsWorld.Step(_deltaTime, 8, 3);
 
@@ -187,8 +187,8 @@ namespace UnicycleSheep
             }
             else
             {
-                resetFrameCounter++;
-                if (resetFrameCounter >= resetFrameCount)
+                resetCounter += _deltaTime;
+                if (resetCounter >= resetValue)
                     return GameState.Reset;
                 }
 
@@ -212,7 +212,7 @@ namespace UnicycleSheep
                 win.Draw(flag);
             }
 
-            if (resetFrameCounter > 0)
+            if (resetCounter > 0)
                 win.Draw(winnerSprite);
 
             //Draw Players

@@ -27,9 +27,12 @@ namespace UnicycleSheep
 
         public float angVelocity { get { return body.GetAngularVelocity(); } protected set { body.SetAngularVelocity(value); } }
 
-        public virtual void update()
+        public virtual void update(float _deltaTime)
         {
         }
+		public virtual void update()
+		{
+		}
 
         public virtual void draw(RenderWindow win, View view) {}
     }

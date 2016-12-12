@@ -32,13 +32,12 @@ namespace UnicycleSheep
 
         //movement input and constant
         private float wheelToSheepRot = 0.0f; //basicly the rotation of the unicycle's frame
-        public float rotation;
-        public float wantsToBalance;
+        public float accelerate;
+        public float rotate;
         private float RotationFakt = 1f;
         //verstärkung der gegensteuerung
         public float Counterfactf = 10f;
 
-        private float Jumptime = Program.inGameFrameCount;
         public float JumptimePassed;
         public bool jump = false;
         public bool isLoadingJump = false;
@@ -59,8 +58,8 @@ namespace UnicycleSheep
         {
             playerIndex = playerCount++;
             color = PlayerCharacter.Colors[playerIndex];
-            rotation = 0;
-            wantsToBalance = 0;
+            accelerate = 0;
+            rotate = 0;
 
             isDead = false;
 
@@ -126,20 +125,10 @@ namespace UnicycleSheep
         {
             if (isDead) return;
 
-            if (!isOnGround)
-            {
-                JumptimePassed = Program.inGameFrameCount - Jumptime;
-            }
-
-            if((this.angVelocity < 100) && this.rotation == 1)
+            if((this.angVelocity < 100) && this.accelerate == 1)
                 this.angVelocity += RotationFakt;
-            else if ((this.angVelocity > -100) && this.rotation == -1)
+            else if ((this.angVelocity > -100) && this.accelerate == -1)
                 this.angVelocity -= RotationFakt;
-
-            if (isLoadingJump)
-            {
-                jumpStrength += Math.Min(0.8f, Constants.maxJumpStrength - jumpStrength);
-            }
 
 			//perform a jump
             if (jump && /*isOnGround &&*/ jumpStrength > 0f)
@@ -153,7 +142,7 @@ namespace UnicycleSheep
             }
 
 			//balance if not in the air
-            if (JumptimePassed < 40 /* && wantsToBalance == 0 */)
+            if (JumptimePassed < 0.66f /* && wantsToBalance == 0 */)
             {
                 Console.WriteLine(JumptimePassed);
                 float scalfact = 0;
@@ -188,33 +177,40 @@ namespace UnicycleSheep
             }
 
 			// perform player controlled balancing
-            if (wantsToBalance != 0)
+            if (rotate != 0)
             {
                 //Vector2 targetVel = (Vector2)head.GetWorldCenter() - location;//optPos - headPos;
                 //targetVel = wantsToBalance == 1 ? new Vector2(targetVel.X, -targetVel.Y) : new Vector2(-targetVel.X, targetVel.Y);
                 //targetVel.normalize();
                 Vector2 theAngVec = chest.GetPosition() - body.GetPosition();
                 //Vector2 targetVec = wantsToBalance == 1 ? new Vector2 ((float) -(Math.Sin((double) head.GetAngle())),(float) Math.Cos((double) head.GetAngle())) : new Vector2((float)Math.Sin((double)head.GetAngle()), (float)-Math.Cos((double)head.GetAngle()));
-                Vector2 targetVec = wantsToBalance > 0 ? new Vector2(-theAngVec.Y, theAngVec.X) : new Vector2(theAngVec.Y, -theAngVec.X);
+                Vector2 targetVec = rotate > 0 ? new Vector2(-theAngVec.Y, theAngVec.X) : new Vector2(theAngVec.Y, -theAngVec.X);
                 
                     targetVec.normalize();
                     float scalfact = (float) Math.Acos(Math.Abs((double)targetVec.X));
 
                 //head.ApplyForce(targetVec * Counterfactf * scalfact, head.GetWorldCenter());
                 
-                chest.ApplyTorque(JumptimePassed < 30 ? 80 * scalfact * wantsToBalance : 65 * wantsToBalance);
+                chest.ApplyTorque(JumptimePassed < 0.5f ? 80 * scalfact * rotate : 65 * rotate);
 
-                wantsToBalance = 0;
+                rotate = 0;
             }
         }
 
 
-        public override void update()
+		public override void update(float _deltaTime)
         {
             base.update();
 
             Vector2 radius = (Vector2)chest.GetWorldCenter() - location;
             wheelToSheepRot = (float)System.Math.Atan2(radius.X, radius.Y) * Helper.RadianToDegree;
+
+			if (isLoadingJump)
+			{
+				jumpStrength += Math.Min(0.8f * _deltaTime / 0.01667f, Constants.maxJumpStrength - jumpStrength);
+			}
+			JumptimePassed += _deltaTime;
+
         }
 
 
@@ -247,7 +243,7 @@ namespace UnicycleSheep
             sheepSprite.Texture = AssetManager.getTexture(AssetManager.TextureName.ShoopInfronUnicycle);
             win.Draw(sheepSprite);
 
-       //     DebugDraw(win);
+        //    DebugDraw(win);
         }
 
         private void DebugDraw(RenderWindow win)
@@ -288,7 +284,6 @@ namespace UnicycleSheep
             {
                 _lastContact = _other;
                 isOnGround = true;
-                Jumptime = Program.inGameFrameCount;
                 JumptimePassed = 0;
             }
             else if(head == _self && Physics.ContactManager.g_contactManager.isLethal(_other))

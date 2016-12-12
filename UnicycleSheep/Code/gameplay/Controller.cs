@@ -32,8 +32,8 @@ namespace UnicycleSheep
 
             process();
 
-            character.rotation = rotation;
-            character.wantsToBalance = wantsToBalance;
+            character.accelerate = rotation;
+            character.rotate = wantsToBalance;
             character.jump = jump;
             character.isLoadingJump = isLoadingJump;
         }

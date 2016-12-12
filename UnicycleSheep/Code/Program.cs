@@ -21,6 +21,7 @@ namespace UnicycleSheep
 
         static void Main(string[] args)
         {
+			// init screen related constants
 			Constants.windowSizeY = (int)VideoMode.DesktopMode.Height;
 			Constants.windowSizeX = Constants.windowSizeY * 4 / 3;
 			Constants.windowScaleFactor = Constants.windowSizeY / 600f;
