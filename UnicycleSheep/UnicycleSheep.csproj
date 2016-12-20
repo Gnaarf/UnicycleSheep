@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Assets\Anaktoria.ttf" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -27,6 +27,8 @@ namespace UnicycleSheep
         Sprite BackgroundBackSprite;
         Sprite BackgroundFrontSprite;
 
+		Text ScoreDisplay = new Text("", AssetManager.getFont());
+
         float resetCounter;
         const float resetValue = 4f;
 
@@ -36,6 +38,17 @@ namespace UnicycleSheep
 
         public InGameState()
         {
+			//position the score display centered at the top
+			ScoreDisplay.CharacterSize = 90;
+			ScoreDisplay.DisplayedString = InGameState.WinCount0.ToString();
+			float leftSize = ScoreDisplay.GetLocalBounds().Width;
+			ScoreDisplay.DisplayedString += " : ";
+			float midSize = ScoreDisplay.GetLocalBounds().Width - leftSize;
+			ScoreDisplay.DisplayedString += InGameState.WinCount1.ToString();
+			ScoreDisplay.Origin = new Vector2(leftSize + 0.5f * midSize, 0f);
+			ScoreDisplay.Position = new Vector2(Constants.windowSizeX / 2 , Constants.windowSizeY / 14);
+			ScoreDisplay.Color = new SFML.Graphics.Color(200, 255, 200);
+
             AABB aabb = new AABB();
             aabb.LowerBound.Set(0.0f, 0.0f);
             aabb.UpperBound.Set(800, 600/*Constants.worldSizeX * Constants.screenRatio*/);
@@ -225,6 +238,8 @@ namespace UnicycleSheep
 
             if (showBackground)
                 win.Draw(BackgroundFrontSprite);
+
+			win.Draw(ScoreDisplay);
 
             // Draw deko Hands
             foreach (DekoElements.RemoteControllHand hand in dekoHands)

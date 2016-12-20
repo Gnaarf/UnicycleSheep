@@ -97,7 +97,7 @@ namespace UnicycleSheep
 
                 case GameState.InGame:
                     state = new InGameState();
-                    win.SetTitle("Shøøp" + " score{" + InGameState.WinCount0 + " : " + InGameState.WinCount1 + ")");
+            //        win.SetTitle("Shøøp" + " score{" + InGameState.WinCount0 + " : " + InGameState.WinCount1 + ")");
                     break;
 
                 case GameState.Reset:

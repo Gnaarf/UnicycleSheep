@@ -6,6 +6,7 @@ public class AssetManager
 {
     static Dictionary<TextureName, Texture> textures = new Dictionary<TextureName, Texture>();
     static Dictionary<SoundName, Sound> sounds = new Dictionary<SoundName, Sound>();
+	static Font font;
 
     public static Texture getTexture(TextureName textureName)
     {
@@ -24,6 +25,14 @@ public class AssetManager
         }
         return sounds[soundName];
     }
+
+	public static Font getFont()
+	{
+		if (font == null)
+			font = new Font("Assets/Anaktoria.ttf");
+
+		return font;
+	}
 
     static void LoadTextures()
     {
